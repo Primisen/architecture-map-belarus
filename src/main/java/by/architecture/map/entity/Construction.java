@@ -28,7 +28,7 @@ public class Construction {
     @Column(name = "name", nullable = false, length = 50)
     private String name;
 
-    @Column(name = "adress", nullable = false, length = 50)
+    @Column(name = "address", nullable = false, length = 50)
     private String address;
 
     @Column(name = "path_to_photo", nullable = false, length = 70)
