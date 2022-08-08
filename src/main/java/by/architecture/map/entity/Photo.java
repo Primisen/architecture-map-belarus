@@ -10,24 +10,27 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.util.UUID;
 
 @Entity
-@Table(name = "construction")
+@Table(name = "photo")
 @RequiredArgsConstructor
 @Getter
 @Setter(AccessLevel.PUBLIC)
-public class Construction {
+public class Photo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private UUID id;
 
-    @Column(name = "name", nullable = false, length = 50)
-    private String name;
+    @Column(name = "url_address_to_photo", nullable = false, length = 140)
+    private String urlAddressToPhoto;
 
-    @Column(name = "address", nullable = false, length = 50)
-    private String address;
+    @ManyToOne
+    @JoinColumn(name = "construction", nullable = false)
+    private Construction construction;
 }
