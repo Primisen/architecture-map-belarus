@@ -7,6 +7,6 @@ import org.mapstruct.Mapper;
 @Mapper (componentModel = "spring")
 public interface ConstructionMapper {
 
-    ConstructionDto constructionToConstructionDto(Construction construction);
-    Construction constructionDtoToConstruction(ConstructionDto constructionDto);
+    ConstructionDto toConstructionDto(Construction construction);
+    Construction toConstruction(ConstructionDto constructionDto);
 }

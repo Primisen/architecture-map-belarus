@@ -3,10 +3,13 @@ package by.architecture.map.mapper;
 import by.architecture.map.dto.PhotoDto;
 import by.architecture.map.entity.Photo;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 @Mapper (componentModel = "spring")
 public interface PhotoMapper {
 
-    PhotoDto photoToPhotoDto(Photo photo);
-    Photo photoDtoToPhoto(PhotoDto photoDto);
+    PhotoDto toPhotoDto(Photo photo);
+
+    @Mapping(target = "construction.id", source = "constructionId")
+    Photo toPhoto(PhotoDto photoDto);
 }
