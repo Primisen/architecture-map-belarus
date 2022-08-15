@@ -1,7 +1,6 @@
 package by.architecture.map.controller;
 
 import by.architecture.map.dto.PhotoDto;
-import by.architecture.map.entity.Construction;
 import by.architecture.map.entity.Photo;
 import by.architecture.map.service.PhotoService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,14 +26,14 @@ public class PhotoController {
     private PhotoService photoService;
 
     @Operation(summary = "Finding all photos of construction")
-    @GetMapping("/")
-    public List<Photo> findAllByConstruction(@RequestBody Construction construction) {
-        return photoService.findAllByConstruction(construction);
+    @GetMapping("/construction/{constructionId}")
+    public List<Photo> findAllByConstruction(@PathVariable Integer constructionId) {
+        return photoService.findAllByConstruction(constructionId);
     }
 
     @Operation(summary = "Change an existing photo")
     @PutMapping("/{idOfOldPhoto}")
-    public void update(@PathVariable UUID idOfOldPhoto, @RequestBody PhotoDto updatedPhoto) {
+    public void update(@PathVariable Integer idOfOldPhoto, @RequestBody PhotoDto updatedPhoto) {
         photoService.update(idOfOldPhoto, updatedPhoto);
     }
 
@@ -47,7 +45,7 @@ public class PhotoController {
 
     @Operation(summary = "Delete photo by id")
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable UUID id) {
+    public void delete(@PathVariable Integer id) {
         photoService.delete(id);
     }
 }

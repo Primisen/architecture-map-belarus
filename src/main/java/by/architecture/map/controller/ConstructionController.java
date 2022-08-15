@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -40,13 +39,13 @@ public class ConstructionController {
 
     @Operation(summary = "Delete construction by id")
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable UUID id) {
+    public void delete(@PathVariable Integer id) {
         constructionService.delete(id);
     }
 
     @Operation(summary = "Change an existing construction")
     @PutMapping("/{idOfOldConstruction}")
-    public void update(@PathVariable UUID idOfOldConstruction, @RequestBody ConstructionDto updatedConstruction) {
+    public void update(@PathVariable Integer idOfOldConstruction, @RequestBody ConstructionDto updatedConstruction) {
         constructionService.update(idOfOldConstruction, updatedConstruction);
     }
 }

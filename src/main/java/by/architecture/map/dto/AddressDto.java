@@ -8,8 +8,12 @@ import lombok.Setter;
 @RequiredArgsConstructor
 @Getter
 @Setter(AccessLevel.PUBLIC)
-public class ConstructionDto {
+public class AddressDto {
 
-    private String name;
-    private AddressDto address;
+    private String locality;
+    private String district;
+    private String region;
+
+    private String street;
+    private String house_number;
 }

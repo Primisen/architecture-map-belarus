@@ -4,7 +4,6 @@ import by.architecture.map.dto.ConstructionDto;
 import by.architecture.map.entity.Construction;
 
 import java.util.List;
-import java.util.UUID;
 
 public interface ConstructionService {
 
@@ -12,8 +11,8 @@ public interface ConstructionService {
 
     void add(ConstructionDto construction);
 
-    void update(UUID idOfOldConstruction, ConstructionDto updatedConstruction);
+    void update(Integer idOfOldConstruction, ConstructionDto updatedConstruction);
 
-    void delete(UUID id);
+    void delete(Integer id);
 
 }

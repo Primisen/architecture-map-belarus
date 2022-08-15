@@ -11,28 +11,33 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import java.util.List;
 
 @Entity
-@Table(name = "construction")
+@Table(name = "address")
 @RequiredArgsConstructor
 @Getter
 @Setter(AccessLevel.PUBLIC)
 @ToString
-public class Construction {
+public class Address {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "name", nullable = false, length = 50)
-    private String name;
+    @Column(name = "locality", nullable = false, length = 20)
+    private String locality;
 
-    @OneToOne
-    @JoinColumn(name = "address_id", nullable = false)
-    private Address address;
+    @Column(name = "district", nullable = false, length = 15)
+    private String district;
+
+    @Column(name = "region", nullable = false, length = 15)
+    private String region;
+
+    @Column(name = "street", length = 2)
+    private String street;
+
+    @Column(name = "house_number", length = 5)
+    private String house_number;
 }

@@ -1,7 +1,6 @@
 package by.architecture.map.service.impl;
 
 import by.architecture.map.dto.PhotoDto;
-import by.architecture.map.entity.Construction;
 import by.architecture.map.entity.Photo;
 import by.architecture.map.mapper.PhotoMapper;
 import by.architecture.map.repository.PhotoRepository;
@@ -11,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -24,28 +22,28 @@ public class PhotoServiceImpl implements PhotoService {
     private PhotoMapper photoMapper;
 
     @Override
-    public List<Photo> findAllByConstruction(Construction construction) {
-        return photoRepository.findAllByConstruction(construction);
+    public List<Photo> findAllByConstruction(Integer constructionId) {
+        return photoRepository.findAllByConstructionId(constructionId);
     }
 
     @Override
     public void add(PhotoDto photoDto) {
 
-        Photo photo = photoMapper.photoDtoToPhoto(photoDto);
+        Photo photo = photoMapper.toPhoto(photoDto);
         photoRepository.save(photo);
     }
 
     @Override
-    public void delete(UUID id) {
+    public void delete(Integer id) {
         photoRepository.deleteById(id);
     }
 
     @Override
-    public void update(UUID idOfOldPhoto, PhotoDto updatedPhoto) {
+    public void update(Integer idOfOldPhoto, PhotoDto updatedPhoto) {
 
         Photo oldPhoto = photoRepository.findById(idOfOldPhoto).get();
         oldPhoto.setUrlAddressToPhoto(updatedPhoto.getUrlAddressToPhoto());
-        oldPhoto.setConstruction(updatedPhoto.getConstruction());
+//        oldPhoto.setConstruction(constructionMapper.constructionDtoToConstruction(updatedPhoto.getConstruction()));
         photoRepository.save(oldPhoto);
     }
 }

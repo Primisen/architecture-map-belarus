@@ -1,6 +1,5 @@
 package by.architecture.map.dto;
 
-import by.architecture.map.entity.Construction;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +10,6 @@ import lombok.Setter;
 @Setter(AccessLevel.PUBLIC)
 public class PhotoDto {
 
-    private Construction construction;
+    private Integer constructionId;
     private String urlAddressToPhoto;
 }
