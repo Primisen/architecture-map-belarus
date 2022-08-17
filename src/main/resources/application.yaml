@@ -7,3 +7,14 @@ spring:
     url: ${DB_URL:jdbc:postgresql://localhost:5432/architecture_map?currentSchema=${spring.application.name}}
     username: ${DB_LOGIN:postgres}
     password: ${DB_PASSWORD:password}
+
+server:
+  port: 8083
+
+keycloak:
+  server:
+    contextPath: /auth
+    adminUser:
+      username: admin
+      password: admin
+    realmImportFile: baeldung-realm.json
