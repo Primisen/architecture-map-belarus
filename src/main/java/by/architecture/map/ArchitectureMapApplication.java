@@ -1,6 +1,11 @@
 package by.architecture.map;
 
-import by.architecture.map.configuration.KeycloakServerProperties;
+//import by.architecture.map.configuration.KeycloakServerProperties;
+import com.google.api.gax.core.FixedCredentialsProvider;
+import com.google.api.gax.rpc.ApiException;
+import com.google.photos.library.v1.PhotosLibraryClient;
+import com.google.photos.library.v1.PhotosLibrarySettings;
+import com.google.photos.types.proto.Album;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
 import org.slf4j.Logger;
@@ -14,9 +19,11 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 
+import static org.keycloak.models.PasswordPolicy.build;
+
 @OpenAPIDefinition(info = @Info(title = "Architecture map API", version = "1.0"))
 @SpringBootApplication(exclude = LiquibaseAutoConfiguration.class)
-@EnableConfigurationProperties(KeycloakServerProperties.class)
+//@EnableConfigurationProperties(KeycloakServerProperties.class)
 public class ArchitectureMapApplication {
 
     private static final Logger LOG = LoggerFactory.getLogger(ArchitectureMapApplication.class);
@@ -25,14 +32,4 @@ public class ArchitectureMapApplication {
         SpringApplication.run(ArchitectureMapApplication.class, args);
     }
 
-    @Bean
-    ApplicationListener<ApplicationReadyEvent> onApplicationReadyEventListener(
-            ServerProperties serverProperties, KeycloakServerProperties keycloakServerProperties) {
-        return (evt) -> {
-            Integer port = serverProperties.getPort();
-            String keycloakContextPath = keycloakServerProperties.getContextPath();
-            LOG.info("Embedded Keycloak started: http://localhost:{}{} to use keycloak",
-                    port, keycloakContextPath);
-        };
-    }
 }
