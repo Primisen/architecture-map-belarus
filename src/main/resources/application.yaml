@@ -1,0 +1,13 @@
+spring:
+
+  application:
+    name: ${APPLICATION_NAME:architecture_map}
+
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/architecture_map?currentSchema=${spring.application.name}}
+    username: ${DB_LOGIN:postgres}
+    password: ${DB_PASSWORD:password}
+
+cross_origin_address:
+  app: http://localhost:4200
+  admin: http://localhost:7200
