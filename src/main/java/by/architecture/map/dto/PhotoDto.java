@@ -12,4 +12,5 @@ public class PhotoDto {
 
     private Integer constructionId;
     private String urlAddressToPhoto;
+    private Integer sourceId;
 }

@@ -1,5 +1,6 @@
 package by.architecture.map.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -28,10 +29,15 @@ public class Photo {
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "url_address_to_photo", nullable = false, length = 140)
+    @Column(name = "url_address_to_photo", nullable = false, length = 1000)
     private String urlAddressToPhoto;
 
     @ManyToOne
     @JoinColumn(name = "construction_id", nullable = false)
+    @JsonIgnore
     private Construction construction;
+
+    @ManyToOne
+    @JoinColumn(name = "source_id", nullable = false)
+    private Source source;
 }
