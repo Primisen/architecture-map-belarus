@@ -32,12 +32,12 @@ public class Address {
     @Column(name = "district", nullable = false, length = 15)
     private String district;
 
-    @Column(name = "region", nullable = false, length = 15)
+    @Column(name = "region", nullable = false, length = 20)
     private String region;
 
     @Column(name = "street", length = 2)
     private String street;
 
     @Column(name = "house_number", length = 5)
-    private String house_number;
+    private String houseNumber;
 }

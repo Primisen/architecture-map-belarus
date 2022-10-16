@@ -34,6 +34,11 @@ public class ConstructionServiceImpl implements ConstructionService {
     }
 
     @Override
+    public Construction findById(Integer id) {
+        return constructionRepository.findById(id).get();//
+    }
+
+    @Override
     public void add(ConstructionDto constructionDto) {
         Construction construction = constructionMapper.toConstruction(constructionDto);
         addressRepository.save(construction.getAddress());

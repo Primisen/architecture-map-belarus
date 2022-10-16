@@ -16,10 +16,18 @@ CREATE TABLE construction(
     FOREIGN KEY (address_id) REFERENCES address(id)
 );
 
+CREATE TABLE source(
+    id                          SERIAL              PRIMARY KEY,
+    name                        VARCHAR(50)         NOT NULL,
+    url                         VARCHAR(500)        NOT NULL
+);
+
 CREATE TABLE photo(
     id                          SERIAL              PRIMARY KEY,
-    url_address_to_photo        VARCHAR(140)        NOT NULL,
+    url_address_to_photo        VARCHAR(500)        NOT NULL,
     construction_id             INT                 NOT NULL,
+    source_id                   INT                 NOT NULL,
 
-    FOREIGN KEY (construction_id) REFERENCES construction(id)
+    FOREIGN KEY (construction_id) REFERENCES construction(id),
+    FOREIGN KEY (source_id) REFERENCES source(id)
 );

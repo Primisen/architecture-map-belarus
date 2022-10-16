@@ -9,6 +9,8 @@ public interface ConstructionService {
 
     List<Construction> findAll();
 
+    Construction findById(Integer id);
+
     void add(ConstructionDto construction);
 
     void update(Integer idOfOldConstruction, ConstructionDto updatedConstruction);
