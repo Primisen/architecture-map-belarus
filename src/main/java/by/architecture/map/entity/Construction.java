@@ -4,7 +4,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -22,7 +22,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @Getter
 @Setter(AccessLevel.PUBLIC)
-@ToString
 public class Construction {
 
     @Id
@@ -40,4 +39,10 @@ public class Construction {
     @OneToMany(mappedBy = "construction")
     private List<Photo> photos;
 
+    @ManyToOne
+    @JoinColumn(name = "architectural_style_id")
+    private ArchitecturalStyle architecturalStyle;
+
+    @Column(name = "building_time", length = 20)
+    private String buildingTime;
 }

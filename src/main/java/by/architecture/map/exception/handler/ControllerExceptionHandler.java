@@ -1,5 +1,6 @@
 package by.architecture.map.exception.handler;
 
+import by.architecture.map.exception.ArchitecturalStyleException;
 import by.architecture.map.exception.ConstructionException;
 import by.architecture.map.exception.PhotoException;
 import by.architecture.map.exception.SourceException;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
-public class ControllerExceptionHandler {
+public class ControllerExceptionHandler {//мягко говоря, много повторяющегося кода
 
     @ExceptionHandler({PhotoException.class})
     public ResponseEntity<Response> photoExceptionHandle(PhotoException e){
@@ -25,7 +26,13 @@ public class ControllerExceptionHandler {
     }
 
     @ExceptionHandler({SourceException.class})
-    public ResponseEntity<Response> constructionExceptionHandle(SourceException e){
+    public ResponseEntity<Response> sourceExceptionHandle(SourceException e){
+        Response response = new Response(e.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({ArchitecturalStyleException.class})
+    public ResponseEntity<Response> architecturalStyleExceptionHandle(ArchitecturalStyleException e){
         Response response = new Response(e.getMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }

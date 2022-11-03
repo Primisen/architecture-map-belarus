@@ -58,7 +58,7 @@ public class PhotoServiceImpl implements PhotoService {
     @Override
     public void update(Integer id, PhotoDto photoUpdates) throws PhotoException, ConstructionException, SourceException {
 
-        Photo photo = findPhotoById(id);
+        Photo photo = findById(id);
 
         updateUrlAddressToPhoto(photo, photoUpdates);
         updateConstruction(photo, photoUpdates);
@@ -78,7 +78,7 @@ public class PhotoServiceImpl implements PhotoService {
         }
     }
 
-    private Photo findPhotoById(Integer id) throws PhotoException {
+    private Photo findById(Integer id) throws PhotoException {
         return photoRepository.findById(id)
                 .orElseThrow(() -> new PhotoException("Photo with id = " + id + "not exists."));
     }
