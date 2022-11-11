@@ -5,6 +5,7 @@ import by.architecture.map.entity.Construction;
 import by.architecture.map.mapper.AddressMapper;
 import by.architecture.map.mapper.ConstructionMapper;
 import by.architecture.map.repository.AddressRepository;
+import by.architecture.map.repository.ArchitecturalStyleRepository;
 import by.architecture.map.repository.ConstructionRepository;
 import by.architecture.map.service.ConstructionService;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,9 @@ public class ConstructionServiceImpl implements ConstructionService {
     @Autowired
     private AddressMapper addressMapper;
 
+    @Autowired
+    private ArchitecturalStyleRepository architecturalStyleRepository;
+
     @Override
     public List<Construction> findAll() {
         return constructionRepository.findAll();
@@ -42,6 +46,11 @@ public class ConstructionServiceImpl implements ConstructionService {
     public void add(ConstructionDto constructionDto) {
         Construction construction = constructionMapper.toConstruction(constructionDto);
         addressRepository.save(construction.getAddress());
+
+        //
+        construction.setArchitecturalStyle(
+                architecturalStyleRepository.
+                        findById(constructionDto.getArchitecturalStyleId()).get());
         constructionRepository.save(construction);
     }
 

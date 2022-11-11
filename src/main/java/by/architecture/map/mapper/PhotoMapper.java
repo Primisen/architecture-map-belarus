@@ -13,6 +13,7 @@ public interface PhotoMapper {
 
     @Mapping(target = "construction.id", source = "constructionId")
     @Mapping(target = "source.id", source = "sourceId")
+    @Mapping(target = "visualType.id", source = "visualTypeId")
     Photo toPhoto(PhotoDto photoDto);
 
     @Mapping(target = "constructionName", source = "construction.name")

@@ -12,4 +12,6 @@ public class ConstructionDto {
 
     private String name;
     private AddressDto address;
+    private Integer architecturalStyleId;
+    private String buildingTime;
 }

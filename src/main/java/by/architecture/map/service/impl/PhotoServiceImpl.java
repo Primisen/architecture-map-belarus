@@ -9,6 +9,7 @@ import by.architecture.map.exception.SourceException;
 import by.architecture.map.mapper.PhotoMapper;
 import by.architecture.map.repository.ConstructionRepository;
 import by.architecture.map.repository.PhotoRepository;
+import by.architecture.map.repository.PhotoVisualTypeRepository;
 import by.architecture.map.repository.SourceRepository;
 import by.architecture.map.service.PhotoService;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,9 @@ public class PhotoServiceImpl implements PhotoService {
     private ConstructionRepository constructionRepository;
     @Autowired
     private SourceRepository sourceRepository;
+
+    @Autowired
+    private PhotoVisualTypeRepository photoVisualTypeRepository;
 
     @Autowired
     private PhotoMapper photoMapper;
@@ -63,6 +67,7 @@ public class PhotoServiceImpl implements PhotoService {
         updateUrlAddressToPhoto(photo, photoUpdates);
         updateConstruction(photo, photoUpdates);
         updateSource(photo, photoUpdates);
+        updateVisualStyle(photo, photoUpdates);
 
         photoRepository.save(photo);
     }
@@ -101,6 +106,12 @@ public class PhotoServiceImpl implements PhotoService {
             photo.setSource(sourceRepository.findById(photoUpdates.getSourceId())
                     .orElseThrow(() -> new SourceException("Source with id = " + photoUpdates.getSourceId() + " not exists.")));
         }
+    }
+
+    private void updateVisualStyle(Photo photo, PhotoDto photoUpdates) {
+//        if (photoUpdates.getVisualTypeDto() != null) {
+//            photo.setVisualType(photoVisualTypeRepository.findByName(photoUpdates.getVisualTypeDto().getName()));
+//        }
     }
 
     private void save(PhotoDto photoDto) {

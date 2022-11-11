@@ -4,6 +4,7 @@ import by.architecture.map.dto.ConstructionDto;
 import by.architecture.map.entity.Construction;
 import by.architecture.map.service.ConstructionService;
 import io.swagger.v3.oas.annotations.Operation;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -20,6 +21,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@AllArgsConstructor
 @RequestMapping("/constructions")
 @CrossOrigin(origins = {"http://localhost:4200", "http://localhost:7200"})
 public class ConstructionController {
@@ -52,9 +54,9 @@ public class ConstructionController {
     }
 
     @Operation(summary = "Change an existing construction")
-    @PutMapping("/{idOfOldConstruction}")
-    public void update(@PathVariable Integer idOfOldConstruction,
-                       @RequestBody ConstructionDto updatedConstruction) {
-        constructionService.update(idOfOldConstruction, updatedConstruction);
+    @PutMapping("/{id}")
+    public void update(@PathVariable Integer id,
+                       @RequestBody ConstructionDto constructionUpdates) {
+        constructionService.update(id, constructionUpdates);
     }
 }

@@ -40,4 +40,8 @@ public class Photo {
     @ManyToOne
     @JoinColumn(name = "source_id", nullable = false)
     private Source source;
+
+    @ManyToOne
+    @JoinColumn(name = "visual_type_id")
+    private PhotoVisualType visualType;
 }

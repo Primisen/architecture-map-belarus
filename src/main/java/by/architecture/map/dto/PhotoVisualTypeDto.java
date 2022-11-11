@@ -8,10 +8,7 @@ import lombok.Setter;
 @RequiredArgsConstructor
 @Getter
 @Setter(AccessLevel.PUBLIC)
-public class PhotoDto {
+public class PhotoVisualTypeDto {
 
-    private Integer constructionId;
-    private String urlAddressToPhoto;
-    private Integer sourceId;
-    private Integer visualTypeId;
+    private String name;
 }
