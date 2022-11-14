@@ -1,8 +1,10 @@
 package by.architecture.map.entity;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Column;
@@ -14,9 +16,11 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "source")
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter(AccessLevel.PUBLIC)
-@RequiredArgsConstructor
+@Builder
 public class Source {
 
     @Id

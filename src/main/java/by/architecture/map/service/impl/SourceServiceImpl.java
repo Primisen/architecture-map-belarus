@@ -2,7 +2,6 @@ package by.architecture.map.service.impl;
 
 import by.architecture.map.dto.SourceDto;
 import by.architecture.map.entity.Source;
-import by.architecture.map.exception.PhotoException;
 import by.architecture.map.exception.SourceException;
 import by.architecture.map.mapper.SourceMapper;
 import by.architecture.map.repository.SourceRepository;
@@ -23,11 +22,17 @@ public class SourceServiceImpl implements SourceService {
     @Autowired
     private SourceMapper sourceMapper;
 
+
     @Override
-    public void add(SourceDto sourceDto) throws SourceException {
+    public List<Source> findAll() {
+        return sourceRepository.findAll();
+    }
+
+    @Override
+    public Source add(SourceDto sourceDto) throws SourceException {
 
         if (sourceNotExists(sourceDto)) {
-            save(sourceDto);
+            return save(sourceDto);
 
         } else {
             throw new SourceException("Source is exists.");
@@ -35,8 +40,14 @@ public class SourceServiceImpl implements SourceService {
     }
 
     @Override
-    public List<Source> findAll() {
-        return sourceRepository.findAll();
+    public Source update(Integer id, SourceDto sourceUpdates) throws SourceException {
+
+        Source source = findById(id);
+
+        updateName(source, sourceUpdates);
+        updateUrl(source, sourceUpdates);
+
+        return sourceRepository.save(source);
     }
 
     @Override
@@ -48,17 +59,6 @@ public class SourceServiceImpl implements SourceService {
         } else {
             throw new SourceException("Source not exists.");
         }
-    }
-
-    @Override
-    public void update(Integer id, SourceDto sourceUpdates) throws SourceException {
-
-        Source source = findById(id);
-
-        updateName(source, sourceUpdates);
-        updateUrl(source, sourceUpdates);
-
-        sourceRepository.save(source);
     }
 
     private void updateUrl(Source source, SourceDto sourceUpdates) {
@@ -78,11 +78,11 @@ public class SourceServiceImpl implements SourceService {
     private Source findById(Integer id) throws SourceException {
 
         return sourceRepository.findById(id)
-                .orElseThrow(() -> new SourceException("Source with id = " + id + "not exists."));
+                .orElseThrow(() -> new SourceException("Source with id = " + id + " not exists."));
     }
 
-    private void save(SourceDto sourceDto) {
-        sourceRepository.save(sourceMapper.toSource(sourceDto));
+    private Source save(SourceDto sourceDto) {
+        return sourceRepository.save(sourceMapper.toSource(sourceDto));
     }
 
     private boolean sourceNotExists(SourceDto sourceDto) {

@@ -14,7 +14,7 @@ public interface PhotoService {
 
     void add(PhotoDto photo) throws PhotoException;
 
-    void delete(Integer id) throws PhotoException;
-
     void update(Integer idOfOldPhoto, PhotoDto updatedPhoto) throws PhotoException, ConstructionException, SourceException;
+
+    void delete(Integer id) throws PhotoException;
 }

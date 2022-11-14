@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/styles")
+@RequestMapping("/architectural-styles")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:7200")
 public class ArchitecturalStyleController {

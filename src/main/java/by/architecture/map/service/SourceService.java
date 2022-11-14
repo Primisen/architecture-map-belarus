@@ -7,11 +7,13 @@ import by.architecture.map.exception.SourceException;
 import java.util.List;
 
 public interface SourceService {
-    void add(SourceDto sourceDto) throws SourceException;
 
     List<Source> findAll();
 
+    Source add(SourceDto sourceDto) throws SourceException;
+
+    Source update(Integer id, SourceDto sourceUpdates) throws SourceException;
+
     void delete(Integer id) throws SourceException;
 
-    void update(Integer id, SourceDto sourceUpdates) throws SourceException;
 }
