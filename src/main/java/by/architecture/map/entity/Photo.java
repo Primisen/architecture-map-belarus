@@ -2,13 +2,15 @@ package by.architecture.map.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,7 +23,7 @@ import javax.persistence.Table;
 @RequiredArgsConstructor
 @Getter
 @Setter(AccessLevel.PUBLIC)
-@ToString
+@EqualsAndHashCode
 public class Photo {
 
     @Id
@@ -41,7 +43,9 @@ public class Photo {
     @JoinColumn(name = "source_id", nullable = false)
     private Source source;
 
-    @ManyToOne
+
+    //remove
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "visual_type_id")
     private PhotoVisualType visualType;
 }

@@ -2,6 +2,7 @@ package by.architecture.map.service.impl;
 
 import by.architecture.map.dto.PhotoDto;
 import by.architecture.map.dto.RandomPhotoDto;
+import by.architecture.map.entity.Construction;
 import by.architecture.map.entity.Photo;
 import by.architecture.map.exception.ConstructionException;
 import by.architecture.map.exception.PhotoException;
@@ -65,7 +66,6 @@ public class PhotoServiceImpl implements PhotoService {
         Photo photo = findById(id);
 
         updateUrlAddressToPhoto(photo, photoUpdates);
-        updateConstruction(photo, photoUpdates);
         updateSource(photo, photoUpdates);
         updateVisualStyle(photo, photoUpdates);
 
@@ -77,7 +77,6 @@ public class PhotoServiceImpl implements PhotoService {
 
         if (photoIsExists(id)) {
             photoRepository.deleteById(id);
-
         } else {
             throw new PhotoException("Photo not exists.");
         }
@@ -91,13 +90,6 @@ public class PhotoServiceImpl implements PhotoService {
     private void updateUrlAddressToPhoto(Photo photo, PhotoDto photoUpdates) {
         if (photoUpdates.getUrlAddressToPhoto() != null) {
             photo.setUrlAddressToPhoto(photoUpdates.getUrlAddressToPhoto());
-        }
-    }
-
-    private void updateConstruction(Photo photo, PhotoDto photoUpdates) throws ConstructionException {
-        if (photoUpdates.getConstructionId() != 0) {
-            photo.setConstruction(constructionRepository.findById(photoUpdates.getConstructionId())
-                    .orElseThrow(() -> new ConstructionException("Construction with id = " + photoUpdates.getConstructionId() + " not exists.")));
         }
     }
 

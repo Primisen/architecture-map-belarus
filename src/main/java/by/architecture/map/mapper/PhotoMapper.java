@@ -16,9 +16,9 @@ public interface PhotoMapper {
     @Mapping(target = "visualType.id", source = "visualTypeId")
     Photo toPhoto(PhotoDto photoDto);
 
-    @Mapping(target = "constructionName", source = "construction.name")
     @Mapping(target = "address", source = "construction.address")
     @Mapping(target = "constructionId", source = "construction.id")
+    @Mapping(target = "architecturalStyleName", source = "construction.architecturalStyle.name")
     RandomPhotoDto toRandomPhotoDto(Photo photo);
 
 }

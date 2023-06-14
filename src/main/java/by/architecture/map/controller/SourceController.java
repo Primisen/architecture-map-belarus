@@ -43,7 +43,7 @@ public class SourceController {
     }
 
     @PutMapping("/{id}")
-    public void update(@PathVariable Integer id, SourceDto sourceUpdates) throws SourceException {
+    public void update(@PathVariable Integer id, @RequestBody SourceDto sourceUpdates) throws SourceException {
         sourceService.update(id, sourceUpdates);
     }
 }

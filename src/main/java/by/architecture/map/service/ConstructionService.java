@@ -17,4 +17,5 @@ public interface ConstructionService {
 
     void delete(Integer id);
 
+    List<Construction> getByArchitecturalStyleId(Integer architecturalStyleId);
 }

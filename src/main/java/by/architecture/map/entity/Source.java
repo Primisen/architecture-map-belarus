@@ -21,7 +21,7 @@ import javax.persistence.Table;
 @Getter
 @Setter(AccessLevel.PUBLIC)
 @Builder
-public class Source {
+public class Source { //rename -> photo source
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

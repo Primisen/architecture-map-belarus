@@ -9,12 +9,14 @@ import lombok.Setter;
 @RequiredArgsConstructor
 @Getter
 @Setter(AccessLevel.PUBLIC)
-public class RandomPhotoDto {
+public class RandomPhotoDto { //rename -> Home page photos
 
     private Integer id;
     private String urlAddressToPhoto;
     private Integer constructionId;
-    private String constructionName;
+
     private AddressDto address;
+    private String architecturalStyleName;
+
     private Source source;
 }

@@ -39,7 +39,9 @@ public class ConstructionServiceImpl implements ConstructionService {
 
     @Override
     public Construction findById(Integer id) {
-        return constructionRepository.findById(id).get();//
+
+        Construction construction = constructionRepository.findById(id).get();
+        return construction;
     }
 
     @Override
@@ -65,5 +67,10 @@ public class ConstructionServiceImpl implements ConstructionService {
     @Override
     public void delete(Integer id) {
         constructionRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Construction> getByArchitecturalStyleId(Integer architecturalStyleId) {
+        return constructionRepository.findAllByArchitecturalStyleId(architecturalStyleId);
     }
 }

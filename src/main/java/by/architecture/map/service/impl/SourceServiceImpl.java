@@ -63,7 +63,7 @@ public class SourceServiceImpl implements SourceService {
 
     private void updateUrl(Source source, SourceDto sourceUpdates) {
 
-        if (sourceUpdates != null) {
+        if (sourceUpdates.getUrl() != null) {
             source.setUrl(sourceUpdates.getUrl());
         }
     }

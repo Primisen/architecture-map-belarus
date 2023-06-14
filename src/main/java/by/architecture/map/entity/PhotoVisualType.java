@@ -12,6 +12,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+
+//remove
 @Entity
 @Table(name = "photo_visual_type")
 @RequiredArgsConstructor

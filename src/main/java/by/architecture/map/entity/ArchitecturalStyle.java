@@ -25,4 +25,6 @@ public class ArchitecturalStyle {
 
     @Column(name = "name", length = 20, nullable = false)
     private String name;
+
+    //String description
 }

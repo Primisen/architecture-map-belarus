@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ArchitectureStyleServiceImpl implements ArchitectureStyleService {
@@ -52,6 +54,11 @@ public class ArchitectureStyleServiceImpl implements ArchitectureStyleService {
         } else {
             throw new ArchitecturalStyleException("Architectural style not exists.");
         }
+    }
+
+    @Override
+    public List<ArchitecturalStyle> findAll() {
+        return architecturalStyleRepository.findAll();
     }
 
     private boolean architecturalStyleNotExists(ArchitecturalStyleDto architecturalStyle) {
