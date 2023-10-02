@@ -1,6 +1,7 @@
 package com.architecture_map.belarus.entity;
 
 import com.architecture_map.belarus.entity.image.ConstructionImage;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -56,6 +57,7 @@ public class Construction {
 
     private String description;
 
+    @JsonIgnoreProperties("construction")
     @OneToMany(mappedBy = "construction")
     private Set<ConstructionImage> images = new HashSet<>();
 }
