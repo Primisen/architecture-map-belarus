@@ -1,5 +1,6 @@
 package com.architecture_map.belarus.entity;
 
+import com.architecture_map.belarus.entity.image.ConstructionImage;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.JoinColumn;
@@ -53,4 +55,7 @@ public class Construction {
     private Set<Architect> architects = new HashSet<>();
 
     private String description;
+
+    @OneToMany(mappedBy = "construction")
+    private Set<ConstructionImage> images = new HashSet<>();
 }

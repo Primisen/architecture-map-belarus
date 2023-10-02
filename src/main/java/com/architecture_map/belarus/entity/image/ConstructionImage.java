@@ -1,6 +1,7 @@
 package com.architecture_map.belarus.entity.image;
 
 import com.architecture_map.belarus.entity.Construction;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ public class ConstructionImage extends Image{
 
     @ManyToOne
     @JoinColumn(name = "construction_id")
+    @JsonIgnore
     private Construction construction;
     private String takenTime;
 

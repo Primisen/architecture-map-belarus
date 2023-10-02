@@ -37,7 +37,7 @@ public class ConstructionController {
 
     @Operation(summary = "Get all information about construction")
     @GetMapping("/{id}")
-    public Construction getConstruction(@PathVariable Integer id){
+    public Construction getById(@PathVariable Integer id){
         return constructionService.findById(id);
     }
 
