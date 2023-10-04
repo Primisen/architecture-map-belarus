@@ -23,6 +23,12 @@ public class ArchitectureStyleServiceImpl implements ArchitectureStyleService {
     private ArchitecturalStyleMapper architecturalStyleMapper;
 
     @Override
+    public ArchitecturalStyle findById(Integer id) throws ArchitecturalStyleException {
+        return architecturalStyleRepository.findById(id).orElseThrow(() ->
+                new ArchitecturalStyleException("Architectural style with id = " + id + " not exists."));
+    }
+
+    @Override
     public void add(ArchitecturalStyleDto architecturalStyleDto) throws ArchitecturalStyleException {
 
         if (architecturalStyleNotExists(architecturalStyleDto)) {
@@ -77,10 +83,4 @@ public class ArchitectureStyleServiceImpl implements ArchitectureStyleService {
 
         architecturalStyleRepository.save(architecturalStyleMapper.toArchitecturalStyle(architecturalStyleDto));
     }
-
-    private ArchitecturalStyle findById(Integer id) throws ArchitecturalStyleException {
-
-        return architecturalStyleRepository.findById(id).orElseThrow(() -> new ArchitecturalStyleException("Architectural style with id = " + id + " not exists."));
-    }
-
 }

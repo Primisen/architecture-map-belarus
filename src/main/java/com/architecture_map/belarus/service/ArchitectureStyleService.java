@@ -14,4 +14,6 @@ public interface ArchitectureStyleService {
     void delete(Integer id) throws ArchitecturalStyleException;
 
     List<ArchitecturalStyle> findAll();
+
+    ArchitecturalStyle findById(Integer id) throws ArchitecturalStyleException;
 }

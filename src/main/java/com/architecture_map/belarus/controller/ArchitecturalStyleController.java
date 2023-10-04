@@ -32,6 +32,11 @@ public class ArchitecturalStyleController {
         return architectureStyleService.findAll();
     }
 
+    @GetMapping("/{id}")
+    public ArchitecturalStyle findById(@PathVariable Integer id) throws ArchitecturalStyleException {
+        return architectureStyleService.findById(id);
+    }
+
     @PostMapping("/")
     public void add(@RequestBody ArchitecturalStyleDto architecturalStyleDto) throws ArchitecturalStyleException {
         architectureStyleService.add(architecturalStyleDto);
