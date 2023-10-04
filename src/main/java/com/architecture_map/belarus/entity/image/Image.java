@@ -36,4 +36,6 @@ public class Image {
     @ManyToOne
     @JoinColumn(name = "source_id")
     private Source source;
+
+    private String author;
 }
