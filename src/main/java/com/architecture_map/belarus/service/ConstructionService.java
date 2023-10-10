@@ -16,6 +16,4 @@ public interface ConstructionService {
     void update(Integer idOfOldConstruction, ConstructionDto updatedConstruction);
 
     void delete(Integer id);
-
-    List<Construction> getByArchitecturalStyleId(Integer architecturalStyleId);
 }

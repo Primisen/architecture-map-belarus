@@ -8,4 +8,6 @@ public interface ConstructionImageService {
 
     List<ConstructionImage> getRandomImage(String usedId);
 
+    List<ConstructionImage> getByConstructionArchitecturalStyleId(Integer id);
+
 }

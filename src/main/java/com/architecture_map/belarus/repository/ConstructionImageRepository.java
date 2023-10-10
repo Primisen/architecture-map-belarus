@@ -15,4 +15,6 @@ public interface ConstructionImageRepository extends JpaRepository<ConstructionI
             nativeQuery = true)
     List<ConstructionImage> getRandomImage(int[] usedId);
 
+    List<ConstructionImage> getByConstructionArchitecturalStyleId(Integer id);
+
 }

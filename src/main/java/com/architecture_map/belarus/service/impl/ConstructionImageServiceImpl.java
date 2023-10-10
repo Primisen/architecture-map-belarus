@@ -19,20 +19,24 @@ public class ConstructionImageServiceImpl implements ConstructionImageService {
     @Override
     public List<ConstructionImage> getRandomImage(String usedId) {
 
-        int[] numbers = {0};
+        int[] usedImaageId = {0};
         //horrible
         if (usedId != null) {
 
             String[] strings = usedId.split(",");
-            numbers = new int[strings.length];
-            System.out.println(strings.length);
+            usedImaageId = new int[strings.length];
 
             for (int i = 0; i < strings.length; i++) {
-                numbers[i] = Integer.parseInt(strings[i]);
+                usedImaageId[i] = Integer.parseInt(strings[i]);
             }
             //horrible
         }
-        return constructionImageRepository.getRandomImage(numbers);
+        return constructionImageRepository.getRandomImage(usedImaageId);
+    }
+
+    @Override
+    public List<ConstructionImage> getByConstructionArchitecturalStyleId(Integer id) {
+        return constructionImageRepository.getByConstructionArchitecturalStyleId(id);
     }
 
 }

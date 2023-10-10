@@ -69,8 +69,4 @@ public class ConstructionServiceImpl implements ConstructionService {
         constructionRepository.deleteById(id);
     }
 
-    @Override
-    public List<Construction> getByArchitecturalStyleId(Integer architecturalStyleId) {
-        return constructionRepository.findAllByArchitecturalStyleId(architecturalStyleId);
-    }
 }

@@ -41,12 +41,6 @@ public class ConstructionController {
         return constructionService.findById(id);
     }
 
-    @Operation(summary = "Get constructions by architectural style")
-    @GetMapping("/architectural-styles/{architecturalStyleId}")//?
-    public List<Construction> getByArchitecturalStyleId(@PathVariable Integer architecturalStyleId){
-        return constructionService.getByArchitecturalStyleId(architecturalStyleId);
-    }
-
     @Operation(summary = "Adding a new construction")
     @PostMapping("/")
     public void add(@RequestBody ConstructionDto construction) {
