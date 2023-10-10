@@ -22,7 +22,7 @@ public class ConstructionImageServiceImpl implements ConstructionImageService {
         int[] usedImaageId = {0};
         //horrible
         if (usedId != null) {
-
+    
             String[] strings = usedId.split(",");
             usedImaageId = new int[strings.length];
 
