@@ -21,7 +21,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/sources")
-@CrossOrigin(origins = "http://localhost:7200")
+@CrossOrigin(origins = "http://localhost:4200")
 public class SourceController {
 
     @Autowired

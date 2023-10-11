@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/architects")
 @RequiredArgsConstructor
@@ -22,5 +24,10 @@ public class ArchitectController {
     @GetMapping("/{id}")
     public Architect findById(@PathVariable Integer id) {
         return architectService.findById(id);
+    }
+
+    @GetMapping("/")
+    public List<Architect> findAll(){
+        return architectService.findAll();
     }
 }
