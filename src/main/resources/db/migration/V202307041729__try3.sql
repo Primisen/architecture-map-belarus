@@ -3,7 +3,7 @@ DROP TABLE IF EXISTS architectural_attribute_image;
 DROP TABLE IF EXISTS image;
 
 
-CREATE TABLE image
+CREATE TABLE IF NOT EXISTS image
 (
     id        SERIAL PRIMARY KEY,
     url       VARCHAR(1000) NOT NULL,
@@ -13,7 +13,7 @@ CREATE TABLE image
     FOREIGN KEY (source_id) REFERENCES source (id)
 );
 
-CREATE TABLE construction_image
+CREATE TABLE IF NOT EXISTS construction_image
 (
     image_id        SERIAL PRIMARY KEY REFERENCES image (id),
     construction_id INT NOT NULL,
@@ -22,7 +22,7 @@ CREATE TABLE construction_image
     FOREIGN KEY (construction_id) REFERENCES construction (id)
 );
 
-CREATE TABLE architectural_attribute_image
+CREATE TABLE IF NOT EXISTS architectural_attribute_image
 (
     image_id                   SERIAL PRIMARY KEY REFERENCES image (id),
     architectural_attribute_id INT NOT NULL,

@@ -11,7 +11,9 @@ import lombok.Setter;
 public class ConstructionImageDto {
 
     private String url;
-    private SourceDto sourceDto;
+    private Integer sourceId;
     private String takenTime;
-    private ConstructionDto constructionDto;
+    private Integer constructionId;
+    private boolean show;
+    private String author;
 }

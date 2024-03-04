@@ -1,6 +1,8 @@
 package com.architecture_map.belarus.service.impl;
 
+import com.architecture_map.belarus.dto.ConstructionImageDto;
 import com.architecture_map.belarus.entity.image.ConstructionImage;
+import com.architecture_map.belarus.mapper.ConstructionImageMapper;
 import com.architecture_map.belarus.repository.ConstructionImageRepository;
 import com.architecture_map.belarus.service.ConstructionImageService;
 import lombok.RequiredArgsConstructor;
@@ -13,8 +15,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ConstructionImageServiceImpl implements ConstructionImageService {
 
-    @Autowired
-    private ConstructionImageRepository constructionImageRepository;
+//    @Autowired
+    private final ConstructionImageRepository constructionImageRepository;
+    private final ConstructionImageMapper constructionImageMapper;
 
     @Override
     public List<ConstructionImage> getRandomImage(String usedId) {
@@ -37,6 +40,11 @@ public class ConstructionImageServiceImpl implements ConstructionImageService {
     @Override
     public List<ConstructionImage> getByConstructionArchitecturalStyleId(Integer id) {
         return constructionImageRepository.getByConstructionArchitecturalStyleId(id);
+    }
+
+    @Override
+    public void save(ConstructionImageDto image) {
+        constructionImageRepository.save(constructionImageMapper.toConstructionImage(image));
     }
 
 }

@@ -1,4 +1,4 @@
-CREATE TABlE attribute_of_architectural_style
+CREATE TABlE IF NOT EXISTS attribute_of_architectural_style
 (
     id              SERIAL         PRIMARY KEY,
     name            VARCHAR(50)    NOT NULL,

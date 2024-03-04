@@ -1,4 +1,4 @@
-CREATE TABLE architectural_attribute
+CREATE TABLE IF NOT EXISTS architectural_attribute
 (
     id           SERIAL PRIMARY KEY,
     name         VARCHAR(50) NOT NULL,
@@ -6,7 +6,7 @@ CREATE TABLE architectural_attribute
     url_ti_image VARCHAR(500) NOT NULL
 );
 
-CREATE TABLE architectural_style_architectural_attribute
+CREATE TABLE IF NOT EXISTS architectural_style_architectural_attribute
 (
     id                         SERIAL PRIMARY KEY,
     architectural_style_id     INT NOT NULL,
@@ -16,7 +16,7 @@ CREATE TABLE architectural_style_architectural_attribute
     FOREIGN KEY (architectural_attribute_id) REFERENCES architectural_attribute (id)
 );
 
-CREATE TABLE construction_architect
+CREATE TABLE IF NOT EXISTS construction_architect
 (
     id              SERIAL PRIMARY KEY,
     construction_id INT NOT NULL,
