@@ -13,10 +13,8 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.Table;
 
 @Entity
-@Table(name = "architectural_attribute_image")
 @RequiredArgsConstructor
 @Getter
 @Setter(AccessLevel.PUBLIC)

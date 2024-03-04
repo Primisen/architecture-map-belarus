@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public interface ConstructionImageRepository extends JpaRepository<ConstructionImage, Integer> {
@@ -13,7 +14,7 @@ public interface ConstructionImageRepository extends JpaRepository<ConstructionI
     @Query(
             value = "SELECT *  FROM construction_image JOIN image ON image_id=id where show='true' AND id NOT IN (?1) ORDER BY random() LIMIT 20 ",
             nativeQuery = true)
-    List<ConstructionImage> getRandomImage(int[] usedId);
+    Set<ConstructionImage> getRandomImage(int[] usedId);
 
     List<ConstructionImage> getByConstructionArchitecturalStyleId(Integer id);
 

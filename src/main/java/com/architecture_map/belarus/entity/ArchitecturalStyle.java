@@ -12,14 +12,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.Table;
 import javax.persistence.ManyToMany;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "architectural_style")
 @Getter
 @Setter(AccessLevel.PUBLIC)
 @RequiredArgsConstructor

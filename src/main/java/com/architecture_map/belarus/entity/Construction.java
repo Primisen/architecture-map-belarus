@@ -16,7 +16,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.Table;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.ManyToMany;
@@ -25,7 +24,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "construction")
 @RequiredArgsConstructor
 @Getter
 @Setter(AccessLevel.PUBLIC)

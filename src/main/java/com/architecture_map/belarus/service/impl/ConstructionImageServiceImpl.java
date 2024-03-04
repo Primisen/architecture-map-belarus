@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -20,7 +21,7 @@ public class ConstructionImageServiceImpl implements ConstructionImageService {
     private final ConstructionImageMapper constructionImageMapper;
 
     @Override
-    public List<ConstructionImage> getRandomImage(String usedId) {
+    public Set<ConstructionImage> getRandomImage(String usedId) {
 
         int[] usedImaageId = {0};
         //horrible

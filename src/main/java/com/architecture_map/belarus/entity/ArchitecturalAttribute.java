@@ -15,12 +15,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "architectural_attribute")
 @Getter
 @Setter(AccessLevel.PUBLIC)
 @RequiredArgsConstructor
@@ -35,7 +33,6 @@ public class ArchitecturalAttribute {
     private String name;
     private String description;
 
-
-    @OneToMany(mappedBy = "architecturalAttribute", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "architecturalAttribute", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private Set<ArchitecturalAttributeImage> images = new HashSet<>();
 }

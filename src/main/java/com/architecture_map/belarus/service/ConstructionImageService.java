@@ -4,10 +4,11 @@ import com.architecture_map.belarus.dto.ConstructionImageDto;
 import com.architecture_map.belarus.entity.image.ConstructionImage;
 
 import java.util.List;
+import java.util.Set;
 
 public interface ConstructionImageService {
 
-    List<ConstructionImage> getRandomImage(String usedId);
+    Set<ConstructionImage> getRandomImage(String usedId);
 
     List<ConstructionImage> getByConstructionArchitecturalStyleId(Integer id);
 

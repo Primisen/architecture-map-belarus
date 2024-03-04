@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,7 +29,7 @@ public class ConstructionImageController {
 
     @Operation(summary = "Getting list of random images of construction for home page")
     @GetMapping("/")
-    public List<ConstructionImage> getRandomConstructionImages(@RequestParam(required = false) String usedId) {
+    public Set<ConstructionImage> getRandomConstructionImages(@RequestParam(required = false) String usedId) {
         return constructionImageService.getRandomImage(usedId);
     }
 
