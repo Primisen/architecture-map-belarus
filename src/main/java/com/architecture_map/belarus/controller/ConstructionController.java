@@ -7,9 +7,12 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -58,5 +61,12 @@ public class ConstructionController {
     public void update(@PathVariable Integer id,
                        @RequestBody ConstructionDto constructionUpdates) {
         constructionService.update(id, constructionUpdates);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<String> partialUpdate(@PathVariable Integer id,
+                                              @RequestBody ConstructionDto construction) {
+        constructionService.partialUpdate(id, construction);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

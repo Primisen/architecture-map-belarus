@@ -4,6 +4,7 @@ import com.architecture_map.belarus.dto.ConstructionDto;
 import com.architecture_map.belarus.entity.Construction;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ConstructionService {
 
@@ -16,4 +17,6 @@ public interface ConstructionService {
     void update(Integer idOfOldConstruction, ConstructionDto updatedConstruction);
 
     void delete(Integer id);
+
+    Optional<Construction> partialUpdate(Integer id, ConstructionDto construction);
 }

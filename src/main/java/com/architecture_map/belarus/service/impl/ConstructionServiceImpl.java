@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -67,6 +68,11 @@ public class ConstructionServiceImpl implements ConstructionService {
     @Override
     public void delete(Integer id) {
         constructionRepository.deleteById(id);
+    }
+
+    @Override
+    public Optional<Construction> partialUpdate(Integer id, ConstructionDto construction) {
+        return Optional.empty();
     }
 
 }
