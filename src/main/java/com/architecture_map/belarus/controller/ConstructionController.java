@@ -2,11 +2,11 @@ package com.architecture_map.belarus.controller;
 
 import com.architecture_map.belarus.dto.ConstructionDto;
 import com.architecture_map.belarus.entity.Construction;
+import com.architecture_map.belarus.exception.NotFoundException;
 import com.architecture_map.belarus.service.ConstructionService;
 import io.swagger.v3.oas.annotations.Operation;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -24,49 +24,56 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@AllArgsConstructor
 @RequestMapping("/constructions")
 @CrossOrigin(origins = {"http://localhost:4200", "http://localhost:7200"})
 public class ConstructionController {
 
-    @Autowired
-    private ConstructionService constructionService;
+    private final ConstructionService constructionService;
 
-    @Operation(summary = "Get all existing constructions")
+    @PostMapping("/")
+    public ResponseEntity<String> create(@RequestBody ConstructionDto construction) {
+        Construction savedConstruction = constructionService.create(construction);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", savedConstruction.getId().toString());
+
+        return new ResponseEntity<>(headers, HttpStatus.CREATED);
+    }
+
     @GetMapping("/")
     public List<Construction> getAll() {
         return constructionService.findAll();
     }
 
-    @Operation(summary = "Get all information about construction")
     @GetMapping("/{id}")
-    public Construction getById(@PathVariable Integer id){
-        return constructionService.findById(id);
+    public Construction getById(@PathVariable Integer id) {
+        return constructionService.findById(id).orElseThrow(NotFoundException::new);
     }
 
-    @Operation(summary = "Adding a new construction")
-    @PostMapping("/")
-    public void add(@RequestBody ConstructionDto construction) {
-        constructionService.add(construction);
-    }
-
-    @Operation(summary = "Delete construction by id")
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable Integer id) {
-        constructionService.delete(id);
-    }
-
-    @Operation(summary = "Change an existing construction")
     @PutMapping("/{id}")
-    public void update(@PathVariable Integer id,
-                       @RequestBody ConstructionDto constructionUpdates) {
-        constructionService.update(id, constructionUpdates);
+    public ResponseEntity<String> updateById(@PathVariable Integer id,
+                                             @RequestBody ConstructionDto constructionUpdates) {
+        if (constructionService.updateBuId(id, constructionUpdates).isEmpty()) {
+            throw new NotFoundException();
+        }
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<String> partialUpdate(@PathVariable Integer id,
-                                              @RequestBody ConstructionDto construction) {
-        constructionService.partialUpdate(id, construction);
+    public ResponseEntity<String> patchUpdateById(@PathVariable Integer id,
+                                                  @RequestBody ConstructionDto construction) {
+        constructionService.patchUpdateBuId(id, construction);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteById(@PathVariable Integer id) {
+
+        if (!constructionService.deleteById(id)) {
+            throw new NotFoundException();
+        }
+
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

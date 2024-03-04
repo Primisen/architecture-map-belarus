@@ -8,15 +8,16 @@ import java.util.Optional;
 
 public interface ConstructionService {
 
+    Construction create(ConstructionDto constructionDto);
+
     List<Construction> findAll();
 
-    Construction findById(Integer id);
+    Optional<Construction> findById(Integer id);
 
-    void add(ConstructionDto construction);
+    Optional<Construction> updateBuId(Integer id, ConstructionDto constructionDto);
 
-    void update(Integer idOfOldConstruction, ConstructionDto updatedConstruction);
+    Optional<Construction> patchUpdateBuId(Integer id, ConstructionDto constructionDto);
 
-    void delete(Integer id);
+    boolean deleteById(Integer id);
 
-    Optional<Construction> partialUpdate(Integer id, ConstructionDto construction);
 }

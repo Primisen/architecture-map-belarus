@@ -2,26 +2,28 @@ package com.architecture_map.belarus.service.impl;
 
 import com.architecture_map.belarus.dto.SourceDto;
 import com.architecture_map.belarus.entity.Source;
-import com.architecture_map.belarus.exception.SourceException;
 import com.architecture_map.belarus.mapper.SourceMapper;
 import com.architecture_map.belarus.repository.SourceRepository;
 import com.architecture_map.belarus.service.SourceService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 @RequiredArgsConstructor
 public class SourceServiceImpl implements SourceService {
 
-    @Autowired
-    private SourceRepository sourceRepository;
+    private final SourceRepository sourceRepository;
 
-    @Autowired
-    private SourceMapper sourceMapper;
+    private final SourceMapper sourceMapper;
 
+    @Override
+    public Source create(SourceDto sourceDto) {
+        return sourceRepository.save(sourceMapper.toSource(sourceDto));
+    }
 
     @Override
     public List<Source> findAll() {
@@ -29,71 +31,28 @@ public class SourceServiceImpl implements SourceService {
     }
 
     @Override
-    public Source add(SourceDto sourceDto) throws SourceException {
+    public Optional<Source> updateById(Integer id, SourceDto sourceDto) {
 
-        if (sourceNotExists(sourceDto)) {
-            return save(sourceDto);
+        AtomicReference<Optional<Source>> atomicReference = new AtomicReference<>();
 
-        } else {
-            throw new SourceException("Source is exists.");
-        }
+        sourceRepository.findById(id).ifPresentOrElse(foundSource -> {
+            foundSource.setName(sourceDto.getName());
+            foundSource.setUrl(sourceDto.getUrl());
+            atomicReference.set(Optional.of(
+                    sourceRepository.save(foundSource)));
+        }, () -> atomicReference.set(Optional.empty()));
+
+        return atomicReference.get();
     }
 
     @Override
-    public Source update(Integer id, SourceDto sourceUpdates) throws SourceException {
+    public boolean deleteByid(Integer id) {
 
-        Source source = findById(id);
-
-        updateName(source, sourceUpdates);
-        updateUrl(source, sourceUpdates);
-
-        return sourceRepository.save(source);
-    }
-
-    @Override
-    public void delete(Integer id) throws SourceException {
-
-        if (sourceIsExists(id)) {
+        if (sourceRepository.existsById(id)) {
             sourceRepository.deleteById(id);
-
-        } else {
-            throw new SourceException("Source not exists.");
+            return true;
         }
-    }
 
-    private void updateUrl(Source source, SourceDto sourceUpdates) {
-
-        if (sourceUpdates.getUrl() != null) {
-            source.setUrl(sourceUpdates.getUrl());
-        }
-    }
-
-    private void updateName(Source source, SourceDto sourceUpdates) {
-
-        if (sourceUpdates.getName() != null) {
-            source.setName(sourceUpdates.getName());
-        }
-    }
-
-    private Source findById(Integer id) throws SourceException {
-
-        return sourceRepository.findById(id)
-                .orElseThrow(() -> new SourceException("Source with id = " + id + " not exists."));
-    }
-
-    private Source save(SourceDto sourceDto) {
-        return sourceRepository.save(sourceMapper.toSource(sourceDto));
-    }
-
-    private boolean sourceNotExists(SourceDto sourceDto) {
-        return !sourceIsExists(sourceDto);
-    }
-
-    private boolean sourceIsExists(SourceDto sourceDto) {
-        return sourceRepository.existsByUrl(sourceDto.getUrl());
-    }
-
-    private boolean sourceIsExists(Integer id) {
-        return sourceRepository.existsById(id);
+        return false;
     }
 }

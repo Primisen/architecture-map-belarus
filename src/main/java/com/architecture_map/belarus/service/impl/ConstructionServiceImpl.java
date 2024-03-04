@@ -9,29 +9,33 @@ import com.architecture_map.belarus.repository.ArchitecturalStyleRepository;
 import com.architecture_map.belarus.repository.ConstructionRepository;
 import com.architecture_map.belarus.service.ConstructionService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 @RequiredArgsConstructor
 public class ConstructionServiceImpl implements ConstructionService {
 
-    @Autowired
-    private ConstructionRepository constructionRepository;
-    @Autowired
-    private AddressRepository addressRepository;
+    private final ConstructionRepository constructionRepository;
+    private final AddressRepository addressRepository;
+    private final ConstructionMapper constructionMapper;
+    private final AddressMapper addressMapper;
+    private final ArchitecturalStyleRepository architecturalStyleRepository;
 
-    @Autowired
-    private ConstructionMapper constructionMapper;
+    @Override
+    public Construction create(ConstructionDto constructionDto) {
+//        Construction construction = constructionMapper.toConstruction(constructionDto);
+//        addressRepository.save(construction.getAddress());
 
-    @Autowired
-    private AddressMapper addressMapper;
-
-    @Autowired
-    private ArchitecturalStyleRepository architecturalStyleRepository;
+        //
+//        construction.setArchitecturalStyle(
+//                architecturalStyleRepository.
+//                        findById(constructionDto.getArchitecturalStyleId()).get());
+        return constructionRepository.save(constructionMapper.toConstruction(constructionDto));
+    }
 
     @Override
     public List<Construction> findAll() {
@@ -39,40 +43,37 @@ public class ConstructionServiceImpl implements ConstructionService {
     }
 
     @Override
-    public Construction findById(Integer id) {
-
-        Construction construction = constructionRepository.findById(id).get();
-        return construction;
+    public Optional<Construction> findById(Integer id) {
+        return constructionRepository.findById(id);
     }
 
     @Override
-    public void add(ConstructionDto constructionDto) {
-        Construction construction = constructionMapper.toConstruction(constructionDto);
-        addressRepository.save(construction.getAddress());
+    public Optional<Construction> updateBuId(Integer id, ConstructionDto constructionDto) {
 
-        //
-        construction.setArchitecturalStyle(
-                architecturalStyleRepository.
-                        findById(constructionDto.getArchitecturalStyleId()).get());
-        constructionRepository.save(construction);
+        AtomicReference<Optional<Construction>> atomicReference = new AtomicReference<>();
+
+        constructionRepository.findById(id).ifPresentOrElse(foundConstruction -> {
+            foundConstruction.setName(constructionDto.getName());
+            foundConstruction.setDescription(constructionDto.getDescription());
+            atomicReference.set(Optional.of(
+                    constructionRepository.save(foundConstruction)));
+        }, () -> atomicReference.set(Optional.empty()));
+
+        return atomicReference.get();
     }
 
     @Override
-    public void update(Integer idOfOldConstruction, ConstructionDto updatedConstruction) {
-
-        Construction oldConstruction = constructionRepository.findById(idOfOldConstruction).get();
-        oldConstruction.setAddress(addressMapper.toAddress(updatedConstruction.getAddress()));
-        oldConstruction.setName(updatedConstruction.getName());
-    }
-
-    @Override
-    public void delete(Integer id) {
-        constructionRepository.deleteById(id);
-    }
-
-    @Override
-    public Optional<Construction> partialUpdate(Integer id, ConstructionDto construction) {
+    public Optional<Construction> patchUpdateBuId(Integer id, ConstructionDto construction) {
         return Optional.empty();
     }
 
+    @Override
+    public boolean deleteById(Integer id) {
+        if (constructionRepository.existsById(id)) {
+            constructionRepository.deleteById(id);
+            return true;
+        }
+
+        return false;
+    }
 }

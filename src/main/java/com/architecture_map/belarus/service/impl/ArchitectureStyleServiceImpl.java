@@ -2,64 +2,31 @@ package com.architecture_map.belarus.service.impl;
 
 import com.architecture_map.belarus.dto.ArchitecturalStyleDto;
 import com.architecture_map.belarus.entity.ArchitecturalStyle;
-import com.architecture_map.belarus.exception.ArchitecturalStyleException;
 import com.architecture_map.belarus.mapper.ArchitecturalStyleMapper;
 import com.architecture_map.belarus.repository.ArchitecturalStyleRepository;
 import com.architecture_map.belarus.service.ArchitectureStyleService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 @RequiredArgsConstructor
 public class ArchitectureStyleServiceImpl implements ArchitectureStyleService {
 
-    @Autowired
-    private ArchitecturalStyleRepository architecturalStyleRepository;
-
-    @Autowired
-    private ArchitecturalStyleMapper architecturalStyleMapper;
+    private final ArchitecturalStyleRepository architecturalStyleRepository;
+    private final ArchitecturalStyleMapper architecturalStyleMapper;
 
     @Override
-    public ArchitecturalStyle findById(Integer id) throws ArchitecturalStyleException {
-        return architecturalStyleRepository.findById(id).orElseThrow(() ->
-                new ArchitecturalStyleException("Architectural style with id = " + id + " not exists."));
+    public ArchitecturalStyle create(ArchitecturalStyleDto architecturalStyleDto) {
+        return architecturalStyleRepository.save(architecturalStyleMapper.toArchitecturalStyle(architecturalStyleDto));
     }
 
     @Override
-    public void add(ArchitecturalStyleDto architecturalStyleDto) throws ArchitecturalStyleException {
-
-        if (architecturalStyleNotExists(architecturalStyleDto)) {
-            save(architecturalStyleDto);
-
-        } else {
-            throw new ArchitecturalStyleException("Architectural style is exists.");
-        }
-
-    }
-
-    @Override
-    public void update(Integer id, ArchitecturalStyleDto styleUpdates) throws ArchitecturalStyleException {
-
-        ArchitecturalStyle architecturalStyle = findById(id);
-        if (styleUpdates.getName() != null) {
-            architecturalStyle.setName(styleUpdates.getName());
-        }
-
-        architecturalStyleRepository.save(architecturalStyle);
-    }
-
-    @Override
-    public void delete(Integer id) throws ArchitecturalStyleException {
-
-        if (architecturalStyleIsExists(id)) {
-            architecturalStyleRepository.deleteById(id);
-
-        } else {
-            throw new ArchitecturalStyleException("Architectural style not exists.");
-        }
+    public Optional<ArchitecturalStyle> findById(Integer id) {
+        return architecturalStyleRepository.findById(id);
     }
 
     @Override
@@ -67,20 +34,30 @@ public class ArchitectureStyleServiceImpl implements ArchitectureStyleService {
         return architecturalStyleRepository.findAll();
     }
 
-    private boolean architecturalStyleNotExists(ArchitecturalStyleDto architecturalStyle) {
-        return !architecturalStyleIsExists(architecturalStyle);
+
+    @Override
+    public Optional<ArchitecturalStyle> updateById(Integer id, ArchitecturalStyleDto architecturalStyleDto) {
+
+        AtomicReference<Optional<ArchitecturalStyle>> atomicReference = new AtomicReference<>();
+
+        architecturalStyleRepository.findById(id).ifPresentOrElse(foundArchitecturalStyle -> {
+            foundArchitecturalStyle.setName(architecturalStyleDto.getName());
+            foundArchitecturalStyle.setAttributes(architecturalStyleDto.getArchitecturalAttributes());
+            foundArchitecturalStyle.setDescription(architecturalStyleDto.getDescription());
+            atomicReference.set(Optional.of(
+                    architecturalStyleRepository.save(foundArchitecturalStyle)));
+        }, () -> atomicReference.set(Optional.empty()));
+
+        return atomicReference.get();
     }
 
-    private boolean architecturalStyleIsExists(ArchitecturalStyleDto architecturalStyle) {
-        return architecturalStyleRepository.existsByName(architecturalStyle.getName());
-    }
+    @Override
+    public boolean deleteById(Integer id) {
+        if (architecturalStyleRepository.existsById(id)) {
+            architecturalStyleRepository.deleteById(id);
+            return true;
+        }
 
-    private boolean architecturalStyleIsExists(Integer id) {
-        return architecturalStyleRepository.existsById(id);
-    }
-
-    private void save(ArchitecturalStyleDto architecturalStyleDto) {
-
-        architecturalStyleRepository.save(architecturalStyleMapper.toArchitecturalStyle(architecturalStyleDto));
+        return false;
     }
 }

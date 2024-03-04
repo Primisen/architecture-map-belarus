@@ -2,18 +2,18 @@ package com.architecture_map.belarus.service;
 
 import com.architecture_map.belarus.dto.ArchitecturalStyleDto;
 import com.architecture_map.belarus.entity.ArchitecturalStyle;
-import com.architecture_map.belarus.exception.ArchitecturalStyleException;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ArchitectureStyleService {
-    void add(ArchitecturalStyleDto architecturalStyleDto) throws ArchitecturalStyleException;
-
-    void update(Integer id, ArchitecturalStyleDto styleUpdates) throws ArchitecturalStyleException;
-
-    void delete(Integer id) throws ArchitecturalStyleException;
+    ArchitecturalStyle create(ArchitecturalStyleDto architecturalStyleDto);
 
     List<ArchitecturalStyle> findAll();
 
-    ArchitecturalStyle findById(Integer id) throws ArchitecturalStyleException;
+    Optional<ArchitecturalStyle> findById(Integer id);
+
+    Optional<ArchitecturalStyle> updateById(Integer id, ArchitecturalStyleDto styleUpdates);
+
+    boolean deleteById(Integer id);
 }

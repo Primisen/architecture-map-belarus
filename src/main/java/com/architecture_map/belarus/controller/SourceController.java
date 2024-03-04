@@ -2,10 +2,12 @@ package com.architecture_map.belarus.controller;
 
 import com.architecture_map.belarus.dto.SourceDto;
 import com.architecture_map.belarus.entity.Source;
-import com.architecture_map.belarus.exception.SourceException;
+import com.architecture_map.belarus.exception.NotFoundException;
 import com.architecture_map.belarus.service.SourceService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,26 +26,38 @@ import java.util.List;
 @CrossOrigin(origins = {"http://localhost:7200", "http://localhost:4200"})
 public class SourceController {
 
-    @Autowired
-    private SourceService sourceService;
+    private final SourceService sourceService;
 
     @PostMapping("/")
-    public void add(@RequestBody SourceDto source) throws SourceException {
-        sourceService.add(source);
+    public ResponseEntity<String> create(@RequestBody SourceDto source) {
+        Source savedSource = sourceService.create(source);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", savedSource.getId().toString());
+
+        return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
     @GetMapping("/")
-    public List<Source> findAll(){
+    public List<Source> findAll() {
         return sourceService.findAll();
     }
 
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable Integer id) throws SourceException {
-        sourceService.delete(id);
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateById(@PathVariable Integer id, @RequestBody SourceDto sourceDto) {
+        if (sourceService.updateById(id, sourceDto).isEmpty()) {
+            throw new NotFoundException();
+        }
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping("/{id}")
-    public void update(@PathVariable Integer id, @RequestBody SourceDto sourceUpdates) throws SourceException {
-        sourceService.update(id, sourceUpdates);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteById(@PathVariable Integer id) {
+        if (!sourceService.deleteByid(id)) {
+            throw new NotFoundException();
+        }
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
