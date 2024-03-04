@@ -10,6 +10,7 @@ import com.architecture_map.belarus.repository.ConstructionRepository;
 import com.architecture_map.belarus.service.ConstructionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -63,8 +64,22 @@ public class ConstructionServiceImpl implements ConstructionService {
     }
 
     @Override
-    public Optional<Construction> patchUpdateBuId(Integer id, ConstructionDto construction) {
-        return Optional.empty();
+    public Optional<Construction> patchUpdateBuId(Integer id, ConstructionDto constructionDto) {
+        AtomicReference<Optional<Construction>> atomicReference = new AtomicReference<>();
+
+        constructionRepository.findById(id).ifPresentOrElse(foundConstruction -> {
+            if (constructionDto.getArchitecturalStyleId() != null){
+                foundConstruction.setArchitecturalStyle(architecturalStyleRepository.getReferenceById(constructionDto.getArchitecturalStyleId()));
+            }
+            if (StringUtils.hasText(constructionDto.getName())){
+                foundConstruction.setName(constructionDto.getName());
+            }
+            atomicReference.set(Optional.of((constructionRepository.save(foundConstruction))));
+        }, () -> {
+            atomicReference.set(Optional.empty());
+        });
+
+        return atomicReference.get();
     }
 
     @Override

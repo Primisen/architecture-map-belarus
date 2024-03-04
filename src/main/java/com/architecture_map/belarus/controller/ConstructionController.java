@@ -4,7 +4,6 @@ import com.architecture_map.belarus.dto.ConstructionDto;
 import com.architecture_map.belarus.entity.Construction;
 import com.architecture_map.belarus.exception.NotFoundException;
 import com.architecture_map.belarus.service.ConstructionService;
-import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
