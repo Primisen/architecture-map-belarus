@@ -21,9 +21,9 @@ import javax.persistence.PrimaryKeyJoinColumn;
 @PrimaryKeyJoinColumn(name = "image_id")
 public class ArchitectImage extends Image{
 
-//    @JsonIgnoreProperties("images")
+    @JsonIgnoreProperties("images")
     @OneToOne
-    @JoinColumn(name = "architect_id")
+    @JoinColumn(name = "architect_id", referencedColumnName = "id")
     private Architect architect;
 
 }

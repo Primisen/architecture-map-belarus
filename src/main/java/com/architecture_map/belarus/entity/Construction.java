@@ -45,6 +45,7 @@ public class Construction {
     @JoinColumn(name = "architectural_style_id")
     private ArchitecturalStyle architecturalStyle;
 
+    @JsonIgnoreProperties("constructions")
     @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(
             name = "construction_architect",

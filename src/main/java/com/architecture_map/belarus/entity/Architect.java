@@ -9,12 +9,18 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -35,7 +41,16 @@ public class Architect {
     @Column(name="work_description", columnDefinition="TEXT")
     private String workDescription;
 
-//    @JsonIgnoreProperties("architect")
+    @JsonIgnoreProperties("architect")
     @OneToOne(mappedBy = "architect")
     private ArchitectImage image;
+
+    @JsonIgnoreProperties("architects")
+    @ManyToMany(cascade = {CascadeType.ALL})
+    @JoinTable(
+            name = "construction_architect",
+            joinColumns = { @JoinColumn(name = "architect_id")},
+            inverseJoinColumns = {@JoinColumn(name = "construction_id")}
+    )
+    private Set<Construction> constructions = new HashSet<>();
 }
