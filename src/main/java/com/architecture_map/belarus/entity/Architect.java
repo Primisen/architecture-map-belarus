@@ -1,5 +1,7 @@
 package com.architecture_map.belarus.entity;
 
+import com.architecture_map.belarus.entity.image.ArchitectImage;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -7,10 +9,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 @Entity
 @Getter
@@ -28,5 +32,10 @@ public class Architect {
     private String middleName;
     private String surname;
     private String yearsOfLife;
+    @Column(name="work_description", columnDefinition="TEXT")
     private String workDescription;
+
+//    @JsonIgnoreProperties("architect")
+    @OneToOne(mappedBy = "architect")
+    private ArchitectImage image;
 }
