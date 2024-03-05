@@ -5,6 +5,7 @@ import com.architecture_map.belarus.entity.Construction;
 import com.architecture_map.belarus.mapper.AddressMapper;
 import com.architecture_map.belarus.mapper.ConstructionMapper;
 import com.architecture_map.belarus.repository.AddressRepository;
+import com.architecture_map.belarus.repository.ArchitectRepository;
 import com.architecture_map.belarus.repository.ArchitecturalStyleRepository;
 import com.architecture_map.belarus.repository.ConstructionRepository;
 import com.architecture_map.belarus.service.ConstructionService;
@@ -25,6 +26,7 @@ public class ConstructionServiceImpl implements ConstructionService {
     private final ConstructionMapper constructionMapper;
     private final AddressMapper addressMapper;
     private final ArchitecturalStyleRepository architecturalStyleRepository;
+    private final ArchitectRepository architectRepository;
 
     @Override
     public Construction create(ConstructionDto constructionDto) {
@@ -73,6 +75,11 @@ public class ConstructionServiceImpl implements ConstructionService {
             }
             if (StringUtils.hasText(constructionDto.getName())){
                 foundConstruction.setName(constructionDto.getName());
+            }
+            if (constructionDto.getArchitectsId() != null){
+                foundConstruction.getArchitects().addAll(
+                        architectRepository.findAllById(constructionDto.getArchitectsId())
+                );
             }
             atomicReference.set(Optional.of((constructionRepository.save(foundConstruction))));
         }, () -> {
