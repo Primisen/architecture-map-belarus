@@ -6,6 +6,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ArchitecturalStyleRepository extends JpaRepository<ArchitecturalStyle, Integer> {
-
-    boolean existsByName(String name);
 }
