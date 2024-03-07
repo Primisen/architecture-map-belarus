@@ -3,15 +3,13 @@ package com.architecture_map.belarus.service;
 import com.architecture_map.belarus.dto.ConstructionImageDto;
 import com.architecture_map.belarus.entity.image.ConstructionImage;
 
-import java.util.List;
 import java.util.Set;
 
 public interface ConstructionImageService {
 
-    Set<ConstructionImage> getRandomImage(String usedId);
+    ConstructionImage create(ConstructionImageDto image);
 
-    List<ConstructionImage> getByConstructionArchitecturalStyleId(Integer id);
+    Set<ConstructionImage> getRandomAndUniqueImages(String gotImagesId);
 
-    void save (ConstructionImageDto image);
-
+    Set<ConstructionImage> getByConstructionArchitecturalStyleId(Integer architecturalStyleId);
 }

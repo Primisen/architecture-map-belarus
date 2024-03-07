@@ -6,46 +6,46 @@ import com.architecture_map.belarus.mapper.ConstructionImageMapper;
 import com.architecture_map.belarus.repository.ConstructionImageRepository;
 import com.architecture_map.belarus.service.ConstructionImageService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
 public class ConstructionImageServiceImpl implements ConstructionImageService {
 
-//    @Autowired
     private final ConstructionImageRepository constructionImageRepository;
     private final ConstructionImageMapper constructionImageMapper;
 
     @Override
-    public Set<ConstructionImage> getRandomImage(String usedId) {
+    public ConstructionImage create(ConstructionImageDto image) {
+        return constructionImageRepository.save(constructionImageMapper.toConstructionImage(image));
+    }
 
-        int[] usedImaageId = {0};
-        //horrible
-        if (usedId != null) {
-    
-            String[] strings = usedId.split(",");
-            usedImaageId = new int[strings.length];
+    @Override
+    public Set<ConstructionImage> getRandomAndUniqueImages(String gotImagesId) {
+        return constructionImageRepository.getRandomAndUniqueImages(parseStringToArrayOfInt(gotImagesId));
+    }
 
-            for (int i = 0; i < strings.length; i++) {
-                usedImaageId[i] = Integer.parseInt(strings[i]);
+    @Override
+    public Set<ConstructionImage> getByConstructionArchitecturalStyleId(Integer architecturalStyleId) {
+        return constructionImageRepository.getByConstructionArchitecturalStyleId(architecturalStyleId);
+    }
+
+    private int[] parseStringToArrayOfInt(String string) {
+
+        int[] arrayOfInt = new int[]{0};
+
+        if (string != null) {
+
+            String[] arrayOfStrings = string.split(",");
+            arrayOfInt = new int[arrayOfStrings.length];
+
+            for (int i = 0; i < arrayOfStrings.length; i++) {
+                arrayOfInt[i] = Integer.parseInt(arrayOfStrings[i]);
             }
-            //horrible
         }
-        return constructionImageRepository.getRandomImage(usedImaageId);
-    }
 
-    @Override
-    public List<ConstructionImage> getByConstructionArchitecturalStyleId(Integer id) {
-        return constructionImageRepository.getByConstructionArchitecturalStyleId(id);
+        return arrayOfInt;
     }
-
-    @Override
-    public void save(ConstructionImageDto image) {
-        constructionImageRepository.save(constructionImageMapper.toConstructionImage(image));
-    }
-
 }
