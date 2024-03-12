@@ -33,3 +33,5 @@ out/
 *.iml
 *.ipr
 *.iws
+
+.env
