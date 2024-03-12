@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  frontend:
+    build:
+      context: https://github.com/Primisen/architecture-map-frontend.git
+    ports:
+      - "4200:4200"
+  app:
+    image: 'docker-spring-boot-postgres:latest'
+    build:
+      context: .
+    container_name: app
+    depends_on:
+      db:
+         condition: service_healthy
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/architecture-map?currentSchema=architecture_map
+#      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/compose-postgres
+      - DB_USERNAME=nadzeya2
+      - DB_PASSWORD=nadzeya2
+#      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    ports:
+      - "8080:8080"
+  db:
+    image: 'postgres:13.1-alpine'
+    container_name: db
+    environment:
+      - POSTGRES_USER=nadzeya2
+      - POSTGRES_PASSWORD=nadzeya2
+      - POSTGRES_DB=architecture-map
+      - PGUSER=nadzeya2
+    healthcheck:
+      test: pg_isready -q -d $${POSTGRES_DB} -U $${POSTGRES_USER}
+      interval: 3s
+      timeout: 3s
+      retries: 30
+    volumes:
+      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
