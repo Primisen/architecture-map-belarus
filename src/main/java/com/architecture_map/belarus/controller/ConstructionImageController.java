@@ -22,7 +22,7 @@ import java.util.Set;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/construction-images")
-@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:7200"})
+@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:7200", "*"})
 public class ConstructionImageController {
 
     private final ConstructionImageService constructionImageService;

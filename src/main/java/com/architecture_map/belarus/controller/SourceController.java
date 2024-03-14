@@ -23,7 +23,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/sources")
-@CrossOrigin(origins = {"http://localhost:7200", "http://localhost:4200"})
+@CrossOrigin(origins = {"http://localhost:7200", "http://localhost:4200", "*"})
 public class SourceController {
 
     private final SourceService sourceService;

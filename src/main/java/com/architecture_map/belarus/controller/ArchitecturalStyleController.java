@@ -23,7 +23,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/architectural-styles")
 @RequiredArgsConstructor
-@CrossOrigin(origins = {"http://localhost:7200", "http://localhost:4200"})
+@CrossOrigin(origins = {"http://localhost:7200", "http://localhost:4200", "*"})
 public class ArchitecturalStyleController {
 
     private final ArchitectureStyleService architectureStyleService;

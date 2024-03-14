@@ -24,7 +24,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/constructions")
-@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:7200"})
+@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:7200", "*"})
 public class ConstructionController {
 
     private final ConstructionService constructionService;
