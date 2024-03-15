@@ -11,7 +11,7 @@ import java.util.Set;
 public interface ConstructionImageRepository extends JpaRepository<ConstructionImage, Integer> {
 
     @Query(
-            value = "SELECT *  FROM construction_image JOIN image ON image_id=id where show='true' AND id NOT IN (?1) ORDER BY random() LIMIT 20 ",
+            value = "SELECT *  FROM construction_image JOIN image ON image_id=id WHERE show=true AND id NOT IN (?1) ORDER BY random() LIMIT 20",
             nativeQuery = true)
     Set<ConstructionImage> getRandomAndUniqueImages(int[] gotImageId);
 
