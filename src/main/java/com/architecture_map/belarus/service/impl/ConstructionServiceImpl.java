@@ -2,9 +2,7 @@ package com.architecture_map.belarus.service.impl;
 
 import com.architecture_map.belarus.dto.ConstructionDto;
 import com.architecture_map.belarus.entity.Construction;
-import com.architecture_map.belarus.mapper.AddressMapper;
 import com.architecture_map.belarus.mapper.ConstructionMapper;
-import com.architecture_map.belarus.repository.AddressRepository;
 import com.architecture_map.belarus.repository.ArchitectRepository;
 import com.architecture_map.belarus.repository.ArchitecturalStyleRepository;
 import com.architecture_map.belarus.repository.ConstructionRepository;
@@ -22,9 +20,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class ConstructionServiceImpl implements ConstructionService {
 
     private final ConstructionRepository constructionRepository;
-    private final AddressRepository addressRepository;
     private final ConstructionMapper constructionMapper;
-    private final AddressMapper addressMapper;
     private final ArchitecturalStyleRepository architecturalStyleRepository;
     private final ArchitectRepository architectRepository;
 
