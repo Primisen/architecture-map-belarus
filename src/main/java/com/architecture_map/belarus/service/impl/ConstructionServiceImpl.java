@@ -30,13 +30,6 @@ public class ConstructionServiceImpl implements ConstructionService {
 
     @Override
     public Construction create(ConstructionDto constructionDto) {
-//        Construction construction = constructionMapper.toConstruction(constructionDto);
-//        addressRepository.save(construction.getAddress());
-
-        //
-//        construction.setArchitecturalStyle(
-//                architecturalStyleRepository.
-//                        findById(constructionDto.getArchitecturalStyleId()).get());
         return constructionRepository.save(constructionMapper.toConstruction(constructionDto));
     }
 
