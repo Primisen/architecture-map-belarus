@@ -37,11 +37,11 @@ public class Construction {
     private String name;
     private String buildingTime;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "address_id", nullable = false)
     private Address address;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "architectural_style_id")
     private ArchitecturalStyle architecturalStyle;
 
