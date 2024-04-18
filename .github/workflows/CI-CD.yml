@@ -69,4 +69,4 @@ jobs:
       - name: Docker-compose build
         run: docker-compose build
       - name: Docker-compose run
-        run: docker-compose  up
+        run: docker-compose  up -d
