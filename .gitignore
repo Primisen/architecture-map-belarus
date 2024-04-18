@@ -34,4 +34,4 @@ out/
 *.ipr
 *.iws
 
-src/main/docker/.env
+.env
