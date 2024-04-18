@@ -60,11 +60,11 @@ jobs:
             echo PGUSER=${{ secrets.PGUSER }} >> .env
             echo DB_USERNAME=${{ secrets.DB_USERNAME }} >> .env
             echo DB_PASSWORD=${{ secrets.DB_PASSWORD }} >> .env
-#      - name: Rerun and rebuild Java docker-container
-#        run: cd /opt/architecture-map-belarus/src/main/docker/ && docker-compose up --detach --build backend
-      - name: Stop docker-compose
-        run: docker-compose down
-      - name: Docker-compose build
-        run: docker-compose build
-      - name: Docker-compose run
-        run: docker-compose  up
+      - name: Rerun and rebuild Java docker-container
+        run: cd /opt/architecture-map-belarus/src/main/docker/ && docker-compose up --detach --build backend
+#      - name: Stop docker-compose
+#        run: docker-compose down
+#      - name: Docker-compose build
+#        run: docker-compose build
+#      - name: Docker-compose run
+#        run: docker-compose  up
