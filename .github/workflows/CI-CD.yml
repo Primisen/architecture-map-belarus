@@ -63,7 +63,7 @@ jobs:
       - name: Delete old container
         run: docker rm backend
       - name: Rerun and rebuild Java docker-container
-        run: cd /opt/architecture-map-belarus/src/main/docker/ && docker-compose restart backend
+        run: docker-compose restart backend
 #      - name: Stop docker-compose
 #        run: docker-compose down
 #      - name: Docker-compose build
