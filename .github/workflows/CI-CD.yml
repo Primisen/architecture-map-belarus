@@ -51,14 +51,14 @@ jobs:
 #        run: sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/belarus-architecture-map:latest
 #      - name: Delete old container
 #        run: sudo docker rm -f belarus-architecture-map
-      - name: Create env file
-        run: |
-            touch .env       
-            echo POSTGRES_USER=${{ secrets.POSTGRES_USER }}  >> .env
-            echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env
-            echo POSTGRES_DB=${{ secrets.POSTGRES_DB }} >> .env
-            echo PGUSER=${{ secrets.PGUSER }} >> .env
-            echo DB_USERNAME=${{ secrets.DB_USERNAME }} >> .env
-            echo DB_PASSWORD=${{ secrets.DB_PASSWORD }} >> .env
+#      - name: Create env file
+#        run: |
+#            touch .env
+#            echo POSTGRES_USER=${{ secrets.POSTGRES_USER }}  >> .env
+#            echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env
+#            echo POSTGRES_DB=${{ secrets.POSTGRES_DB }} >> .env
+#            echo PGUSER=${{ secrets.PGUSER }} >> .env
+#            echo DB_USERNAME=${{ secrets.DB_USERNAME }} >> .env
+#            echo DB_PASSWORD=${{ secrets.DB_PASSWORD }} >> .env
       - name: Rerun and rebuild Java docker-container
         run: docker-compose up --detach --build backend
