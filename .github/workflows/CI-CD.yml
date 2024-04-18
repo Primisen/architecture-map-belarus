@@ -56,17 +56,17 @@ jobs:
           echo PGUSER=${{ secrets.PGUSER }} >> .env
           echo DB_USERNAME=${{ secrets.DB_USERNAME }} >> .env
           echo DB_PASSWORD=${{ secrets.DB_PASSWORD }} >> .env
-      - name: Pull Image from docker hub
-        run: docker pull ${{ secrets.DOCKERHUB_USERNAME }}/belarus-architecture-map:latest
-      - name: Stop old container
-        run: docker stop backend
-      - name: Delete old container
-        run: docker rm backend
-      - name: Rerun and rebuild Java docker-container
-        run: docker-compose restart backend
-#      - name: Stop docker-compose
-#        run: docker-compose down
-#      - name: Docker-compose build
-#        run: docker-compose build
-#      - name: Docker-compose run
-#        run: docker-compose  up
+#      - name: Pull Image from docker hub
+#        run: docker pull ${{ secrets.DOCKERHUB_USERNAME }}/belarus-architecture-map:latest
+#      - name: Stop old container
+#        run: docker stop backend
+#      - name: Delete old container
+#        run: docker rm backend
+#      - name: Rerun and rebuild Java docker-container
+#        run: docker-compose restart backend
+      - name: Stop docker-compose
+        run: docker-compose down
+      - name: Docker-compose build
+        run: docker-compose build
+      - name: Docker-compose run
+        run: docker-compose  up
