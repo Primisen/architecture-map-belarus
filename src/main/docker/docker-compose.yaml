@@ -12,8 +12,6 @@ services:
       - "4200:4200"
   backend:
     image: 'docker-spring-boot-postgres:latest'
-    build:
-      context: .
     container_name: backend
     depends_on:
       db:
