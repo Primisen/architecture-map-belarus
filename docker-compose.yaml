@@ -1,17 +1,8 @@
 version: '3'
 
 services:
-  frontend:
-    container_name: frontend
-    depends_on:
-      backend:
-        condition: service_started
-    build:
-      context: https://github.com/Primisen/architecture-map-frontend.git
-    ports:
-      - "4200:4200"
   backend:
-    image: 'docker-spring-boot-postgres:latest'
+    image: 'belarus-architecture-map:latest'
     container_name: backend
     depends_on:
       db:

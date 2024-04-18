@@ -47,9 +47,9 @@ jobs:
     needs: build
     runs-on: self-hosted
     steps:
-      - name: Pull Image from docker hub
-        run: sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/belarus-architecture-map:latest
-      - name: Delete old container
-        run: sudo docker rm -f belarus-architecture-map
+#      - name: Pull Image from docker hub
+#        run: sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/belarus-architecture-map:latest
+#      - name: Delete old container
+#        run: sudo docker rm -f belarus-architecture-map
       - name: Rerun and rebuild Java docker-container
-        run: sudo docker-compose up --detach --build belarus-architecture-map ${{ secrets.DOCKERHUB_USERNAME }}/belarus-architecture-map
+        run: sudo docker-compose up --detach --build backend
