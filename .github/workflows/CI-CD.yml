@@ -62,4 +62,9 @@ jobs:
             echo DB_PASSWORD=${{ secrets.DB_PASSWORD }} >> .env
       - name: Rerun and rebuild Java docker-container
 #        run: cd /opt/architecture-map-belarus/src/main/docker/ && docker-compose up --detach --build backend
-        run: docker-compose down $$ docker-compose build --no-cache && docker-compose  up -d
+      - name: Stop docker-compose
+        run: docker-compose down
+      - name: Docker-compose build
+        run: docker-compose build
+      - name: Docker-compose run
+        run: docker-compose  up
