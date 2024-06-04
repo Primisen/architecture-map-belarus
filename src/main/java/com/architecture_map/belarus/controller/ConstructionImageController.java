@@ -50,4 +50,10 @@ public class ConstructionImageController {
         return constructionImageService.getByConstructionArchitecturalStyleId(architecturalStyleId);
     }
 
+    @Operation(summary = "Get images with the same architectural style by constructionId across images of current construction")
+    @GetMapping("/similar/{constructionId}")
+    public Set<ConstructionImage> getImagesWithSameArchitecturalStyleByConstructionIdAcrossImagesOfCurrentConstruction(@PathVariable Integer constructionId){
+        return constructionImageService.getImagesWithSameArchitecturalStyleByConstructionIdAcrossImagesOfCurrentConstruction(constructionId);
+    }
+
 }

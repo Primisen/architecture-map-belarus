@@ -12,4 +12,7 @@ public interface ConstructionImageService {
     Set<ConstructionImage> getRandomAndUniqueImages(String gotImagesId);
 
     Set<ConstructionImage> getByConstructionArchitecturalStyleId(Integer architecturalStyleId);
+
+    // If you can propose more descriptive name for this method please share <3
+    Set<ConstructionImage> getImagesWithSameArchitecturalStyleByConstructionIdAcrossImagesOfCurrentConstruction(Integer constructionId);
 }

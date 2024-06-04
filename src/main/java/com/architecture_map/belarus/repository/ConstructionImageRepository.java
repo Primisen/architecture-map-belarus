@@ -16,4 +16,13 @@ public interface ConstructionImageRepository extends JpaRepository<ConstructionI
     Set<ConstructionImage> getRandomAndUniqueImages(int[] gotImageId);
 
     Set<ConstructionImage> getByConstructionArchitecturalStyleId(Integer architecturalStyleId);
+
+    @Query(
+            value = "SELECT *  FROM construction_image " +
+                    "JOIN image ON image_id=id  " +
+                    "JOIN construction ON construction_image.construction_id=construction.id AND construction.architectural_style_id=(?2) " +
+                    "WHERE show=true " +
+                    "AND construction_image.construction_id NOT IN (?1) ",
+            nativeQuery = true)
+    Set<ConstructionImage> getImagesWithSameArchitecturalStyleByConstructionIdAcrossImagesOfCurrentConstruction(int constructionId, int architecturalStyleId);
 }

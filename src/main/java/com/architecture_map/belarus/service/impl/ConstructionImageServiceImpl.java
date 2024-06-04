@@ -4,6 +4,7 @@ import com.architecture_map.belarus.dto.ConstructionImageDto;
 import com.architecture_map.belarus.entity.image.ConstructionImage;
 import com.architecture_map.belarus.mapper.ConstructionImageMapper;
 import com.architecture_map.belarus.repository.ConstructionImageRepository;
+import com.architecture_map.belarus.repository.ConstructionRepository;
 import com.architecture_map.belarus.service.ConstructionImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ public class ConstructionImageServiceImpl implements ConstructionImageService {
 
     private final ConstructionImageRepository constructionImageRepository;
     private final ConstructionImageMapper constructionImageMapper;
+    private final ConstructionRepository constructionRepository;
 
     @Override
     public ConstructionImage create(ConstructionImageDto image) {
@@ -30,6 +32,14 @@ public class ConstructionImageServiceImpl implements ConstructionImageService {
     @Override
     public Set<ConstructionImage> getByConstructionArchitecturalStyleId(Integer architecturalStyleId) {
         return constructionImageRepository.getByConstructionArchitecturalStyleId(architecturalStyleId);
+    }
+
+    @Override
+    public Set<ConstructionImage> getImagesWithSameArchitecturalStyleByConstructionIdAcrossImagesOfCurrentConstruction(Integer constructionId) {
+        return constructionImageRepository.getImagesWithSameArchitecturalStyleByConstructionIdAcrossImagesOfCurrentConstruction(
+                constructionId,
+                constructionRepository.findById(constructionId).orElseThrow().getArchitecturalStyle().getId()
+                );
     }
 
     private int[] parseStringToArrayOfInt(String string) {
