@@ -2,6 +2,7 @@ package com.architecture_map.belarus.controller;
 
 import com.architecture_map.belarus.dto.ConstructionImageDto;
 import com.architecture_map.belarus.entity.image.ConstructionImage;
+import com.architecture_map.belarus.exception.NotFoundException;
 import com.architecture_map.belarus.service.ConstructionImageService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -54,6 +56,16 @@ public class ConstructionImageController {
     @GetMapping("/similar/{constructionId}")
     public Set<ConstructionImage> getImagesWithSameArchitecturalStyleByConstructionIdAcrossImagesOfCurrentConstruction(@PathVariable Integer constructionId){
         return constructionImageService.getImagesWithSameArchitecturalStyleByConstructionIdAcrossImagesOfCurrentConstruction(constructionId);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteById(@PathVariable Integer id) {
+
+        if (!constructionImageService.deleteById(id)) {
+            throw new NotFoundException();
+        }
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }
