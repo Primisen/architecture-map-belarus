@@ -38,8 +38,11 @@ public class Architect {
     private String middleName;
     private String surname;
     private String yearsOfLife;
-    @Column(name="work_description", columnDefinition="TEXT")
-    private String workDescription;
+
+    @Column(name="short_work_description", columnDefinition="TEXT")
+    private String shortWorkDescription;
+
+    private String biographical_article;
 
     @JsonIgnoreProperties("architect")
     @OneToOne(mappedBy = "architect")
