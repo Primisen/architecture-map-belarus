@@ -11,4 +11,4 @@
 будынкі, але і асобныя аркі, калоны, якія цікаўны архітэктурна ці гістарычна,
 адсюль і назва класса, які гэта ўсё апісвае — Construction, а не Building.
 
-Site link: https://architecture-map.    by/
+Site link: https://architecture-map.by/
