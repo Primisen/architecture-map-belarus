@@ -42,7 +42,7 @@ public class Architect {
     @Column(name="short_work_description", columnDefinition="TEXT")
     private String shortWorkDescription;
 
-    private String biographical_article;
+    private String biographicalArticle;
 
     @JsonIgnoreProperties("architect")
     @OneToOne(mappedBy = "architect")
