@@ -7,6 +7,7 @@ import com.architecture_map.belarus.repository.SourceRepository;
 import com.architecture_map.belarus.service.SourceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -41,6 +42,29 @@ public class SourceServiceImpl implements SourceService {
             atomicReference.set(Optional.of(
                     sourceRepository.save(foundSource)));
         }, () -> atomicReference.set(Optional.empty()));
+
+        return atomicReference.get();
+    }
+
+    @Override
+    public Optional<Source> patchUpdateById(Integer id, SourceDto sourceDto) {
+        AtomicReference<Optional<Source>> atomicReference = new AtomicReference<>();
+
+        sourceRepository.findById(id).ifPresentOrElse(foundSource -> {
+            if (StringUtils.hasText(sourceDto.getName())){
+                foundSource.setName(sourceDto.getName());
+            }
+            if (StringUtils.hasText(sourceDto.getUrl())){
+                foundSource.setUrl(sourceDto.getUrl());
+            }
+            if (StringUtils.hasText(sourceDto.getDescription())){
+                foundSource.setDescription(sourceDto.getDescription());
+            }
+
+            atomicReference.set(Optional.of((sourceRepository.save(foundSource))));
+        }, () -> {
+            atomicReference.set(Optional.empty());
+        });
 
         return atomicReference.get();
     }

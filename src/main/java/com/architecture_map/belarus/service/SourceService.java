@@ -14,6 +14,7 @@ public interface SourceService {
 
     Optional<Source> updateById(Integer id, SourceDto sourceUpdates);
 
-    boolean deleteByid(Integer id);
+    Optional<Source> patchUpdateById(Integer id, SourceDto sourceDto);
 
+    boolean deleteByid(Integer id);
 }
