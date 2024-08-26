@@ -62,7 +62,7 @@ public class SourceController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteById(@PathVariable Integer id) {
-        if (!sourceService.deleteByid(id)) {
+        if (!sourceService.deleteById(id)) {
             throw new NotFoundException();
         }
 

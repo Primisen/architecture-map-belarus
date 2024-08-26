@@ -14,9 +14,9 @@ public interface ConstructionService {
 
     Optional<Construction> findById(Integer id);
 
-    Optional<Construction> updateBuId(Integer id, ConstructionDto constructionDto);
+    Optional<Construction> updateById(Integer id, ConstructionDto constructionDto);
 
-    Optional<Construction> patchUpdateBuId(Integer id, ConstructionDto constructionDto);
+    Optional<Construction> patchUpdateById(Integer id, ConstructionDto constructionDto);
 
     boolean deleteById(Integer id);
 

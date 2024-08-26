@@ -40,7 +40,7 @@ public class ConstructionServiceImpl implements ConstructionService {
     }
 
     @Override
-    public Optional<Construction> updateBuId(Integer id, ConstructionDto constructionDto) {
+    public Optional<Construction> updateById(Integer id, ConstructionDto constructionDto) {
 
         AtomicReference<Optional<Construction>> atomicReference = new AtomicReference<>();
 
@@ -55,7 +55,7 @@ public class ConstructionServiceImpl implements ConstructionService {
     }
 
     @Override
-    public Optional<Construction> patchUpdateBuId(Integer id, ConstructionDto constructionDto) {
+    public Optional<Construction> patchUpdateById(Integer id, ConstructionDto constructionDto) {
         AtomicReference<Optional<Construction>> atomicReference = new AtomicReference<>();
 
         constructionRepository.findById(id).ifPresentOrElse(foundConstruction -> {

@@ -70,7 +70,7 @@ public class SourceServiceImpl implements SourceService {
     }
 
     @Override
-    public boolean deleteByid(Integer id) {
+    public boolean deleteById(Integer id) {
 
         if (sourceRepository.existsById(id)) {
             sourceRepository.deleteById(id);

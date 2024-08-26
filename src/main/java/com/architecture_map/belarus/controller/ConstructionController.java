@@ -52,7 +52,7 @@ public class ConstructionController {
     @PutMapping("/{id}")
     public ResponseEntity<String> updateById(@PathVariable Integer id,
                                              @RequestBody ConstructionDto constructionUpdates) {
-        if (constructionService.updateBuId(id, constructionUpdates).isEmpty()) {
+        if (constructionService.updateById(id, constructionUpdates).isEmpty()) {
             throw new NotFoundException();
         }
 
@@ -62,7 +62,7 @@ public class ConstructionController {
     @PatchMapping("/{id}")
     public ResponseEntity<String> patchUpdateById(@PathVariable Integer id,
                                                   @RequestBody ConstructionDto construction) {
-        constructionService.patchUpdateBuId(id, construction);
+        constructionService.patchUpdateById(id, construction);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
