@@ -28,4 +28,5 @@ public class Source {
 
     private String name;
     private String url;
+    private String description;
 }

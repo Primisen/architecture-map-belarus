@@ -14,6 +14,7 @@ public class ArchitectDto {
     private String surname;
     private String middleName;
     private String yearsOfLife;
-    private String workDescription;
+    private String shortWorkDescription;
+    private String biographicalArticle;
     private ArchitectImage architectImage;
 }
