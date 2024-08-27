@@ -15,5 +15,7 @@ public interface ArchitectureStyleService {
 
     Optional<ArchitecturalStyle> updateById(Integer id, ArchitecturalStyleDto styleUpdates);
 
+    Optional<ArchitecturalStyle>  patchUpdateById(Integer id, ArchitecturalStyleDto architecturalStyleDto);
+
     boolean deleteById(Integer id);
 }
