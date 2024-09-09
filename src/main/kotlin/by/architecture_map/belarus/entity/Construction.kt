@@ -9,12 +9,14 @@ import jakarta.persistence.ManyToMany
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToMany
 import jakarta.persistence.OneToOne
+import org.springframework.data.elasticsearch.annotations.Document
 
 /**
  * The class means to architectural structures such as buildings, separate arches,
  * gates, columns (for example, the column in honor of the constitution of 1791)
  */
 @Entity
+@Document(indexName = "construction")
 data class Construction(
 
     var name: String? = null,
