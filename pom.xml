@@ -32,6 +32,12 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+        <!--Elasticsearch-->
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-elasticsearch</artifactId>
+        </dependency>
+
         <!--DB Migration-->
         <dependency>
             <groupId>org.flywaydb</groupId>
