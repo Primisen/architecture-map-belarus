@@ -1,6 +1,7 @@
 package by.architecture_map.belarus.service.impl
 
 import by.architecture_map.belarus.entity.Construction
+import by.architecture_map.belarus.exception.NotFoundException
 import by.architecture_map.belarus.repository.ConstructionRepository
 import io.mockk.Runs
 import io.mockk.every
@@ -10,7 +11,6 @@ import io.mockk.verify
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
-import org.springframework.data.repository.findByIdOrNull
 import java.util.*
 
 class ConstructionServiceImplTest {
@@ -19,9 +19,11 @@ class ConstructionServiceImplTest {
     private val constructionService = ConstructionServiceImpl(constructionRepository)
 
     @Test
-    fun whenCreateConstruction_thenReturnSavedConstruction() {
+    fun whenCreateConstruction_thenSaveConstruction() {
         //given
-        val construction = Construction(id = 1, description = "Really beautiful")
+        val construction = Construction(description = "Really beautiful")
+            .apply { id = 1 }
+
         every { constructionRepository.save(construction) } returns construction
 
         //when
@@ -36,8 +38,10 @@ class ConstructionServiceImplTest {
     fun whenFindAllConstruction_thenReturnListOfConstruction() {
         //given
         val constructions = mutableListOf(
-                Construction(id = 1, description = "Really beautiful"),
-                Construction(id = 2, description = "Beautiful")
+            Construction(description = "Really beautiful")
+                .apply { id = 1 },
+            Construction(description = "Beautiful")
+                .apply { id = 2 }
         )
         every { constructionRepository.findAll() } returns constructions
 
@@ -50,25 +54,29 @@ class ConstructionServiceImplTest {
     }
 
     @Test
-    fun whenFindById_thenReturnConstruction() {
+    fun whenFind_thenReturnConstruction() {
         //given
-        val construction = Construction(id = 1, description = "Really beautiful")
-        every { constructionRepository.findByIdOrNull(1) } returns construction
+        var id = 1
+        val construction = Construction(description = "Really beautiful")
+            .apply { id = id }
+        every { constructionRepository.findById(id) } returns Optional.of(construction)
 
         //when
-        val result = constructionService.findById(1)
+        val result = constructionService.find(id)
 
         //then
-        verify(exactly = 1) { constructionRepository.findByIdOrNull(1) }
+        verify(exactly = 1) { constructionRepository.findById(id) }
         assertEquals(construction, result)
     }
 
     @Test
-    fun whenUpdateById_thenReturnUpdatedConstruction() {
+    fun whenUpdate_thenUpdateConstruction() {
         //given
-        val id = 1
-        val existingConstruction = Construction(id = id)
-        val updatedConstruction = Construction(id = id, name = "Updated Name")
+        var id = 1
+        val existingConstruction = Construction()
+            .apply { id = id }
+        val updatedConstruction = Construction(name = "Updated Name")
+            .apply { id = id }
         every { constructionRepository.findById(id) } returns Optional.of(existingConstruction)
         every { constructionRepository.save(existingConstruction) } returns existingConstruction.apply {
             name = updatedConstruction.name
@@ -81,7 +89,7 @@ class ConstructionServiceImplTest {
         }
 
         //when
-        val result = constructionService.updateById(id, updatedConstruction)
+        val result = constructionService.update(id, updatedConstruction)
 
         //then
         verify(exactly = 1) { constructionRepository.findById(id) }
@@ -90,11 +98,13 @@ class ConstructionServiceImplTest {
     }
 
     @Test
-    fun whenPatchById_thenReturnPatchedConstruction() {
+    fun whenPatch_thenPatcheConstruction() {
         //given
-        val id = 1
-        val existingConstruction = Construction(id = id)
-        val updatedConstruction = Construction(id = id, name = "Updated Name")
+        var id = 1
+        val existingConstruction = Construction()
+            .apply { id = id }
+        val updatedConstruction = Construction(name = "Updated Name")
+            .apply { id = id }
         every { constructionRepository.findById(id) } returns Optional.of(existingConstruction)
         every { constructionRepository.save(existingConstruction) } returns existingConstruction.apply {
             name = updatedConstruction.name
@@ -107,7 +117,7 @@ class ConstructionServiceImplTest {
         }
 
         //when
-        val result = constructionService.patchById(id, updatedConstruction)
+        val result = constructionService.patchUpdate(id, updatedConstruction)
 
         //then
         verify(exactly = 1) { constructionRepository.findById(id) }
@@ -116,34 +126,34 @@ class ConstructionServiceImplTest {
     }
 
     @Test
-    fun whenDeleteById_thenReturnTrueIfExists() {
+    fun whenDelete_thenDeleteConstruction() {
         //given
         val id = 1
         every { constructionRepository.existsById(id) } returns true
         every { constructionRepository.deleteById(id) } just Runs
 
         //when
-        val result = constructionService.deleteById(id)
+        val result = constructionService.delete(id)
 
         //then
         verify(exactly = 1) { constructionRepository.existsById(id) }
         verify(exactly = 1) { constructionRepository.deleteById(id) }
-        assertTrue(result)
     }
 
     @Test
-    fun whenDeleteById_thenReturnFalseIfNotExists() {
+    fun whenDeleteConstructionAndConstructionDoesNotExists_thenThrowNotFoundException() {
         //given
         val id = 1
         every { constructionRepository.existsById(id) } returns false
         every { constructionRepository.deleteById(id) } just Runs
 
-        //when
-        val result = constructionService.deleteById(id)
+        //when & then
+        assertThrows(NotFoundException::class.java) {
+            constructionService.delete(id)
+        }
 
-        //then
+        //verify
         verify(exactly = 1) { constructionRepository.existsById(id) }
         verify(exactly = 0) { constructionRepository.deleteById(id) }
-        assertFalse(result)
     }
 }

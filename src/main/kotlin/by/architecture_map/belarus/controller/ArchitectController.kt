@@ -1,9 +1,7 @@
 package by.architecture_map.belarus.controller
 
 import by.architecture_map.belarus.entity.Architect
-import by.architecture_map.belarus.exception.NotFoundException
 import by.architecture_map.belarus.service.ArchitectService
-import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.CrossOrigin
@@ -18,22 +16,18 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/architects")
 @CrossOrigin(origins = ["http://localhost:7200", "http://localhost:4200", "*"])
 class ArchitectController(
-        private val architectService: ArchitectService
+    private val architectService: ArchitectService
 ) {
 
     @PostMapping
-    fun create(@RequestBody architect: Architect): ResponseEntity<String> {
-        val savedArchitect = architectService.create(architect)
-
-        val headers = HttpHeaders()
-        headers.add("Location", savedArchitect.id.toString())
-
-        return ResponseEntity(headers, HttpStatus.CREATED)
+    fun create(@RequestBody architect: Architect): ResponseEntity<Architect> {
+        val createdArchitect = architectService.create(architect)
+        return ResponseEntity(createdArchitect, HttpStatus.CREATED)
     }
 
     @GetMapping("/{id}")
-    fun findById(@PathVariable id: Int): Architect {
-        return architectService.findById(id) ?: throw NotFoundException("Architect not found with id: $id")
+    fun find(@PathVariable id: Int): Architect {
+        return architectService.find(id)
     }
 
     @GetMapping("/")

@@ -9,9 +9,11 @@ import jakarta.persistence.PrimaryKeyJoinColumn
 @Entity
 @PrimaryKeyJoinColumn(name = "image_id")
 data class ConstructionImage(
-        @JsonIgnoreProperties("images")
-        @ManyToOne
-        @JoinColumn(name = "construction_id")
-        var construction: Construction? = null,
-        var takenTime: String? = null
+
+    @JsonIgnoreProperties("images")
+    @ManyToOne
+    @JoinColumn(name = "construction_id")
+    var construction: Construction? = null,
+    var takenTime: String? = null
+
 ) : Image()

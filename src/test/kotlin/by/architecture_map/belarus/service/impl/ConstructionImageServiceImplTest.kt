@@ -1,10 +1,9 @@
 package by.architecture_map.belarus.service.impl
 
-import by.architecture_map.belarus.entity.ArchitecturalStyle
-import by.architecture_map.belarus.entity.Construction
 import by.architecture_map.belarus.entity.ConstructionImage
+import by.architecture_map.belarus.exception.NotFoundException
 import by.architecture_map.belarus.repository.ConstructionImageRepository
-import by.architecture_map.belarus.repository.ConstructionRepository
+import by.architecture_map.belarus.service.ConstructionService
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
@@ -13,16 +12,15 @@ import io.mockk.verify
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
-import java.util.*
 
 class ConstructionImageServiceImplTest {
 
     private val constructionImageRepository: ConstructionImageRepository = mockk()
-    private val constructionRepository: ConstructionRepository = mockk()
-    private val constructionImageService = ConstructionImageServiceImpl(constructionImageRepository, constructionRepository)
+    private val constructionService: ConstructionService = mockk()
+    private val constructionImageService = ConstructionImageServiceImpl(constructionImageRepository, constructionService)
 
     @Test
-    fun whenCreateConstructionImage_thenReturnSavedImage() {
+    fun whenCreateConstructionImage_thenSaveImage() {
         //given
         val image = ConstructionImage(takenTime = "пач. XX ст")
         every { constructionImageRepository.save(image) } returns image
@@ -54,7 +52,7 @@ class ConstructionImageServiceImplTest {
     }
 
     @Test
-    fun whenGetByConstructionArchitecturalStyleId_thenReturnListOfImages() {
+    fun whenFindConstructionImages_thenReturnListOfImages() {
         //given
         val styleId = 1
         val images = mutableListOf(
@@ -64,7 +62,7 @@ class ConstructionImageServiceImplTest {
         every { constructionImageRepository.findByConstructionArchitecturalStyleId(styleId) } returns images
 
         //when
-        val result = constructionImageService.getByConstructionArchitecturalStyleId(styleId)
+        val result = constructionImageService.find(styleId)
 
         //then
         verify(exactly = 1) { constructionImageRepository.findByConstructionArchitecturalStyleId(styleId) }
@@ -72,57 +70,34 @@ class ConstructionImageServiceImplTest {
     }
 
     @Test
-    fun whenGetImagesWithSameArchitecturalStyleByConstructionIdAcrossImagesOfCurrentConstruction_thenReturnListOfImages() {
-        //given
-        val constructionId = 1
-        val styleId = 1
-        val images = mutableListOf(
-                ConstructionImage(takenTime = "пач. XX ст"),
-                ConstructionImage(takenTime = "cяр. XX ст")
-        )
-        val construction = Construction(id = 1, architecturalStyle = ArchitecturalStyle(id = styleId))
-
-        every { constructionRepository.findById(constructionId) } returns Optional.of(construction)
-        every { constructionImageRepository.getImagesWithSameArchitecturalStyleByConstructionIdAcrossImagesOfCurrentConstruction(constructionId, styleId) } returns images
-
-        //when
-        val result = constructionImageService.getImagesWithSameArchitecturalStyleByConstructionIdAcrossImagesOfCurrentConstruction(constructionId)
-
-        //then
-        verify(exactly = 1) { constructionRepository.findById(constructionId) }
-        verify(exactly = 1) { constructionImageRepository.getImagesWithSameArchitecturalStyleByConstructionIdAcrossImagesOfCurrentConstruction(constructionId, styleId) }
-        assertEquals(images, result)
-    }
-
-    @Test
-    fun whenDeleteById_thenReturnTrueIfExists() {
+    fun whenDeleteConstructionImage_thenDeleteConstructionImage() {
         //given
         val id = 1
         every { constructionImageRepository.existsById(id) } returns true
         every { constructionImageRepository.deleteById(id) } just Runs
 
         //when
-        val result = constructionImageService.deleteById(id)
+        val result = constructionImageService.delete(id)
 
         //then
         verify(exactly = 1) { constructionImageRepository.existsById(id) }
         verify(exactly = 1) { constructionImageRepository.deleteById(id) }
-        assertTrue(result)
     }
 
     @Test
-    fun whenDeleteById_thenReturnFalseIfNotExists() {
+    fun whenDeleteConstructionImageAndImageDoesNotExists_thenThrowNotFoundException() {
         //given
         val id = 1
         every { constructionImageRepository.existsById(id) } returns false
         every { constructionImageRepository.deleteById(id) } just Runs
 
-        //when
-        val result = constructionImageService.deleteById(id)
+        //when & then
+        assertThrows(NotFoundException::class.java) {
+            constructionImageService.delete(id)
+        }
 
-        //then
+        //verify
         verify(exactly = 1) { constructionImageRepository.existsById(id) }
         verify(exactly = 0) { constructionImageRepository.deleteById(id) }
-        assertFalse(result)
     }
 }

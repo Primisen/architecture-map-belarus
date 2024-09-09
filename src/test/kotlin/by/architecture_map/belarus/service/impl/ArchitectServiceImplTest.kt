@@ -8,8 +8,6 @@ import io.mockk.verify
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
-import org.springframework.data.repository.findByIdOrNull
-import java.util.*
 
 class ArchitectServiceImplTest {
 
@@ -17,9 +15,9 @@ class ArchitectServiceImplTest {
     private val architectService = ArchitectServiceImpl(architectRepository);
 
     @Test
-    fun whenSaveArchitect_thenReturnSavedArchitect() {
+    fun whenSaveArchitect_thenSaveArchitect() {
         //given
-        val architect = Architect(id = 1, name = "John Doe")
+        val architect = Architect(name = "John Doe")
         every { architectRepository.save(architect) } returns architect
 
         //when
@@ -31,40 +29,11 @@ class ArchitectServiceImplTest {
     }
 
     @Test
-    fun whenFindArchitectById_thenReturnArchitect() {
-        //given
-        val id = 1
-        val architect = Architect(id = id, name = "John Doe")
-        every { architectRepository.findByIdOrNull(id) } returns architect
-
-        //when
-        val result = architectService.findById(id)
-
-        //then
-        verify(exactly = 1) { architectRepository.findByIdOrNull(id) }
-        assertEquals(architect, result)
-    }
-
-    @Test
-    fun whenFindArchitectByIdAndArchitectDoesNotExist_thenReturnNull() {
-        //given
-        val id = 1
-        every { architectRepository.findById(id) } returns Optional.empty()
-
-        //when
-        val result = architectService.findById(id)
-
-        //then
-        verify(exactly = 1) { architectRepository.findById(id) }
-        assertNull(result)
-    }
-
-    @Test
     fun whenFindAll_thenReturnListOfArchitects() {
         //given
         val architects = mutableListOf(
-                Architect(id = 1, name = "John Doe"),
-                Architect(id = 2, name = "Jane Doe")
+            Architect(name = "John Doe"),
+            Architect(name = "Jane Doe")
         )
         every { architectRepository.findAll() } returns architects
 

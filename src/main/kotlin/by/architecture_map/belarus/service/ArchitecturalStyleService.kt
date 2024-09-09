@@ -5,9 +5,9 @@ import by.architecture_map.belarus.entity.ArchitecturalStyle
 interface ArchitecturalStyleService {
 
     fun create(architecturalStyle: ArchitecturalStyle): ArchitecturalStyle
-    fun findAll(): MutableList<ArchitecturalStyle>
-    fun findById(id: Int): ArchitecturalStyle?
-    fun updateById(id: Int, updatedArchitecturalStyle: ArchitecturalStyle): ArchitecturalStyle?
-    fun patchById(id: Int, updatedArchitecturalStyle: ArchitecturalStyle): ArchitecturalStyle?
-    fun deleteById(id: Int): Boolean
+    fun findAll(): List<ArchitecturalStyle>
+    fun find(id: Int): ArchitecturalStyle
+    fun update(id: Int, updatedArchitecturalStyle: ArchitecturalStyle): ArchitecturalStyle
+    fun patchUpdate(id: Int, updatedArchitecturalStyle: ArchitecturalStyle): ArchitecturalStyle
+    fun delete(id: Int)
 }

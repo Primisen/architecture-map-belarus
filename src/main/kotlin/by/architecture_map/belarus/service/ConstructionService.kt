@@ -5,9 +5,9 @@ import by.architecture_map.belarus.entity.Construction
 interface ConstructionService {
 
     fun create(construction: Construction): Construction
-    fun findAll(): MutableList<Construction>
-    fun findById(id: Int): Construction?
-    fun updateById(id: Int, updatedConstruction: Construction): Construction?
-    fun patchById(id: Int, updatedConstruction: Construction): Construction?
-    fun deleteById(id: Int): Boolean
+    fun findAll(): List<Construction>
+    fun find(id: Int): Construction
+    fun update(id: Int, updatedConstruction: Construction): Construction
+    fun patchUpdate(id: Int, updatedConstruction: Construction): Construction
+    fun delete(id: Int)
 }

@@ -10,12 +10,12 @@ import org.springframework.stereotype.Repository
 interface ConstructionImageRepository : JpaRepository<ConstructionImage, Int> {
 
     @Query(
-            value = "SELECT * FROM construction_image JOIN image ON image_id = id WHERE show = true AND id NOT IN (:gotImageId) ORDER BY random() LIMIT 20",
+            value = "SELECT * FROM construction_image JOIN image ON image_id = id WHERE show = true AND id NOT IN (:usedImageId) ORDER BY random() LIMIT 20",
             nativeQuery = true
     )
-    fun getRandomAndUniqueImages(@Param("gotImageId") gotImageId: IntArray): MutableList<ConstructionImage>
+    fun getRandomAndUniqueImages(@Param("usedImageId") usedImageId: IntArray): List<ConstructionImage>
 
-    fun findByConstructionArchitecturalStyleId(architecturalStyleId: Int): MutableList<ConstructionImage>
+    fun findByConstructionArchitecturalStyleId(architecturalStyleId: Int): List<ConstructionImage>
 
     @Query(
             value = """
@@ -28,8 +28,8 @@ interface ConstructionImageRepository : JpaRepository<ConstructionImage, Int> {
         """,
             nativeQuery = true
     )
-    fun getImagesWithSameArchitecturalStyleByConstructionIdAcrossImagesOfCurrentConstruction(
-            @Param("constructionId") constructionId: Int,
-            @Param("architecturalStyleId") architecturalStyleId: Int?
-    ): MutableList<ConstructionImage>
+    fun getImagesOfConstructionsWithSameArchitecturalStyleByConstructionId(
+        @Param("constructionId") constructionId: Int,
+        @Param("architecturalStyleId") architecturalStyleId: Int?
+    ): List<ConstructionImage>
 }

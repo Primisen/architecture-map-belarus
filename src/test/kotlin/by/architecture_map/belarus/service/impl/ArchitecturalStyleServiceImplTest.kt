@@ -1,8 +1,9 @@
 package by.architecture_map.belarus.service.impl
 
 import by.architecture_map.belarus.entity.ArchitecturalStyle
+import by.architecture_map.belarus.exception.NotFoundException
 import by.architecture_map.belarus.repository.ArchitecturalStyleRepository
-import by.architecture_map.belarus.repository.ImageRepository
+import by.architecture_map.belarus.service.ImageService
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
@@ -11,19 +12,19 @@ import io.mockk.verify
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
-import org.springframework.data.repository.findByIdOrNull
 import java.util.*
 
 class ArchitecturalStyleServiceImplTest {
 
     private val architecturalStyleRepository: ArchitecturalStyleRepository = mockk()
-    private val imageRepository: ImageRepository = mockk()
-    private val architecturalStyleService = ArchitecturalStyleServiceImpl(architecturalStyleRepository, imageRepository)
+    private val imageService: ImageService = mockk()
+    private val architecturalStyleService = ArchitecturalStyleServiceImpl(architecturalStyleRepository, imageService)
 
     @Test
-    fun whenSaveArchitecturalStyle_thenReturnSavedStyle() {
+    fun whenSaveArchitecturalStyle_thenSaveStyle() {
         //given
-        val architecturalStyle = ArchitecturalStyle(id = 1, name = "Gothic")
+        val architecturalStyle = ArchitecturalStyle(name = "Gothic")
+            .apply { id = 1 }
         every { architecturalStyleRepository.save(architecturalStyle) } returns architecturalStyle
 
         //when
@@ -38,8 +39,10 @@ class ArchitecturalStyleServiceImplTest {
     fun whenFindAllArchitecturalStyles_thenReturnListOfStyles() {
         //given
         val styles = mutableListOf(
-                ArchitecturalStyle(id = 1, name = "Gothic"),
-                ArchitecturalStyle(id = 2, name = "Baroque")
+            ArchitecturalStyle(name = "Gothic")
+                .apply { id = 1 },
+            ArchitecturalStyle(name = "Baroque")
+                .apply { id = 2 }
         )
         every { architecturalStyleRepository.findAll() } returns styles
 
@@ -52,40 +55,44 @@ class ArchitecturalStyleServiceImplTest {
     }
 
     @Test
-    fun whenFindArchitecturalStyleById_thenReturnStyle() {
+    fun whenFindArchitecturalStyle_thenReturnStyle() {
         //given
         val id = 1
-        val architecturalStyle = ArchitecturalStyle(id = id, name = "Gothic")
-        every { architecturalStyleRepository.findByIdOrNull(id) } returns architecturalStyle
+        val architecturalStyle = ArchitecturalStyle(name = "Gothic")
+            .apply { this.id = id }
+        every { architecturalStyleRepository.findById(id) } returns Optional.of(architecturalStyle)
 
         //when
-        val result = architecturalStyleService.findById(id)
+        val result = architecturalStyleService.find(id)
 
         //then
-        verify(exactly = 1) { architecturalStyleRepository.findByIdOrNull(id) }
+        verify(exactly = 1) { architecturalStyleRepository.findById(id) }
         assertEquals(architecturalStyle, result)
     }
 
     @Test
-    fun whenFindArchitecturalStyleByIdAndStyleDoesNotExist_thenReturnNull() {
+    fun whenFindArchitecturalStyleAndStyleDoesNotExist_thenThrowNotFoundException() {
         //given
         val id = 1
-        every { architecturalStyleRepository.findByIdOrNull(id) } returns null
+        every { architecturalStyleRepository.findById(id) } returns Optional.empty()
 
-        //when
-        val result = architecturalStyleService.findById(id)
+        //when & then
+        assertThrows(NotFoundException::class.java) {
+            architecturalStyleService.find(id)
+        }
 
-        //then
-        verify(exactly = 1) { architecturalStyleRepository.findByIdOrNull(id) }
-        assertNull(result)
+        //verify
+        verify(exactly = 1) { architecturalStyleRepository.findById(id) }
     }
 
     @Test
-    fun whenUpdateArchitecturalStyleById_thenReturnUpdatedStyle() {
+    fun whenUpdateArchitecturalStyle_thenUpdateStyle() {
         //given
-        val id = 1
-        val existingStyle = ArchitecturalStyle(id = id, name = "Gothic")
-        val updatedStyle = ArchitecturalStyle(id = id, name = "Updated Gothic")
+        var id = 1
+        val existingStyle = ArchitecturalStyle(name = "Gothic")
+            .apply { id = id }
+        val updatedStyle = ArchitecturalStyle(name = "Updated Gothic")
+            .apply { id = id }
 
         every { architecturalStyleRepository.findById(id) } returns Optional.of(existingStyle)
         every { architecturalStyleRepository.save(existingStyle) } returns existingStyle.apply {
@@ -93,7 +100,7 @@ class ArchitecturalStyleServiceImplTest {
         }
 
         //when
-        val result = architecturalStyleService.updateById(id, updatedStyle)
+        val result = architecturalStyleService.update(id, updatedStyle)
 
         //then
         verify(exactly = 1) { architecturalStyleRepository.findById(id) }
@@ -102,27 +109,31 @@ class ArchitecturalStyleServiceImplTest {
     }
 
     @Test
-    fun whenUpdateArchitecturalStyleByIdAndStyleDoesNotExist_thenReturnNull() {
+    fun whenUpdateArchitecturalStyleAndStyleDoesNotExist_thenThrowNotFoundException() {
         //given
-        val id = 1
-        val updatedStyle = ArchitecturalStyle(id = id, name = "Updated Gothic")
+        var id = 1
+        val updatedStyle = ArchitecturalStyle(name = "Updated Gothic")
+            .apply { id = id }
 
         every { architecturalStyleRepository.findById(id) } returns Optional.empty()
 
-        //when
-        val result = architecturalStyleService.updateById(id, updatedStyle)
+        //when & then
+        assertThrows(NotFoundException::class.java) {
+            architecturalStyleService.update(id, updatedStyle)
+        }
 
-        //then
+        //verify
         verify(exactly = 1) { architecturalStyleRepository.findById(id) }
-        assertNull(result)
     }
 
     @Test
-    fun whenPatchArchitecturalStyleById_thenReturnPatchedStyle() {
+    fun whenPatchArchitecturalStyle_thenPatchStyle() {
         //given
-        val id = 1
-        val existingStyle = ArchitecturalStyle(id = id, name = "Gothic", description = "Old Description")
-        val patchStyle = ArchitecturalStyle(id = id, description = "New Description")
+        var id = 1
+        val existingStyle = ArchitecturalStyle(name = "Gothic", description = "Old Description")
+            .apply { id = id }
+        val patchStyle = ArchitecturalStyle(description = "New Description")
+            .apply { id = id }
 
         every { architecturalStyleRepository.findById(id) } returns Optional.of(existingStyle)
         every { architecturalStyleRepository.save(existingStyle) } returns existingStyle.apply {
@@ -130,7 +141,7 @@ class ArchitecturalStyleServiceImplTest {
         }
 
         //when
-        val result = architecturalStyleService.patchById(id, patchStyle)
+        val result = architecturalStyleService.patchUpdate(id, patchStyle)
 
         //then
         verify(exactly = 1) { architecturalStyleRepository.findById(id) }
@@ -139,34 +150,33 @@ class ArchitecturalStyleServiceImplTest {
     }
 
     @Test
-    fun whenDeleteArchitecturalStyleById_thenReturnTrueIfExists() {
-        //given
+    fun whenDeleteArchitecturalStyle_thenDeleteIfExists() {
+        // given
         val id = 1
         every { architecturalStyleRepository.existsById(id) } returns true
         every { architecturalStyleRepository.deleteById(id) } just Runs
 
-        //when
-        val result = architecturalStyleService.deleteById(id)
+        // when
+        architecturalStyleService.delete(id)
 
-        //then
+        // then
         verify(exactly = 1) { architecturalStyleRepository.existsById(id) }
         verify(exactly = 1) { architecturalStyleRepository.deleteById(id) }
-        assertTrue(result)
     }
 
     @Test
-    fun whenDeleteArchitecturalStyleByIdAndStyleDoesNotExist_thenReturnFalseIfNotExists() {
+    fun whenDeleteArchitecturalStyleAndStyleDoesNotExist_thenThrowNotFoundException() {
         //given
         val id = 1
         every { architecturalStyleRepository.existsById(id) } returns false
-        every { architecturalStyleRepository.deleteById(id) } just Runs
 
-        //when
-        val result = architecturalStyleService.deleteById(id)
+        //when & then
+        assertThrows(NotFoundException::class.java) {
+            architecturalStyleService.delete(id)
+        }
 
-        //then
+        //verify
         verify(exactly = 1) { architecturalStyleRepository.existsById(id) }
         verify(exactly = 0) { architecturalStyleRepository.deleteById(id) }
-        assertFalse(result)
     }
 }

@@ -1,9 +1,6 @@
 package by.architecture_map.belarus.entity
 
 import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
 import jakarta.persistence.Inheritance
 import jakarta.persistence.InheritanceType
 import jakarta.persistence.JoinColumn
@@ -12,16 +9,16 @@ import jakarta.persistence.ManyToOne
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 open class Image(
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        open var id: Int? = null,
-        open var url: String? = null,
-        open var show: Boolean? = null,
-        @ManyToOne
-        @JoinColumn(name = "source_id")
-        open var source: Source? = null,
-        open var author: String? = null
-) {
+
+    open var url: String? = null,
+    open var show: Boolean? = null,
+    @ManyToOne
+    @JoinColumn(name = "source_id")
+    open var source: Source? = null,
+    open var author: String? = null
+
+) : BaseEntity() {
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is Image) return false

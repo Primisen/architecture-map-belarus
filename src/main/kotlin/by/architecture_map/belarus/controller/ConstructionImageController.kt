@@ -1,10 +1,9 @@
 package by.architecture_map.belarus.controller
 
 import by.architecture_map.belarus.entity.ConstructionImage
-import by.architecture_map.belarus.exception.NotFoundException
 import by.architecture_map.belarus.service.ConstructionImageService
 import io.swagger.v3.oas.annotations.Operation
-import org.springframework.http.HttpHeaders
+import io.swagger.v3.oas.annotations.Parameter
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.CrossOrigin
@@ -21,43 +20,45 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/construction-images")
 @CrossOrigin(origins = ["http://localhost:4200", "http://localhost:7200", "*"])
 class ConstructionImageController(
-        private val constructionImageService: ConstructionImageService
+    private val constructionImageService: ConstructionImageService
 ) {
 
     @Operation(summary = "Save image of construction")
     @PostMapping("/")
-    fun create(@RequestBody constructionImage: ConstructionImage): ResponseEntity<String> {
-        val savedConstructionImage = constructionImageService.create(constructionImage)
-
-        val headers = HttpHeaders()
-        headers.add("Location", savedConstructionImage.id.toString())
-
-        return ResponseEntity(headers, HttpStatus.CREATED)
+    fun create(@RequestBody constructionImage: ConstructionImage): ResponseEntity<ConstructionImage> {
+        val createdConstructionImage = constructionImageService.create(constructionImage)
+        return ResponseEntity(createdConstructionImage, HttpStatus.CREATED)
     }
 
     @Operation(summary = "Getting list of random images of construction for home page")
     @GetMapping("/")
-    fun getRandomConstructionImages(@RequestParam(required = false) usedId: String?): MutableList<ConstructionImage> {
+    fun getRandomConstructionImages(
+        @Parameter(
+            name = "usedId",
+            description = "The construction image ids, which have already been obtained from the database by one user and are keeping in order not to select them again"
+        )
+        @RequestParam(required = false) usedId: String?
+    ): List<ConstructionImage> {
         return constructionImageService.getRandomAndUniqueImages(usedId)
     }
 
-    @Operation(summary = "Get constructions images by architectural style")
+    @Operation(summary = "Get constructions images by construction architectural style id")
     @GetMapping("/architectural-styles/{architecturalStyleId}")
-    fun getByConstructionArchitecturalStyleId(@PathVariable architecturalStyleId: Int): MutableList<ConstructionImage> {
-        return constructionImageService.getByConstructionArchitecturalStyleId(architecturalStyleId)
+    fun find(@PathVariable architecturalStyleId: Int): List<ConstructionImage> {
+        return constructionImageService.find(architecturalStyleId)
     }
 
     @Operation(summary = "Get images with the same architectural style by constructionId across images of current construction")
     @GetMapping("/similar/{constructionId}")
-    fun getImagesWithSameArchitecturalStyleByConstructionIdAcrossImagesOfCurrentConstruction(@PathVariable constructionId: Int): MutableList<ConstructionImage> {
-        return constructionImageService.getImagesWithSameArchitecturalStyleByConstructionIdAcrossImagesOfCurrentConstruction(constructionId)
+    fun getImagesOfConstructionsWithSameArchitecturalStyle(@PathVariable constructionId: Int): List<ConstructionImage> {
+        return constructionImageService.getImagesOfConstructionsWithSameArchitecturalStyle(
+            constructionId
+        )
     }
 
     @DeleteMapping("/{id}")
-    fun deleteById(@PathVariable id: Int): ResponseEntity<String> {
-        if (!constructionImageService.deleteById(id)) {
-            throw NotFoundException("Construction image not found with id: $id")
-        }
+    fun delete(@PathVariable id: Int): ResponseEntity<String> {
+        constructionImageService.delete(id)
         return ResponseEntity(HttpStatus.NO_CONTENT)
     }
 }

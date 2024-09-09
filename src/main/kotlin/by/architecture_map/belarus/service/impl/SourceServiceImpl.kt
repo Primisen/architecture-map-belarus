@@ -1,60 +1,55 @@
 package by.architecture_map.belarus.service.impl
 
 import by.architecture_map.belarus.entity.Source
+import by.architecture_map.belarus.exception.NotFoundException
 import by.architecture_map.belarus.repository.SourceRepository
 import by.architecture_map.belarus.service.SourceService
 import org.springframework.stereotype.Service
 
 @Service
 class SourceServiceImpl(
-        private val sourceRepository: SourceRepository
+    private val sourceRepository: SourceRepository
 ) : SourceService {
 
-    override fun create(source: Source): Source {
-        return sourceRepository.save(source)
-    }
+    override fun create(source: Source) = sourceRepository.save(source)
 
-    override fun findAll(): MutableList<Source> {
-        return sourceRepository.findAll()
-    }
+    override fun findAll() = sourceRepository.findAll()
 
-    override fun updateById(id: Int, updatedSource: Source): Source? {
-        var savedSource: Source? = null
+    override fun update(id: Int, updatedSource: Source): Source =
 
-        sourceRepository.findById(id).ifPresent { foundSource ->
-            foundSource.name = updatedSource.name
-            foundSource.url = updatedSource.url
-            foundSource.description = updatedSource.description
-            savedSource = sourceRepository.save(foundSource)
-        }
+        sourceRepository.findById(id)
+            .orElseThrow { NotFoundException("Source not found with id: $id") }
+            .apply {
+                name = updatedSource.name
+                url = updatedSource.url
+                description = updatedSource.description
+            }
+            .let { sourceRepository.save(it) }
 
-        return savedSource
-    }
 
-    override fun patchById(id: Int, updatedSource: Source): Source? {
-        var savedSource: Source? = null
+    override fun patchUpdate(id: Int, updatedSource: Source): Source =
 
-        sourceRepository.findById(id).ifPresent { foundSource ->
-            if (!updatedSource.name.isNullOrEmpty())
-                foundSource.name = updatedSource.name
-            if (updatedSource.url.isNullOrEmpty())
-                foundSource.url = updatedSource.url
-            if (!updatedSource.description.isNullOrEmpty())
-                foundSource.description = updatedSource.description
+        sourceRepository.findById(id)
+            .orElseThrow { NotFoundException("Source not found with id: $id") }
+            .apply {
+                if (!updatedSource.name.isNullOrEmpty())
+                    name = updatedSource.name
+                if (updatedSource.url.isNullOrEmpty())
+                    url = updatedSource.url
+                if (!updatedSource.description.isNullOrEmpty())
+                    description = updatedSource.description
+            }
+            .let {
+                sourceRepository.save(it)
+            }
 
-            savedSource = sourceRepository.save(foundSource)
-        }
 
-        return savedSource
-    }
-
-    override fun deleteById(id: Int): Boolean {
+    override fun delete(id: Int) {
 
         if (sourceRepository.existsById(id)) {
             sourceRepository.deleteById(id)
-            return true
+        } else {
+            throw NotFoundException("Source not found with id: $id")
         }
-
-        return false
     }
 }

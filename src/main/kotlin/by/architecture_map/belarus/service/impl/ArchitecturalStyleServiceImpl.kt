@@ -1,76 +1,69 @@
 package by.architecture_map.belarus.service.impl
 
 import by.architecture_map.belarus.entity.ArchitecturalStyle
+import by.architecture_map.belarus.exception.NotFoundException
 import by.architecture_map.belarus.repository.ArchitecturalStyleRepository
-import by.architecture_map.belarus.repository.ImageRepository
 import by.architecture_map.belarus.service.ArchitecturalStyleService
-import org.springframework.data.repository.findByIdOrNull
+import by.architecture_map.belarus.service.ImageService
 import org.springframework.stereotype.Service
 
 @Service
 class ArchitecturalStyleServiceImpl(
-        private val architecturalStyleRepository: ArchitecturalStyleRepository,
-        private val imageRepository: ImageRepository
+    private val architecturalStyleRepository: ArchitecturalStyleRepository,
+    private val imageService: ImageService
 ) : ArchitecturalStyleService {
 
-    override fun create(architecturalStyle: ArchitecturalStyle): ArchitecturalStyle {
-        return architecturalStyleRepository.save(architecturalStyle)
-    }
+    override fun create(architecturalStyle: ArchitecturalStyle) = architecturalStyleRepository.save(architecturalStyle)
 
-    override fun findAll(): MutableList<ArchitecturalStyle> {
-        return architecturalStyleRepository.findAll()
-    }
+    override fun findAll() = architecturalStyleRepository.findAll()
 
-    override fun findById(id: Int): ArchitecturalStyle? {
-        return architecturalStyleRepository.findByIdOrNull(id)
-    }
+    override fun find(id: Int): ArchitecturalStyle = architecturalStyleRepository.findById(id)
+        .orElseThrow { throw NotFoundException("Architectural style not found with id: $id") }
 
-    override fun updateById(id: Int, updatedArchitecturalStyle: ArchitecturalStyle): ArchitecturalStyle? {
+    override fun update(id: Int, updatedArchitecturalStyle: ArchitecturalStyle): ArchitecturalStyle =
+        architecturalStyleRepository.findById(id)
+            .orElseThrow { NotFoundException("Architectural style not found with id: $id") }
+            .apply {
+                name = updatedArchitecturalStyle.name
+                attributes = updatedArchitecturalStyle.attributes
+                description = updatedArchitecturalStyle.description
+                shortDescription = updatedArchitecturalStyle.shortDescription
+                demonstrativeImage = updatedArchitecturalStyle.demonstrativeImage
+                yearsActive = updatedArchitecturalStyle.yearsActive
+            }
+            .let {
+                architecturalStyleRepository.save(it)
+            }
 
-        var savedArchitectureStyle: ArchitecturalStyle? = null
+    override fun patchUpdate(id: Int, updatedArchitecturalStyle: ArchitecturalStyle): ArchitecturalStyle =
 
-        architecturalStyleRepository.findById(id).ifPresent { foundArchitecturalStyle ->
-            foundArchitecturalStyle.name = updatedArchitecturalStyle.name
-            foundArchitecturalStyle.attributes = updatedArchitecturalStyle.attributes
-            foundArchitecturalStyle.description = updatedArchitecturalStyle.description
-            foundArchitecturalStyle.shortDescription = updatedArchitecturalStyle.shortDescription
-            foundArchitecturalStyle.demonstrativeImage = updatedArchitecturalStyle.demonstrativeImage
-            foundArchitecturalStyle.yearsActive = updatedArchitecturalStyle.yearsActive
-            savedArchitectureStyle = architecturalStyleRepository.save(foundArchitecturalStyle)
-        }
+        architecturalStyleRepository.findById(id)
+            .orElseThrow { NotFoundException("Architectural style not found with id: $id") }
+            .apply {
+                if (!updatedArchitecturalStyle.name.isNullOrEmpty())
+                    name = updatedArchitecturalStyle.name
+                if (!updatedArchitecturalStyle.attributes.isNullOrEmpty())
+                    attributes = updatedArchitecturalStyle.attributes
+                if (!updatedArchitecturalStyle.description.isNullOrEmpty())
+                    description = updatedArchitecturalStyle.description
+                if (!updatedArchitecturalStyle.shortDescription.isNullOrEmpty())
+                    shortDescription = updatedArchitecturalStyle.shortDescription
+                if (updatedArchitecturalStyle.demonstrativeImage != null)
+                    demonstrativeImage =
+                        updatedArchitecturalStyle.demonstrativeImage?.id?.let { imageService.find(it) }
+                if (!updatedArchitecturalStyle.yearsActive.isNullOrEmpty())
+                    yearsActive = updatedArchitecturalStyle.yearsActive
+            }
 
-        return savedArchitectureStyle
-    }
+            .let {
+                architecturalStyleRepository.save(it)
+            }
 
-    override fun patchById(id: Int, updatedArchitecturalStyle: ArchitecturalStyle): ArchitecturalStyle? {
-
-        var savedArchitectureStyle: ArchitecturalStyle? = null
-
-        architecturalStyleRepository.findById(id).ifPresent { foundArchitecturalStyle ->
-            if (!updatedArchitecturalStyle.name.isNullOrEmpty())
-                foundArchitecturalStyle.name = updatedArchitecturalStyle.name
-            if (!updatedArchitecturalStyle.attributes.isNullOrEmpty())
-                foundArchitecturalStyle.attributes = updatedArchitecturalStyle.attributes
-            if (!updatedArchitecturalStyle.description.isNullOrEmpty())
-                foundArchitecturalStyle.description = updatedArchitecturalStyle.description
-            if (!updatedArchitecturalStyle.shortDescription.isNullOrEmpty())
-                foundArchitecturalStyle.shortDescription = updatedArchitecturalStyle.shortDescription
-            if (updatedArchitecturalStyle.description != null)
-                foundArchitecturalStyle.demonstrativeImage = updatedArchitecturalStyle.demonstrativeImage?.id?.let { imageRepository.getReferenceById(it) }
-            if (!updatedArchitecturalStyle.yearsActive.isNullOrEmpty())
-                foundArchitecturalStyle.yearsActive = updatedArchitecturalStyle.yearsActive
-
-            savedArchitectureStyle = architecturalStyleRepository.save(foundArchitecturalStyle)
-        }
-
-        return savedArchitectureStyle
-    }
-
-    override fun deleteById(id: Int): Boolean {
+    override fun delete(id: Int) {
         if (architecturalStyleRepository.existsById(id)) {
             architecturalStyleRepository.deleteById(id)
-            return true
+        } else {
+            throw NotFoundException("Architectural style not found with id: $id")
         }
-        return false
     }
 }

@@ -3,9 +3,6 @@ package by.architecture_map.belarus.entity
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.JoinTable
 import jakarta.persistence.ManyToMany
@@ -13,34 +10,43 @@ import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToMany
 import jakarta.persistence.OneToOne
 
+/**
+ * The class means to architectural structures such as buildings, separate arches,
+ * gates, columns (for example, the column in honor of the constitution of 1791)
+ */
 @Entity
 data class Construction(
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        var id: Int? = null,
-        var name: String? = null,
-        var buildingTime: String? = null,
 
-        @OneToOne(cascade = [CascadeType.PERSIST])
-        @JoinColumn(name = "address_id", nullable = false)
-        var address: Address? = null,
+    var name: String? = null,
 
-        @ManyToOne(cascade = [CascadeType.MERGE])
-        @JoinColumn(name = "architectural_style_id")
-        var architecturalStyle: ArchitecturalStyle? = null,
+    /**
+     * There are cases when there is no the exact date the construction was built,
+     * but only an approximate time, for example: "the second half of the 19th century",
+     * so field has a string type
+     */
+    var buildingTime: String? = null,
 
-        @JsonIgnoreProperties("constructions")
-        @ManyToMany(cascade = [CascadeType.ALL])
-        @JoinTable(
-                name = "construction_architect",
-                joinColumns = [JoinColumn(name = "construction_id")],
-                inverseJoinColumns = [JoinColumn(name = "architect_id")]
-        )
-        var architects: MutableList<Architect>? = mutableListOf(),
+    @OneToOne(cascade = [CascadeType.PERSIST])
+    @JoinColumn(name = "address_id", nullable = false)
+    var address: Address? = null,
 
-        var description: String? = null,
+    @ManyToOne(cascade = [CascadeType.MERGE])
+    @JoinColumn(name = "architectural_style_id")
+    var architecturalStyle: ArchitecturalStyle? = null,
 
-        @JsonIgnoreProperties("construction")
-        @OneToMany(mappedBy = "construction")
-        var images: MutableList<ConstructionImage>? = mutableListOf()
-)
+    @JsonIgnoreProperties("constructions")
+    @ManyToMany(cascade = [CascadeType.ALL])
+    @JoinTable(
+        name = "construction_architect",
+        joinColumns = [JoinColumn(name = "construction_id")],
+        inverseJoinColumns = [JoinColumn(name = "architect_id")]
+    )
+    var architects: MutableList<Architect>? = mutableListOf(),
+
+    var description: String? = null,
+
+    @JsonIgnoreProperties("construction")
+    @OneToMany(mappedBy = "construction")
+    var images: MutableList<ConstructionImage>? = mutableListOf()
+
+) : BaseEntity()

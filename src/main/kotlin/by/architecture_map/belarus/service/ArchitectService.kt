@@ -5,6 +5,6 @@ import by.architecture_map.belarus.entity.Architect
 interface ArchitectService {
 
     fun create(architect: Architect): Architect
-    fun findById(id: Int): Architect?
-    fun findAll(): MutableList<Architect>
+    fun find(id: Int): Architect
+    fun findAll(): List<Architect>
 }
