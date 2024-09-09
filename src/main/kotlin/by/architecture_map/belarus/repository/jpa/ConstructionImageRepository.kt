@@ -1,4 +1,4 @@
-package by.architecture_map.belarus.repository
+package by.architecture_map.belarus.repository.jpa
 
 import by.architecture_map.belarus.entity.ConstructionImage
 import org.springframework.data.jpa.repository.JpaRepository
