@@ -1,9 +1,14 @@
 package by.architecture_map.belarus.service.impl
 
 import by.architecture_map.belarus.entity.ConstructionImage
+<<<<<<< HEAD
 import by.architecture_map.belarus.exception.NotFoundException
 import by.architecture_map.belarus.repository.ConstructionImageRepository
 import by.architecture_map.belarus.service.ConstructionService
+=======
+import by.architecture_map.belarus.repository.jpa.ConstructionImageRepository
+import by.architecture_map.belarus.repository.jpa.ConstructionRepository
+>>>>>>> 0d71c02 (It need refactoring)
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
