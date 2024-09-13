@@ -2,7 +2,7 @@ package by.architecture_map.belarus.service.impl
 
 import by.architecture_map.belarus.entity.Image
 import by.architecture_map.belarus.exception.NotFoundException
-import by.architecture_map.belarus.repository.ImageRepository
+import by.architecture_map.belarus.repository.jpa.ImageRepository
 import by.architecture_map.belarus.service.ImageService
 import org.springframework.stereotype.Service
 

@@ -2,8 +2,8 @@ package by.architecture_map.belarus.service.impl
 
 import by.architecture_map.belarus.entity.Construction
 import by.architecture_map.belarus.exception.NotFoundException
-import by.architecture_map.belarus.repository.ConstructionRepository
 import by.architecture_map.belarus.service.ConstructionService
+import by.architecture_map.belarus.repository.jpa.ConstructionRepository
 import org.springframework.stereotype.Service
 
 @Service
@@ -12,7 +12,6 @@ class ConstructionServiceImpl(
 ) : ConstructionService {
 
     override fun create(construction: Construction) = constructionRepository.save(construction)
-
     override fun findAll() = constructionRepository.findAll()
 
     override fun find(id: Int): Construction = constructionRepository.findById(id)
