@@ -2,7 +2,6 @@ package by.architecture_map.belarus.service.impl
 
 import by.architecture_map.belarus.entity.Construction
 import by.architecture_map.belarus.service.SearchService
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations
 import org.springframework.data.elasticsearch.core.SearchHits
 import org.springframework.data.elasticsearch.core.query.Criteria
@@ -11,7 +10,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class SearchServiceImpl(
-    @Autowired private val elasticsearchOperations: ElasticsearchOperations
+    private val elasticsearchOperations: ElasticsearchOperations
 ) : SearchService {
 
     override fun constructionSearch(
@@ -23,16 +22,22 @@ class SearchServiceImpl(
     ): List<Construction> {
         var criteria = Criteria()
 
-        if (architecturalStyleId != null) {
+        if (!architecturalStyleId.isNullOrEmpty()) {
             criteria = criteria.and("architecturalStyle.id").`is`(architecturalStyleId)
         }
 
-        if (region != null) {
+        if (!region.isNullOrEmpty()) {
             criteria = criteria.and("address.region").`is`(region)
         }
 
-        if (district != null) {
+        if (!district.isNullOrEmpty()) {
             criteria = criteria.and("address.district").`is`(district)
+        }
+
+        if (!buildingTimeFrom.isNullOrEmpty() && !buildingTimeTo.isNullOrEmpty()) {
+            criteria = criteria.and("buildingCentury")
+                .greaterThanEqual(buildingTimeFrom)
+                .lessThanEqual(buildingTimeTo)
         }
 
         val query = CriteriaQuery(criteria)
