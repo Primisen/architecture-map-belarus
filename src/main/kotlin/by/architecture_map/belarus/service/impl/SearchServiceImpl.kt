@@ -13,10 +13,11 @@ class SearchServiceImpl(
     private val elasticsearchOperations: ElasticsearchOperations
 ) : SearchService {
 
-    override fun constructionSearch(
+    override fun searchConstruction(
         architecturalStyleId: String?,
         region: String?,
         district: String?,
+
         buildingCenturyFrom: String?,
         buildingCenturyTo: String?
     ): List<Construction> {

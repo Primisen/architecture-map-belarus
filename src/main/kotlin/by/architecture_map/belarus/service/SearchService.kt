@@ -4,7 +4,7 @@ import by.architecture_map.belarus.entity.Construction
 
 interface SearchService {
 
-    fun constructionSearch(
+    fun searchConstruction(
         architecturalStyleId: String?,
         region: String?,
         district: String?,

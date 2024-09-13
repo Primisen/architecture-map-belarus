@@ -1,7 +1,6 @@
 package by.architecture_map.belarus.service.impl
 
 import by.architecture_map.belarus.entity.ConstructionImage
-import by.architecture_map.belarus.exception.NotFoundException
 import by.architecture_map.belarus.repository.jpa.ConstructionImageRepository
 import by.architecture_map.belarus.service.ConstructionImageService
 import by.architecture_map.belarus.service.ConstructionService

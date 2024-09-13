@@ -22,7 +22,6 @@ class SearchController(
         @RequestParam(required = false) district: String?,
         @RequestParam(required = false) buildingCenturyFrom: String?,
         @RequestParam(required = false) buildingCenturyTo: String?
-    ): List<Construction> {
-        return searchService.constructionSearch(architecturalStyleId, region, district, buildingCenturyFrom, buildingCenturyTo)
-    }
+    ): List<Construction> =
+        searchService.searchConstruction(architecturalStyleId, region, district, buildingCenturyFrom, buildingCenturyTo)
 }
