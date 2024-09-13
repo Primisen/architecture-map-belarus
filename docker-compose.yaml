@@ -2,7 +2,9 @@ version: '3'
 
 services:
   backend:
-    image: 'primisen/belarus-architecture-map:latest'
+#    image: 'primisen/belarus-architecture-map:latest'
+#    image: 'docker-spring-boot-postgres:latest'
+    build: .
     container_name: backend
     depends_on:
       es01:
