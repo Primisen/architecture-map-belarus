@@ -11,5 +11,4 @@ interface SearchService {
         buildingTimeFrom: String?,
         buildingTimeTo: String?
     ): List<Construction>
-
 }

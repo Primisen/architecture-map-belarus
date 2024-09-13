@@ -15,14 +15,14 @@ class SearchController(
     private val searchService: SearchService
 ) {
 
-    @GetMapping("/construction")
+    @GetMapping("/constructions")
     fun constructionSearch(
         @RequestParam(required = false) architecturalStyleId: String?,
         @RequestParam(required = false) region: String?,
         @RequestParam(required = false) district: String?,
-        @RequestParam(required = false) buildingTimeFrom: String?,
-        @RequestParam(required = false) buildingTimeTo: String?
+        @RequestParam(required = false) buildingCenturyFrom: String?,
+        @RequestParam(required = false) buildingCenturyTo: String?
     ): List<Construction> {
-        return searchService.constructionSearch(architecturalStyleId, region, district, buildingTimeFrom, buildingTimeTo)
+        return searchService.constructionSearch(architecturalStyleId, region, district, buildingCenturyFrom, buildingCenturyTo)
     }
 }
