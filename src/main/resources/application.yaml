@@ -9,6 +9,15 @@ spring:
     password: ${DB_PASSWORD}
 
   elasticsearch:
-    uris: https://localhost:9200
-    username: ${ELASTIC_USERNAME}
-    password: ${ELASTIC_PASSWORD}
+    uris: http://elastic:9200
+
+  data:
+    elasticsearch:
+      repositories:
+        enabled: true
+
+server:
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
