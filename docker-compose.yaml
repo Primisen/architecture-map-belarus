@@ -2,8 +2,7 @@ version: '3'
 
 services:
   backend:
-#    image: 'primisen/belarus-architecture-map:latest'
-#    image: 'docker-spring-boot-postgres:latest'
+    image: 'primisen/belarus-architecture-map:latest'
     build: .
     container_name: backend
     depends_on:
@@ -15,8 +14,6 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/architecture-map?currentSchema=architecture_map
       - DB_USERNAME=${DB_USERNAME}
       - DB_PASSWORD=${DB_PASSWORD}
-#      - ELASTIC_USERNAME=${ELASTIC_USERNAME}
-#      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
     ports:
       - "8080:8080"
 
@@ -47,15 +44,13 @@ services:
     env_file:
       - .env
     environment:
-#      - ELASTIC_USERNAME=${ELASTIC_USERNAME}
-#      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
       - discovery.type=single-node
       - xpack.security.enabled=false
       - xpack.security.enrollment.enabled=false
     ports:
       - "9200:9200"
     healthcheck:
-      test: curl -u ${ELASTIC_USERNAME}:${ELASTIC_PASSWORD} -k http://localhost:9200
+      test: curl -u -k http://localhost:9200
       interval: 10s
       timeout: 5s
       retries: 5
@@ -66,8 +61,6 @@ services:
     env_file:
       - .env
     environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - LS_JAVA_OPTS=-Xms256m -Xmx256m
     volumes:
       - ./logstash/postgres_to_elasticsearch.conf:/usr/share/logstash/pipeline/logstash.conf
