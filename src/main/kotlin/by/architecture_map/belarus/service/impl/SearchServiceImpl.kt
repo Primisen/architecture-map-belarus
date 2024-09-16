@@ -17,7 +17,6 @@ class SearchServiceImpl(
         architecturalStyleId: String?,
         region: String?,
         district: String?,
-
         buildingCenturyFrom: String?,
         buildingCenturyTo: String?
     ): List<Construction> {
