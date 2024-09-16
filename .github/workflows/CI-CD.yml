@@ -24,6 +24,8 @@ jobs:
           mvn clean install
           mkdir artifacts && cp target/*.jar artifacts
           cd artifacts && ls
+      - name: Generate SSL certificate for Elasticsearch
+        run:  sudo /bin/bash ./generate_certificate.sh
       - name: Save artifact
         uses: actions/upload-artifact@v2
         with:
@@ -56,6 +58,10 @@ jobs:
           echo PGUSER=${{ secrets.PGUSER }} >> .env
           echo DB_USERNAME=${{ secrets.DB_USERNAME }} >> .env
           echo DB_PASSWORD=${{ secrets.DB_PASSWORD }} >> .env
+          echo ELASTIC_USERNAME=${{ secrets.ELASTIC_USERNAME }} >> .env
+          echo ELASTIC_PASSWORD=${{ secrets.ELASTIC_PASSWORD }} >> .env
+          echo CERTS_DIR=${{ secrets.CERTS_DIR }} >> .env
+          echo COMPOSE_PROJECT_NAME=${{ secrets.COMPOSE_PROJECT_NAME }} >> .env
       - name: Stop docker-compose
         run: docker-compose down
       - name: Docker-compose pull
