@@ -27,7 +27,7 @@ jobs:
       - name: Generate SSL certificate for Elasticsearch
         run:  sudo /bin/bash ./generate_certificate.sh
       - name: Save artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: github-action-artifact
           path: artifacts
