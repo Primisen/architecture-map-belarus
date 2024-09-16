@@ -1,6 +1,6 @@
 package com.architecture_map.belarus.entity;
 
-import com.architecture_map.belarus.entity.image.ArchitectImage;
+//import com.architecture_map.belarus.entity.image.ArchitectImage;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -44,9 +44,9 @@ public class Architect {
 
     private String biographicalArticle;
 
-    @JsonIgnoreProperties("architect")
-    @OneToOne(mappedBy = "architect")
-    private ArchitectImage image;
+//    @JsonIgnoreProperties("architect")
+//    @OneToOne(mappedBy = "architect")
+//    private ArchitectImage image;
 
     @JsonIgnoreProperties("architects")
     @ManyToMany(cascade = {CascadeType.ALL})

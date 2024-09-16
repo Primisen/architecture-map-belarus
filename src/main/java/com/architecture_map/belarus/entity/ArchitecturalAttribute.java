@@ -1,6 +1,6 @@
 package com.architecture_map.belarus.entity;
 
-import com.architecture_map.belarus.entity.image.ArchitecturalAttributeImage;
+//import com.architecture_map.belarus.entity.image.ArchitecturalAttributeImage;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -33,6 +33,6 @@ public class ArchitecturalAttribute {
     private String name;
     private String description;
 
-    @OneToMany(mappedBy = "architecturalAttribute", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    private Set<ArchitecturalAttributeImage> images = new HashSet<>();
+//    @OneToMany(mappedBy = "architecturalAttribute", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+//    private Set<ArchitecturalAttributeImage> images = new HashSet<>();
 }

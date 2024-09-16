@@ -13,17 +13,17 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 
-@Entity
-@RequiredArgsConstructor
-@Getter
-@Setter(AccessLevel.PUBLIC)
-@ToString
-@PrimaryKeyJoinColumn(name = "image_id")
-public class ArchitectImage extends Image{
-
-    @JsonIgnoreProperties("images")
-    @OneToOne
-    @JoinColumn(name = "architect_id", referencedColumnName = "id")
-    private Architect architect;
-
-}
+//@Entity
+//@RequiredArgsConstructor
+//@Getter
+//@Setter(AccessLevel.PUBLIC)
+//@ToString
+//@PrimaryKeyJoinColumn(name = "image_id")
+//public class ArchitectImage extends Image{
+//
+//    @JsonIgnoreProperties("images")
+//    @OneToOne
+//    @JoinColumn(name = "architect_id", referencedColumnName = "id")
+//    private Architect architect;
+//
+//}
