@@ -1,12 +1,8 @@
 package by.architecture_map.belarus.service.impl
 
 import by.architecture_map.belarus.entity.Source
-<<<<<<< HEAD
 import by.architecture_map.belarus.exception.NotFoundException
-import by.architecture_map.belarus.repository.SourceRepository
-=======
 import by.architecture_map.belarus.repository.jpa.SourceRepository
->>>>>>> 0d71c02 (It need refactoring)
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
