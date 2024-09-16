@@ -61,7 +61,4 @@ jobs:
       - name: Docker-compose pull
         run: docker-compose pull
       - name: Docker-compose run
-        run:
-          docker stop $(docker ps -a -q) &&
-          docker rm $(docker ps -a -q) &&
-          docker-compose  up -d
+        run: docker-compose  up -d
