@@ -26,8 +26,6 @@ jobs:
           cd artifacts && ls
       - name: Generate SSL certificate for Elasticsearch
         run:  sudo /bin/bash ./generate_certificate.sh
-      - name: Stop and remove all containers
-        run: docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)
       - name: Save artifact
         uses: actions/upload-artifact@v3
         with:
@@ -69,4 +67,6 @@ jobs:
       - name: Docker-compose pull
         run: docker-compose pull
       - name: Docker-compose run
-        run: docker-compose  up -d
+        run: docker stop $(docker ps -a -q)
+             docker rm $(docker ps -a -q)
+             docker-compose  up -d
