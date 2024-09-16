@@ -3,25 +3,27 @@ version: '3'
 services:
   backend:
     image: 'primisen/belarus-architecture-map:latest'
-    build: .
     container_name: backend
     depends_on:
-      elastic:
+      es01:
         condition: service_healthy
       db:
         condition: service_healthy
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/architecture-map?currentSchema=architecture_map
+      - SPRING_ELASTICSEARCH_URIS=https://es01:9200
       - DB_USERNAME=${DB_USERNAME}
       - DB_PASSWORD=${DB_PASSWORD}
+      - ELASTIC_USERNAME=${ELASTIC_USERNAME}
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
     ports:
-      - "8080:8080"
+      - 8080:8080
+    volumes:
+      - ./cacerts:/etc/ssl/certs/java/cacerts:ro
 
   db:
     image: 'postgres:13.1-alpine'
     container_name: db
-    env_file:
-      - .env
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
@@ -29,7 +31,7 @@ services:
       - PGUSER=${PGUSER}
       - PGDATA=/var/lib/postgresql/data/pgdata
     ports:
-      - "5432:5432"
+      - 5432:5432
     healthcheck:
       test: pg_isready -q -d $${POSTGRES_DB} -U $${POSTGRES_USER}
       interval: 3s
@@ -38,19 +40,32 @@ services:
     volumes:
       - /opt/architecture-map-belarus/pgdata:/var/lib/postgresql/data
 
-  elastic:
+  es01:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.15.1
-    container_name: elastic
-    env_file:
-      - .env
+    container_name: es01
     environment:
+      - node.name=es01
       - discovery.type=single-node
-      - xpack.security.enabled=false
-      - xpack.security.enrollment.enabled=false
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+      - xpack.license.self_generated.type=trial
+      - xpack.security.enabled=true
+      - xpack.security.http.ssl.enabled=true
+      - xpack.security.http.ssl.key=${CERTS_DIR}/es01/es01.key
+      - xpack.security.http.ssl.certificate_authorities=${CERTS_DIR}/ca/ca.crt
+      - xpack.security.http.ssl.certificate=${CERTS_DIR}/es01/es01.crt
+      - xpack.security.transport.ssl.enabled=true
+      - xpack.security.transport.ssl.verification_mode=certificate
+      - xpack.security.transport.ssl.certificate_authorities=${CERTS_DIR}/ca/ca.crt
+      - xpack.security.transport.ssl.certificate=${CERTS_DIR}/es01/es01.crt
+      - xpack.security.transport.ssl.key=${CERTS_DIR}/es01/es01.key
+    volumes:
+      - /usr/share/elasticsearch/data
+      - ./certs:${CERTS_DIR}
     ports:
-      - "9200:9200"
+      - 9200:9200
     healthcheck:
-      test: curl -u -k http://localhost:9200
+      test: curl -u ${ELASTIC_USERNAME} ${ELASTIC_PASSWORD} -k https://localhost:9200
       interval: 10s
       timeout: 5s
       retries: 5
@@ -58,15 +73,17 @@ services:
   logstash:
     image: docker.elastic.co/logstash/logstash:8.15.1
     container_name: logstash
-    env_file:
-      - .env
     environment:
       - LS_JAVA_OPTS=-Xms256m -Xmx256m
+      - ELASTIC_USERNAME=${ELASTIC_USERNAME}
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     volumes:
       - ./logstash/postgres_to_elasticsearch.conf:/usr/share/logstash/pipeline/logstash.conf
       - ./logstash/postgresql-42.7.3.jar:/usr/share/logstash/postgresql-42.7.3.jar
     depends_on:
-      elastic:
+      es01:
         condition: service_healthy
       db:
         condition: service_healthy
