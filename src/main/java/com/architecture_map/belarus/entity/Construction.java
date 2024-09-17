@@ -35,7 +35,7 @@ public class Construction {
     private Integer id;
 
     private String name;
-    private String buildingTime;
+    private String buildingDate;
 
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "address_id", nullable = false)

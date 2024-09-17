@@ -23,36 +23,24 @@ class ConstructionController(
 ) {
 
     @PostMapping("/")
-    fun create(@RequestBody construction: Construction): ResponseEntity<Construction> {
-        val createdConstruction = constructionService.create(construction)
-        return ResponseEntity(createdConstruction, HttpStatus.CREATED)
-    }
+    fun create(@RequestBody construction: Construction): ResponseEntity<Construction> =
+        ResponseEntity(constructionService.create(construction), HttpStatus.CREATED)
 
     @GetMapping("/")
-    fun findAll(): List<Construction> {
-        return constructionService.findAll()
-    }
+    fun findAll(): List<Construction> = constructionService.findAll()
 
     @GetMapping("/{id}")
-    fun find(@PathVariable id: Int): Construction {
-        return constructionService.find(id)
-    }
+    fun find(@PathVariable id: Int): Construction = constructionService.find(id)
 
     @PutMapping("/{id}")
-    fun update(@PathVariable id: Int, @RequestBody constructionUpdates: Construction): ResponseEntity<String> {
-        constructionService.update(id, constructionUpdates)
-        return ResponseEntity(HttpStatus.NO_CONTENT)
-    }
+    fun update(@PathVariable id: Int, @RequestBody constructionUpdates: Construction): ResponseEntity<Construction> =
+        ResponseEntity(constructionService.update(id, constructionUpdates), HttpStatus.NO_CONTENT)
 
     @PatchMapping("/{id}")
-    fun patchUpdate(@PathVariable id: Int, @RequestBody construction: Construction): ResponseEntity<String> {
-        constructionService.patchUpdate(id, construction)
-        return ResponseEntity(HttpStatus.NO_CONTENT)
-    }
+    fun patchUpdate(@PathVariable id: Int, @RequestBody construction: Construction): ResponseEntity<Construction> =
+        ResponseEntity(constructionService.patchUpdate(id, construction), HttpStatus.NO_CONTENT)
 
     @DeleteMapping("/{id}")
-    fun delete(@PathVariable id: Int): ResponseEntity<String> {
-        constructionService.delete(id)
-        return ResponseEntity(HttpStatus.NO_CONTENT)
-    }
+    fun delete(@PathVariable id: Int): ResponseEntity<String> =
+        constructionService.delete(id).let { ResponseEntity(HttpStatus.NO_CONTENT) }
 }

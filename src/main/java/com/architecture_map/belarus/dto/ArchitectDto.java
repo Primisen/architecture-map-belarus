@@ -1,6 +1,6 @@
 package com.architecture_map.belarus.dto;
 
-import com.architecture_map.belarus.entity.image.ArchitectImage;
+//import com.architecture_map.belarus.entity.image.ArchitectImage;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -16,5 +16,5 @@ public class ArchitectDto {
     private String yearsOfLife;
     private String shortWorkDescription;
     private String biographicalArticle;
-    private ArchitectImage architectImage;
+//    private ArchitectImage architectImage;
 }

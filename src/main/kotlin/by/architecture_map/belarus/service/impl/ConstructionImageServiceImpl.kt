@@ -13,43 +13,26 @@ class ConstructionImageServiceImpl(
     private val constructionService: ConstructionService
 ) : ConstructionImageService {
 
-    override fun create(image: ConstructionImage) = constructionImageRepository.save(image)
+    override fun create(image: ConstructionImage): ConstructionImage = constructionImageRepository.save(image)
 
     override fun getRandomAndUniqueImages(usedImagesId: String?) =
-        constructionImageRepository.getRandomAndUniqueImages(parseStringToArrayOfInt(usedImagesId))
+        constructionImageRepository.getRandomAndUniqueImages(parseStringToIntArray(usedImagesId))
 
     override fun find(architecturalStyleId: Int) =
         constructionImageRepository.findByConstructionArchitecturalStyleId(architecturalStyleId)
 
-    override fun getImagesOfConstructionsWithSameArchitecturalStyle(constructionId: Int): List<ConstructionImage> {
-        return constructionImageRepository.getImagesOfConstructionsWithSameArchitecturalStyleByConstructionId(
+    override fun getImagesOfConstructionsWithSameArchitecturalStyle(constructionId: Int): List<ConstructionImage> =
+        constructionImageRepository.getImagesOfConstructionsWithSameArchitecturalStyleByConstructionId(
             constructionId,
             constructionService.find(constructionId).architecturalStyle?.id
         )
-    }
 
     override fun delete(id: Int) {
-
-        if (constructionImageRepository.existsById(id)) {
-            constructionImageRepository.deleteById(id)
-        } else {
-            throw NotFoundException("Construction Image not found with id: $id")
-        }
+        find(id).also { constructionImageRepository.deleteById(id) }
     }
-
-    private fun parseStringToArrayOfInt(string: String?): IntArray {
-
-        var arrayOfInt = intArrayOf(0)
-
-        if (!string.isNullOrEmpty()) {
-            val arrayOfStrings = string.split(",")
-            arrayOfInt = IntArray(arrayOfStrings.size)
-
-            for (i in arrayOfStrings.indices) {
-                arrayOfInt[i] = arrayOfStrings[i].toInt()
-            }
-        }
-
-        return arrayOfInt
-    }
+    private fun parseStringToIntArray(numbers: String?): IntArray =
+        numbers
+            ?.split(",")
+            ?.map { it.toInt() }
+            ?.toIntArray() ?: intArrayOf(0)
 }

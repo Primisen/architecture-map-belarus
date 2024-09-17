@@ -107,14 +107,15 @@ class SourceServiceImplTest {
     fun whenDelete_thenDeleteSource() {
         //given
         val id = 1
-        every { sourceRepository.existsById(id) } returns true
+        val source = mockk<Source>()
+        every { sourceRepository.findById(id) } returns Optional.of(source)
         every { sourceRepository.deleteById(id) } just Runs
 
         //when
         sourceService.delete(id)
 
         //then
-        verify(exactly = 1) { sourceRepository.existsById(id) }
+        verify(exactly = 1) { sourceRepository.findById(id) }
         verify(exactly = 1) { sourceRepository.deleteById(id) }
     }
 
@@ -122,8 +123,7 @@ class SourceServiceImplTest {
     fun whenDeleteSourceAndSourceDoesNotExists_thenThrowNotFoundException() {
         //given
         val id = 1
-        every { sourceRepository.existsById(id) } returns false
-        every { sourceRepository.deleteById(id) } just Runs
+        every { sourceRepository.findById(id) } returns Optional.empty()
 
         //when & then
         assertThrows(NotFoundException::class.java) {
@@ -131,7 +131,7 @@ class SourceServiceImplTest {
         }
 
         //verify
-        verify(exactly = 1) { sourceRepository.existsById(id) }
+        verify(exactly = 1) { sourceRepository.findById(id) }
         verify(exactly = 0) { sourceRepository.deleteById(id) }
     }
 }

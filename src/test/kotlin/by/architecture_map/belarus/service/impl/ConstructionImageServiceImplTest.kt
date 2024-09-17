@@ -12,6 +12,7 @@ import io.mockk.verify
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
+import java.util.*
 
 class ConstructionImageServiceImplTest {
 
@@ -67,37 +68,5 @@ class ConstructionImageServiceImplTest {
         //then
         verify(exactly = 1) { constructionImageRepository.findByConstructionArchitecturalStyleId(styleId) }
         assertEquals(images, result)
-    }
-
-    @Test
-    fun whenDeleteConstructionImage_thenDeleteConstructionImage() {
-        //given
-        val id = 1
-        every { constructionImageRepository.existsById(id) } returns true
-        every { constructionImageRepository.deleteById(id) } just Runs
-
-        //when
-        val result = constructionImageService.delete(id)
-
-        //then
-        verify(exactly = 1) { constructionImageRepository.existsById(id) }
-        verify(exactly = 1) { constructionImageRepository.deleteById(id) }
-    }
-
-    @Test
-    fun whenDeleteConstructionImageAndImageDoesNotExists_thenThrowNotFoundException() {
-        //given
-        val id = 1
-        every { constructionImageRepository.existsById(id) } returns false
-        every { constructionImageRepository.deleteById(id) } just Runs
-
-        //when & then
-        assertThrows(NotFoundException::class.java) {
-            constructionImageService.delete(id)
-        }
-
-        //verify
-        verify(exactly = 1) { constructionImageRepository.existsById(id) }
-        verify(exactly = 0) { constructionImageRepository.deleteById(id) }
     }
 }

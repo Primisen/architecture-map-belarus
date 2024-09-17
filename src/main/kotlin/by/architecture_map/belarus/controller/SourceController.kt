@@ -23,31 +23,21 @@ class SourceController(
 ) {
 
     @PostMapping("/")
-    fun create(@RequestBody source: Source): ResponseEntity<Source> {
-        val createdSource = sourceService.create(source)
-        return ResponseEntity(createdSource, HttpStatus.CREATED)
-    }
+    fun create(@RequestBody source: Source): ResponseEntity<Source> =
+        ResponseEntity(sourceService.create(source), HttpStatus.CREATED)
 
     @GetMapping("/")
-    fun findAll(): List<Source> {
-        return sourceService.findAll()
-    }
+    fun findAll(): List<Source> = sourceService.findAll()
 
     @PutMapping("/{id}")
-    fun update(@PathVariable id: Int, @RequestBody source: Source): ResponseEntity<String> {
-        sourceService.update(id, source)
-        return ResponseEntity(HttpStatus.NO_CONTENT)
-    }
+    fun update(@PathVariable id: Int, @RequestBody source: Source): ResponseEntity<Source> =
+        ResponseEntity(sourceService.update(id, source), HttpStatus.NO_CONTENT)
 
     @PatchMapping("/{id}")
-    fun patch(@PathVariable id: Int, @RequestBody source: Source): ResponseEntity<String> {
-        sourceService.patchUpdate(id, source)
-        return ResponseEntity(HttpStatus.NO_CONTENT)
-    }
+    fun patch(@PathVariable id: Int, @RequestBody source: Source): ResponseEntity<Source> =
+        ResponseEntity(sourceService.patchUpdate(id, source), HttpStatus.NO_CONTENT)
 
     @DeleteMapping("/{id}")
-    fun delete(@PathVariable id: Int): ResponseEntity<String> {
-        sourceService.delete(id)
-        return ResponseEntity(HttpStatus.NO_CONTENT)
-    }
+    fun delete(@PathVariable id: Int): ResponseEntity<String> =
+        sourceService.delete(id).let { ResponseEntity(HttpStatus.NO_CONTENT) }
 }

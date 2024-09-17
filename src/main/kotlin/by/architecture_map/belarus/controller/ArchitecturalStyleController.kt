@@ -23,36 +23,30 @@ class ArchitecturalStyleController(
 ) {
 
     @PostMapping("/")
-    fun create(@RequestBody architecturalStyle: ArchitecturalStyle): ResponseEntity<ArchitecturalStyle> {
-        val createdArchitecturalStyle = architecturalStyleService.create(architecturalStyle)
-        return ResponseEntity(createdArchitecturalStyle, HttpStatus.CREATED)
-    }
+    fun create(@RequestBody architecturalStyle: ArchitecturalStyle): ResponseEntity<ArchitecturalStyle> =
+        ResponseEntity(architecturalStyleService.create(architecturalStyle), HttpStatus.CREATED)
 
     @GetMapping("/")
-    fun findAll(): List<ArchitecturalStyle> {
-        return architecturalStyleService.findAll()
-    }
+    fun findAll(): List<ArchitecturalStyle> = architecturalStyleService.findAll()
 
     @GetMapping("/{id}")
-    fun find(@PathVariable id: Int): ArchitecturalStyle {
-        return architecturalStyleService.find(id)
-    }
+    fun find(@PathVariable id: Int): ArchitecturalStyle = architecturalStyleService.find(id)
 
     @PutMapping("/{id}")
-    fun update(@PathVariable id: Int, @RequestBody styleUpdates: ArchitecturalStyle): ResponseEntity<String> {
-        architecturalStyleService.update(id, styleUpdates)
-        return ResponseEntity(HttpStatus.NO_CONTENT)
-    }
+    fun update(
+        @PathVariable id: Int,
+        @RequestBody styleUpdates: ArchitecturalStyle
+    ): ResponseEntity<ArchitecturalStyle> =
+        ResponseEntity(architecturalStyleService.update(id, styleUpdates), HttpStatus.NO_CONTENT)
 
     @PatchMapping("/{id}")
-    fun patchUpdate(@PathVariable id: Int, @RequestBody architecturalStyle: ArchitecturalStyle): ResponseEntity<String> {
-        architecturalStyleService.patchUpdate(id, architecturalStyle)
-        return ResponseEntity(HttpStatus.NO_CONTENT)
-    }
+    fun patchUpdate(
+        @PathVariable id: Int,
+        @RequestBody architecturalStyle: ArchitecturalStyle
+    ): ResponseEntity<ArchitecturalStyle> =
+        ResponseEntity(architecturalStyleService.patchUpdate(id, architecturalStyle), HttpStatus.NO_CONTENT)
 
     @DeleteMapping("/{id}")
-    fun delete(@PathVariable id: Int): ResponseEntity<String> {
-        architecturalStyleService.delete(id)
-        return ResponseEntity(HttpStatus.NO_CONTENT)
-    }
+    fun delete(@PathVariable id: Int): ResponseEntity<String> =
+        architecturalStyleService.delete(id).let { ResponseEntity(HttpStatus.NO_CONTENT) }
 }

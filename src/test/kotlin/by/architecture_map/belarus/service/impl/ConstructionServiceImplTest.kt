@@ -84,7 +84,7 @@ class ConstructionServiceImplTest {
             architecturalStyle = updatedConstruction.architecturalStyle
             address = updatedConstruction.address
             architects = updatedConstruction.architects
-            buildingTime = updatedConstruction.buildingTime
+            buildingDate = updatedConstruction.buildingDate
             images = updatedConstruction.images
         }
 
@@ -113,7 +113,7 @@ class ConstructionServiceImplTest {
             architecturalStyle = updatedConstruction.architecturalStyle
             images = updatedConstruction.images
             description = updatedConstruction.description
-            buildingTime = updatedConstruction.buildingTime
+            buildingDate = updatedConstruction.buildingDate
         }
 
         //when
@@ -129,14 +129,15 @@ class ConstructionServiceImplTest {
     fun whenDelete_thenDeleteConstruction() {
         //given
         val id = 1
-        every { constructionRepository.existsById(id) } returns true
+        val construction = mockk<Construction>()
+        every { constructionRepository.findById(id) } returns Optional.of(construction)
         every { constructionRepository.deleteById(id) } just Runs
 
         //when
         val result = constructionService.delete(id)
 
         //then
-        verify(exactly = 1) { constructionRepository.existsById(id) }
+        verify(exactly = 1) { constructionRepository.findById(id) }
         verify(exactly = 1) { constructionRepository.deleteById(id) }
     }
 
@@ -144,8 +145,7 @@ class ConstructionServiceImplTest {
     fun whenDeleteConstructionAndConstructionDoesNotExists_thenThrowNotFoundException() {
         //given
         val id = 1
-        every { constructionRepository.existsById(id) } returns false
-        every { constructionRepository.deleteById(id) } just Runs
+        every { constructionRepository.findById(id) } returns Optional.empty()
 
         //when & then
         assertThrows(NotFoundException::class.java) {
@@ -153,7 +153,7 @@ class ConstructionServiceImplTest {
         }
 
         //verify
-        verify(exactly = 1) { constructionRepository.existsById(id) }
+        verify(exactly = 1) { constructionRepository.findById(id) }
         verify(exactly = 0) { constructionRepository.deleteById(id) }
     }
 }
