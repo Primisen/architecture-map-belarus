@@ -24,7 +24,7 @@ data class Construction(
      * but only an approximate time, for example: "the second half of the 19th century",
      * so field has a string type
      */
-    var buildingTime: String? = null,
+    var buildingDate: String? = null,
 
     @OneToOne(cascade = [CascadeType.PERSIST])
     @JoinColumn(name = "address_id", nullable = false)

@@ -16,6 +16,5 @@ class ArchitectServiceImpl(
     override fun find(id: Int): Architect = architectRepository.findById(id)
         .orElseThrow { throw NotFoundException("Architect not found with id: $id") }
 
-
     override fun findAll(): List<Architect> = architectRepository.findAll()
 }

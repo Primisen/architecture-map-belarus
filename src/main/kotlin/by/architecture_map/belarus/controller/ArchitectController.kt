@@ -20,18 +20,12 @@ class ArchitectController(
 ) {
 
     @PostMapping
-    fun create(@RequestBody architect: Architect): ResponseEntity<Architect> {
-        val createdArchitect = architectService.create(architect)
-        return ResponseEntity(createdArchitect, HttpStatus.CREATED)
-    }
+    fun create(@RequestBody architect: Architect): ResponseEntity<Architect> =
+        ResponseEntity(architectService.create(architect), HttpStatus.CREATED)
 
     @GetMapping("/{id}")
-    fun find(@PathVariable id: Int): Architect {
-        return architectService.find(id)
-    }
+    fun find(@PathVariable id: Int): Architect = architectService.find(id)
 
     @GetMapping("/")
-    fun findAll(): List<Architect> {
-        return architectService.findAll()
-    }
+    fun findAll(): List<Architect> = architectService.findAll()
 }

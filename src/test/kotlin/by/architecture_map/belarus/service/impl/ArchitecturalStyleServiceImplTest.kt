@@ -153,14 +153,16 @@ class ArchitecturalStyleServiceImplTest {
     fun whenDeleteArchitecturalStyle_thenDeleteIfExists() {
         // given
         val id = 1
-        every { architecturalStyleRepository.existsById(id) } returns true
+        val architecturalStyle = mockk<ArchitecturalStyle>()
+
+        every { architecturalStyleRepository.findById(id) } returns Optional.of(architecturalStyle)
         every { architecturalStyleRepository.deleteById(id) } just Runs
 
         // when
         architecturalStyleService.delete(id)
 
         // then
-        verify(exactly = 1) { architecturalStyleRepository.existsById(id) }
+        verify(exactly = 1) { architecturalStyleRepository.findById(id) }
         verify(exactly = 1) { architecturalStyleRepository.deleteById(id) }
     }
 
@@ -168,7 +170,7 @@ class ArchitecturalStyleServiceImplTest {
     fun whenDeleteArchitecturalStyleAndStyleDoesNotExist_thenThrowNotFoundException() {
         //given
         val id = 1
-        every { architecturalStyleRepository.existsById(id) } returns false
+        every { architecturalStyleRepository.findById(id) } returns Optional.empty()
 
         //when & then
         assertThrows(NotFoundException::class.java) {
@@ -176,7 +178,7 @@ class ArchitecturalStyleServiceImplTest {
         }
 
         //verify
-        verify(exactly = 1) { architecturalStyleRepository.existsById(id) }
+        verify(exactly = 1) { architecturalStyleRepository.findById(id) }
         verify(exactly = 0) { architecturalStyleRepository.deleteById(id) }
     }
 }

@@ -15,41 +15,32 @@ class SourceServiceImpl(
 
     override fun findAll() = sourceRepository.findAll()
 
+    override fun find(id: Int): Source = sourceRepository.findById(id)
+        .orElseThrow { throw NotFoundException("Source not found with id: $id") }
+
     override fun update(id: Int, updatedSource: Source): Source =
-
-        sourceRepository.findById(id)
-            .orElseThrow { NotFoundException("Source not found with id: $id") }
-            .apply {
-                name = updatedSource.name
-                url = updatedSource.url
-                description = updatedSource.description
-            }
-            .let { sourceRepository.save(it) }
-
+        applyUpdates(id) {
+            name = updatedSource.name
+            url = updatedSource.url
+            description = updatedSource.description
+        }
 
     override fun patchUpdate(id: Int, updatedSource: Source): Source =
-
-        sourceRepository.findById(id)
-            .orElseThrow { NotFoundException("Source not found with id: $id") }
-            .apply {
-                if (!updatedSource.name.isNullOrEmpty())
-                    name = updatedSource.name
-                if (updatedSource.url.isNullOrEmpty())
-                    url = updatedSource.url
-                if (!updatedSource.description.isNullOrEmpty())
-                    description = updatedSource.description
-            }
-            .let {
-                sourceRepository.save(it)
-            }
-
+        applyUpdates(id) {
+            if (!updatedSource.name.isNullOrEmpty())
+                name = updatedSource.name
+            if (updatedSource.url.isNullOrEmpty())
+                url = updatedSource.url
+            if (!updatedSource.description.isNullOrEmpty())
+                description = updatedSource.description
+        }
 
     override fun delete(id: Int) {
-
-        if (sourceRepository.existsById(id)) {
-            sourceRepository.deleteById(id)
-        } else {
-            throw NotFoundException("Source not found with id: $id")
-        }
+        find(id).also { sourceRepository.deleteById(id) }
     }
+
+    private fun applyUpdates(id: Int, update: Source.() -> Unit): Source =
+        find(id)
+            .apply(update)
+            .let { sourceRepository.save(it) }
 }

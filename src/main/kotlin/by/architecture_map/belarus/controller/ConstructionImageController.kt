@@ -25,10 +25,8 @@ class ConstructionImageController(
 
     @Operation(summary = "Save image of construction")
     @PostMapping("/")
-    fun create(@RequestBody constructionImage: ConstructionImage): ResponseEntity<ConstructionImage> {
-        val createdConstructionImage = constructionImageService.create(constructionImage)
-        return ResponseEntity(createdConstructionImage, HttpStatus.CREATED)
-    }
+    fun create(@RequestBody constructionImage: ConstructionImage): ResponseEntity<ConstructionImage> =
+        ResponseEntity(constructionImageService.create(constructionImage), HttpStatus.CREATED)
 
     @Operation(summary = "Getting list of random images of construction for home page")
     @GetMapping("/")
@@ -38,27 +36,19 @@ class ConstructionImageController(
             description = "The construction image ids, which have already been obtained from the database by one user and are keeping in order not to select them again"
         )
         @RequestParam(required = false) usedId: String?
-    ): List<ConstructionImage> {
-        return constructionImageService.getRandomAndUniqueImages(usedId)
-    }
+    ): List<ConstructionImage> = constructionImageService.getRandomAndUniqueImages(usedId)
 
     @Operation(summary = "Get constructions images by construction architectural style id")
     @GetMapping("/architectural-styles/{architecturalStyleId}")
-    fun find(@PathVariable architecturalStyleId: Int): List<ConstructionImage> {
-        return constructionImageService.find(architecturalStyleId)
-    }
+    fun find(@PathVariable architecturalStyleId: Int): List<ConstructionImage> =
+        constructionImageService.find(architecturalStyleId)
 
     @Operation(summary = "Get images with the same architectural style by constructionId across images of current construction")
     @GetMapping("/similar/{constructionId}")
-    fun getImagesOfConstructionsWithSameArchitecturalStyle(@PathVariable constructionId: Int): List<ConstructionImage> {
-        return constructionImageService.getImagesOfConstructionsWithSameArchitecturalStyle(
-            constructionId
-        )
-    }
+    fun getImagesOfConstructionsWithSameArchitecturalStyle(@PathVariable constructionId: Int): List<ConstructionImage> =
+        constructionImageService.getImagesOfConstructionsWithSameArchitecturalStyle(constructionId)
 
     @DeleteMapping("/{id}")
-    fun delete(@PathVariable id: Int): ResponseEntity<String> {
-        constructionImageService.delete(id)
-        return ResponseEntity(HttpStatus.NO_CONTENT)
-    }
+    fun delete(@PathVariable id: Int): ResponseEntity<String> =
+        constructionImageService.delete(id).let { ResponseEntity(HttpStatus.NO_CONTENT) }
 }
