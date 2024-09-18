@@ -19,7 +19,7 @@ data class ArchitecturalStyle(
         joinColumns = [JoinColumn(name = "architectural_style_id")],
         inverseJoinColumns = [JoinColumn(name = "architectural_attribute_id")]
     )
-    var attributes: MutableList<ArchitecturalAttribute>? = mutableListOf(),
+    var attributes: List<ArchitecturalAttribute>? = listOf(),
 
     @JsonIgnoreProperties("construction")
     @OneToOne
