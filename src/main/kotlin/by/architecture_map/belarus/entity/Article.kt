@@ -2,7 +2,8 @@ package by.architecture_map.belarus.entity
 
 import jakarta.persistence.Entity
 import jakarta.persistence.JoinColumn
-import jakarta.persistence.OneToMany
+import jakarta.persistence.JoinTable
+import jakarta.persistence.ManyToMany
 import jakarta.persistence.OneToOne
 
 @Entity
@@ -16,7 +17,12 @@ data class Article(
     @JoinColumn(name = "demonstrative_image_id", referencedColumnName = "id")
     var demonstrativeImage: Image? = null,
 
-    @OneToMany
-    var tags: List<Tag>? =  listOf()
+    @ManyToMany
+    @JoinTable(
+        name = "tag_construction",
+        joinColumns = [JoinColumn(name = "article_id")],
+        inverseJoinColumns = [JoinColumn(name = "tag_id")]
+    )
+    var tags: List<Tag>? = listOf()
 
 ) : BaseEntity()
