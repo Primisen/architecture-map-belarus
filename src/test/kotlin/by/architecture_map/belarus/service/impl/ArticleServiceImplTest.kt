@@ -82,7 +82,7 @@ class ArticleServiceImplTest {
             content = updatedArticle.content
             shortDescription = updatedArticle.shortDescription
             demonstrativeImage = updatedArticle.demonstrativeImage
-            tags = updatedArticle.tags
+            tag = updatedArticle.tag
         }
 
         //when

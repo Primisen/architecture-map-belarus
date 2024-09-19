@@ -1,5 +1,6 @@
 package by.architecture_map.belarus.controller
 
+import by.architecture_map.belarus.entity.Article
 import by.architecture_map.belarus.entity.Construction
 import by.architecture_map.belarus.service.SearchService
 import org.springframework.web.bind.annotation.CrossOrigin
@@ -22,7 +23,9 @@ class SearchController(
         @RequestParam(required = false) district: String?,
         @RequestParam(required = false) buildingCenturyFrom: String?,
         @RequestParam(required = false) buildingCenturyTo: String?
-    ): List<Construction> {
-        return searchService.constructionSearch(architecturalStyleId, region, district, buildingCenturyFrom, buildingCenturyTo)
-    }
+    ): List<Construction> =
+        searchService.searchConstruction(architecturalStyleId, region, district, buildingCenturyFrom, buildingCenturyTo)
+
+    @GetMapping("/articles")
+    fun articleSearch(request: String): List<Article> = searchService.searchArticle(request)
 }

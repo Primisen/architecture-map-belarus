@@ -1,5 +1,6 @@
 package by.architecture_map.belarus.service.impl
 
+import by.architecture_map.belarus.entity.Article
 import by.architecture_map.belarus.entity.Construction
 import by.architecture_map.belarus.service.SearchService
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations
@@ -13,7 +14,7 @@ class SearchServiceImpl(
     private val elasticsearchOperations: ElasticsearchOperations
 ) : SearchService {
 
-    override fun constructionSearch(
+    override fun searchConstruction(
         architecturalStyleId: String?,
         region: String?,
         district: String?,
@@ -43,6 +44,25 @@ class SearchServiceImpl(
         val query = CriteriaQuery(criteria)
 
         val searchHits: SearchHits<Construction> = elasticsearchOperations.search(query, Construction::class.java)
+
+        return searchHits.map { it.content }.toList()
+    }
+
+    override fun searchArticle(request: String): List<Article> {
+        var criteria = Criteria()
+
+        if (request.isNotEmpty()) {
+
+            criteria = criteria
+                .or("title").contains(request)
+                .or("content").contains(request)
+                .or("shortDescription").contains(request)
+                .or("tag.name").contains(request)
+        }
+
+        val query = CriteriaQuery(criteria)
+
+        val searchHits: SearchHits<Article> = elasticsearchOperations.search(query, Article::class.java)
 
         return searchHits.map { it.content }.toList()
     }

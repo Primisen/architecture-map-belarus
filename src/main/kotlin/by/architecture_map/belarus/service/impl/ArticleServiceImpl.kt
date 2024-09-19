@@ -23,7 +23,7 @@ class ArticleServiceImpl(
             content = updatedArticle.content
             shortDescription = updatedArticle.shortDescription
             demonstrativeImage = updatedArticle.demonstrativeImage
-            tags = updatedArticle.tags
+            tag = updatedArticle.tag
         }
 
     override fun patchUpdate(id: Int, updatedArticle: Article): Article =
@@ -36,8 +36,8 @@ class ArticleServiceImpl(
                 shortDescription = updatedArticle.shortDescription
             if (updatedArticle.demonstrativeImage != null)
                 demonstrativeImage = updatedArticle.demonstrativeImage
-            if (!updatedArticle.tags.isNullOrEmpty())
-                tags = updatedArticle.tags
+            if (!updatedArticle.tag.isNullOrEmpty())
+                tag = updatedArticle.tag
         }
 
     override fun delete(id: Int) {
