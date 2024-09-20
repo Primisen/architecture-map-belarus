@@ -1,11 +1,22 @@
 package by.architecture_map.belarus.entity
 
+import jakarta.persistence.CascadeType
 import jakarta.persistence.Entity
+import jakarta.persistence.FetchType
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.JoinTable
+import jakarta.persistence.ManyToMany
 
 @Entity
 data class User(
     var username: String? = null,
-    var password: CharArray? = null
+    var password: CharArray? = null,
+    @ManyToMany(fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
+    @JoinTable(name = "employee_role",
+        joinColumns = [JoinColumn(name = "employee_id", referencedColumnName = "id")],
+        inverseJoinColumns = [JoinColumn(name = "role_id", referencedColumnName = "id")]
+    )
+    var roles: List<Role> = listOf()
 ) : BaseEntity() {
 
     override fun equals(other: Any?): Boolean {

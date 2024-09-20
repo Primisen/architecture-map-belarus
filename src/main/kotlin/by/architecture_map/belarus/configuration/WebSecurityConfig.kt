@@ -2,10 +2,14 @@ package by.architecture_map.belarus.configuration
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
+import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.factory.PasswordEncoderFactories
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.provisioning.InMemoryUserDetailsManager
@@ -40,16 +44,34 @@ open class WebSecurityConfig {
             .logout { logout -> logout.permitAll() }
             .build()
 
+    @Bean
+    open fun authenticationManager(configuration: AuthenticationConfiguration): AuthenticationManager =
+        configuration.authenticationManager
+
+
+
 //    @Bean
-//    fun userDetailsService(): UserDetailsService {
-//        val user: UserDetails = User.withDefaultPasswordEncoder()
-//            .username("user")
-//            .password("password")
+//    open fun userDetailsService(): UserDetailsService {
+//        val john: UserDetails = User.builder()
+//            .username("john")
+//            .password(passwordEncoder().encode("john"))
 //            .roles("USER")
 //            .build()
 //
-//        return InMemoryUserDetailsManager(user)
+//        val sam: UserDetails = User.builder()
+//            .username("sam")
+//            .password(passwordEncoder().encode("sam"))
+//            .roles("ADMIN")
+//            .build()
+//
+//        return InMemoryUserDetailsManager(john, sam)
 //    }
+
+    @Bean
+    open fun  passwordEncoder(): PasswordEncoder{
+        return  BCryptPasswordEncoder();
+    }
+
 
 //    @Bean
 //    open fun createPasswordEncoder(): PasswordEncoder =
