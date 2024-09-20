@@ -1,18 +1,14 @@
 package by.architecture_map.belarus.service.impl
 
 import by.architecture_map.belarus.entity.ConstructionImage
-import by.architecture_map.belarus.exception.NotFoundException
-import by.architecture_map.belarus.repository.ConstructionImageRepository
 import by.architecture_map.belarus.service.ConstructionService
-import io.mockk.Runs
+import by.architecture_map.belarus.repository.jpa.ConstructionImageRepository
 import io.mockk.every
-import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
-import java.util.*
 
 class ConstructionImageServiceImplTest {
 

@@ -2,9 +2,9 @@ package by.architecture_map.belarus.service.impl
 
 import by.architecture_map.belarus.entity.ArchitecturalStyle
 import by.architecture_map.belarus.exception.NotFoundException
-import by.architecture_map.belarus.repository.ArchitecturalStyleRepository
 import by.architecture_map.belarus.service.ArchitecturalStyleService
 import by.architecture_map.belarus.service.ImageService
+import by.architecture_map.belarus.repository.jpa.ArchitecturalStyleRepository
 import org.springframework.stereotype.Service
 
 @Service

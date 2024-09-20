@@ -1,7 +1,7 @@
 package by.architecture_map.belarus.service.impl
 
 import by.architecture_map.belarus.entity.Architect
-import by.architecture_map.belarus.repository.ArchitectRepository
+import by.architecture_map.belarus.repository.jpa.ArchitectRepository
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

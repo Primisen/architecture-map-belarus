@@ -9,12 +9,14 @@ import jakarta.persistence.ManyToMany
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToMany
 import jakarta.persistence.OneToOne
+import org.springframework.data.elasticsearch.annotations.Document
 
 /**
  * The class means to architectural structures such as buildings, separate arches,
  * gates, columns (for example, the column in honor of the constitution of 1791)
  */
 @Entity
+@Document(indexName = "construction")
 data class Construction(
 
     var name: String? = null,
@@ -25,6 +27,12 @@ data class Construction(
      * so field has a string type
      */
     var buildingDate: String? = null,
+
+    /**
+     * BuildingDate has difficult type for searching, because it needs complex parsing,
+     * which in turn will reduce productivity. So, much easy look for construction by building century.
+     */
+    var buildingCentury: Short? = null,
 
     @OneToOne(cascade = [CascadeType.PERSIST])
     @JoinColumn(name = "address_id", nullable = false)
@@ -41,12 +49,12 @@ data class Construction(
         joinColumns = [JoinColumn(name = "construction_id")],
         inverseJoinColumns = [JoinColumn(name = "architect_id")]
     )
-    var architects: MutableList<Architect>? = mutableListOf(),
+    var architects: List<Architect>? = listOf(),
 
     var description: String? = null,
 
     @JsonIgnoreProperties("construction")
     @OneToMany(mappedBy = "construction")
-    var images: MutableList<ConstructionImage>? = mutableListOf()
+    var images: List<ConstructionImage>? = listOf()
 
 ) : BaseEntity()

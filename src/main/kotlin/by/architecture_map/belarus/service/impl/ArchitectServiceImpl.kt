@@ -2,7 +2,7 @@ package by.architecture_map.belarus.service.impl
 
 import by.architecture_map.belarus.entity.Architect
 import by.architecture_map.belarus.exception.NotFoundException
-import by.architecture_map.belarus.repository.ArchitectRepository
+import by.architecture_map.belarus.repository.jpa.ArchitectRepository
 import by.architecture_map.belarus.service.ArchitectService
 import org.springframework.stereotype.Service
 

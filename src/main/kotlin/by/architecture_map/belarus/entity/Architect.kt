@@ -34,6 +34,6 @@ data class Architect(
         joinColumns = [JoinColumn(name = "architect_id")],
         inverseJoinColumns = [JoinColumn(name = "construction_id")]
     )
-    var construction: MutableList<Construction>? = mutableListOf()
+    var construction: List<Construction>? = listOf()
 
 ) : BaseEntity()
