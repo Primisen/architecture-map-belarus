@@ -37,7 +37,7 @@ class ConstructionServiceImpl(
 
     override fun patchUpdate(id: Int, updatedConstruction: Construction): Construction =
         constructionRepository.findById(id)
-            .orElseThrow { NotFoundException("Connection not found with id: $id") }
+            .orElseThrow { NotFoundException("Construction not found with id: $id") }
             .apply {
                 if (!updatedConstruction.name.isNullOrEmpty())
                     name = updatedConstruction.name
