@@ -18,33 +18,47 @@ class ConstructionServiceImpl(
         .orElseThrow { throw NotFoundException("Construction not found with id: $id") }
 
     override fun update(id: Int, updatedConstruction: Construction): Construction =
-        applyUpdates(id) {
-            name = updatedConstruction.name
-            description = updatedConstruction.description
-            architecturalStyle = updatedConstruction.architecturalStyle
-            address = updatedConstruction.address
-            architects = updatedConstruction.architects
-            buildingDate = updatedConstruction.buildingDate
-            images = updatedConstruction.images
-        }
+
+        constructionRepository.findById(id)
+            .orElseThrow { NotFoundException("Construction not found with id: $id") }
+            .apply {
+                name = updatedConstruction.name
+                description = updatedConstruction.description
+                architecturalStyle = updatedConstruction.architecturalStyle
+                address = updatedConstruction.address
+                architects = updatedConstruction.architects
+                buildingDate = updatedConstruction.buildingDate
+                buildingCentury = updatedConstruction.buildingCentury
+                images = updatedConstruction.images
+            }
+            .let {
+                constructionRepository.save(it)
+            }
 
     override fun patchUpdate(id: Int, updatedConstruction: Construction): Construction =
-        applyUpdates(id) {
-            if (!updatedConstruction.name.isNullOrEmpty())
-                name = updatedConstruction.name
-            if (updatedConstruction.address != null)
-                address = updatedConstruction.address
-            if (!updatedConstruction.architects.isNullOrEmpty())
-                architects = updatedConstruction.architects
-            if (updatedConstruction.architecturalStyle != null)
-                architecturalStyle = updatedConstruction.architecturalStyle
-            if (!updatedConstruction.images.isNullOrEmpty())
-                images = updatedConstruction.images
-            if (!updatedConstruction.description.isNullOrEmpty())
-                description = updatedConstruction.description
-            if (!updatedConstruction.buildingDate.isNullOrEmpty())
-                buildingDate = updatedConstruction.buildingDate
-        }
+        constructionRepository.findById(id)
+            .orElseThrow { NotFoundException("Connection not found with id: $id") }
+            .apply {
+                if (!updatedConstruction.name.isNullOrEmpty())
+                    name = updatedConstruction.name
+                if (updatedConstruction.address != null)
+                    address = updatedConstruction.address
+                if (!updatedConstruction.architects.isNullOrEmpty())
+                    architects = updatedConstruction.architects
+                if (updatedConstruction.architecturalStyle != null)
+                    architecturalStyle = updatedConstruction.architecturalStyle
+                if (!updatedConstruction.images.isNullOrEmpty())
+                    images = updatedConstruction.images
+                if (!updatedConstruction.description.isNullOrEmpty())
+                    description = updatedConstruction.description
+                if (!updatedConstruction.buildingDate.isNullOrEmpty())
+                    buildingDate = updatedConstruction.buildingDate
+                if (updatedConstruction.buildingCentury != null)
+                    buildingCentury = updatedConstruction.buildingCentury
+            }
+            .let {
+                constructionRepository.save(it)
+            }
 
     override fun delete(id: Int) {
         find(id).also { constructionRepository.deleteById(id) }

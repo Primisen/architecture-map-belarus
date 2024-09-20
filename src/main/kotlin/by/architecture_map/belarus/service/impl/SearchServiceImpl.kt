@@ -17,8 +17,8 @@ class SearchServiceImpl(
         architecturalStyleId: String?,
         region: String?,
         district: String?,
-        buildingTimeFrom: String?,
-        buildingTimeTo: String?
+        buildingCenturyFrom: String?,
+        buildingCenturyTo: String?
     ): List<Construction> {
         var criteria = Criteria()
 
@@ -34,10 +34,14 @@ class SearchServiceImpl(
             criteria = criteria.and("address.district").`is`(district)
         }
 
-        if (!buildingTimeFrom.isNullOrEmpty() && !buildingTimeTo.isNullOrEmpty()) {
+        if (!buildingCenturyFrom.isNullOrEmpty()) {
             criteria = criteria.and("buildingCentury")
-                .greaterThanEqual(buildingTimeFrom)
-                .lessThanEqual(buildingTimeTo)
+                .greaterThanEqual(buildingCenturyFrom)
+        }
+
+        if (!buildingCenturyTo.isNullOrEmpty()) {
+            criteria = criteria.and("buildingCentury")
+                .lessThanEqual(buildingCenturyTo)
         }
 
         val query = CriteriaQuery(criteria)

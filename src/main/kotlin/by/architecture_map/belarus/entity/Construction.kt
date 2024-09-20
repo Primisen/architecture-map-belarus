@@ -28,6 +28,12 @@ data class Construction(
      */
     var buildingDate: String? = null,
 
+    /**
+     * BuildingDate has difficult type for searching, because it needs complex parsing,
+     * which in turn will reduce productivity. So, much easy look for construction by building century.
+     */
+    var buildingCentury: Short? = null,
+
     @OneToOne(cascade = [CascadeType.PERSIST])
     @JoinColumn(name = "address_id", nullable = false)
     var address: Address? = null,
