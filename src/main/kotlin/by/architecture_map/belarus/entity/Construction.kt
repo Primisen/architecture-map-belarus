@@ -49,12 +49,12 @@ data class Construction(
         joinColumns = [JoinColumn(name = "construction_id")],
         inverseJoinColumns = [JoinColumn(name = "architect_id")]
     )
-    var architects: MutableList<Architect>? = mutableListOf(),
+    var architects: List<Architect>? = listOf(),
 
     var description: String? = null,
 
     @JsonIgnoreProperties("construction")
     @OneToMany(mappedBy = "construction")
-    var images: MutableList<ConstructionImage>? = mutableListOf()
+    var images: List<ConstructionImage>? = listOf()
 
 ) : BaseEntity()
