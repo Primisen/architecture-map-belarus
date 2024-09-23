@@ -1,80 +1,67 @@
 package by.architecture_map.belarus.configuration
 
+import by.architecture_map.belarus.service.impl.CustomDetailsService
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
-import org.springframework.security.core.userdetails.User
-import org.springframework.security.core.userdetails.UserDetails
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
-import org.springframework.security.crypto.factory.PasswordEncoderFactories
 import org.springframework.security.crypto.password.PasswordEncoder
-import org.springframework.security.provisioning.InMemoryUserDetailsManager
 import org.springframework.security.web.SecurityFilterChain
 
 @Configuration
 @EnableWebSecurity
-open class WebSecurityConfig {
+//open class WebSecurityConfig() {
+open class WebSecurityConfig(private val customUserDetailsService: CustomDetailsService) {
 
     @Bean
     open fun securityFilterChain(http: HttpSecurity): SecurityFilterChain =
         http
+            .csrf { it.disable() }
             .authorizeHttpRequests { requests ->
                 requests
                     .requestMatchers(
-                        "/",
-                        "/home",
-                        "/architectural-styles",
-                        "/architects",
-                        "/sources",
-                        "/contacts",
-                        "/constructions/**",
-                        "/articles"
-                    ).permitAll()
-                    .anyRequest().authenticated()
+                        "/users/**"
+                    ).authenticated()
+                    .anyRequest().permitAll()
+
             }
             .formLogin { form ->
                 form
-                    .loginPage("/login")
+//                    .loginPage("/login")
                     .permitAll()
             }
             .logout { logout -> logout.permitAll() }
             .build()
 
-    @Bean
-    open fun authenticationManager(configuration: AuthenticationConfiguration): AuthenticationManager =
-        configuration.authenticationManager
-
-
+//    @Bean
+//    open fun authenticationManager(configuration: AuthenticationConfiguration): AuthenticationManager =
+//        configuration.authenticationManager
 
 //    @Bean
-//    open fun userDetailsService(): UserDetailsService {
-//        val john: UserDetails = User.builder()
-//            .username("john")
-//            .password(passwordEncoder().encode("john"))
-//            .roles("USER")
-//            .build()
-//
-//        val sam: UserDetails = User.builder()
-//            .username("sam")
-//            .password(passwordEncoder().encode("sam"))
-//            .roles("ADMIN")
-//            .build()
-//
-//        return InMemoryUserDetailsManager(john, sam)
+//    open fun authenticationManager(auth: AuthenticationManagerBuilder): AuthenticationManager {
+//        auth.authenticationProvider(daoAuthenticationProvider())
+//        return auth.build()
 //    }
 
     @Bean
-    open fun  passwordEncoder(): PasswordEncoder{
-        return  BCryptPasswordEncoder();
+    open fun daoAuthenticationProvider(): DaoAuthenticationProvider {
+        val provider = DaoAuthenticationProvider()
+        provider.setUserDetailsService(customUserDetailsService)  // Your UserDetailsService implementation
+        provider.setPasswordEncoder(passwordEncoder())  // Your password encoder
+        return provider
     }
 
+    @Bean
+    open fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder();
 
-//    @Bean
-//    open fun createPasswordEncoder(): PasswordEncoder =
-//        PasswordEncoderFactories.createDelegatingPasswordEncoder()
+    @Bean
+    open fun userDetailsService(): UserDetailsService = customUserDetailsService
 
 }

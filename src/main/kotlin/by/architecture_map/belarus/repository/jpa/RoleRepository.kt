@@ -1,10 +1,10 @@
 package by.architecture_map.belarus.repository.jpa
 
-import by.architecture_map.belarus.entity.User
+import by.architecture_map.belarus.entity.Role
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface UserRepository : JpaRepository<User, Int> {
-    fun findUserByUsername(username: String): User?
+interface RoleRepository : JpaRepository<Role, Int> {
+    fun findRoleByName(name: String): Role
 }

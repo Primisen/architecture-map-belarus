@@ -15,6 +15,13 @@ open class Image(
     @ManyToOne
     @JoinColumn(name = "source_id")
     open var source: Source? = null,
+
+    /**
+     * If the image is taken from out resource, the name of the author of
+     * the image is written in the 'author' field, if it is specified.
+     * With the possibility of registration and adding pictures by users, the username
+     * of the user who added the picture is written in the 'author' field.
+     */
     open var author: String? = null
 
 ) : BaseEntity() {

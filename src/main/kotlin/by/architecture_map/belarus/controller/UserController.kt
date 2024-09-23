@@ -1,10 +1,10 @@
 package by.architecture_map.belarus.controller
 
+import by.architecture_map.belarus.dto.UserDTO
 import by.architecture_map.belarus.entity.User
 import by.architecture_map.belarus.service.UserService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -23,31 +23,33 @@ class UserController(
     private val userService: UserService
 ) {
 
-    @PostMapping("/")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    fun create(@RequestBody user: User): ResponseEntity<User> =
-        ResponseEntity(userService.create(user), HttpStatus.CREATED)
+    @PostMapping
+    fun create(@RequestBody userDto: UserDTO): ResponseEntity<User> =
+        ResponseEntity(userService.create(userDto), HttpStatus.CREATED)
 
-    @GetMapping("/")
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+    @GetMapping
     fun findAll(): List<User> = userService.findAll()
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     fun find(@PathVariable id: Int): User = userService.find(id)
 
+    @GetMapping("/{username}")
+//    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+    fun find(@PathVariable username: String): User? = userService.find(username)
+
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     fun update(@PathVariable id: Int, @RequestBody updatedUser: User): ResponseEntity<User> =
         ResponseEntity(userService.update(id, updatedUser), HttpStatus.NO_CONTENT)
 
     @PatchMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     fun patchUpdate(@PathVariable id: Int, @RequestBody user: User): ResponseEntity<User> =
         ResponseEntity(userService.patchUpdate(id, user), HttpStatus.NO_CONTENT)
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     fun delete(@PathVariable id: Int): ResponseEntity<String> =
         userService.delete(id).let { ResponseEntity(HttpStatus.NO_CONTENT) }
 }
