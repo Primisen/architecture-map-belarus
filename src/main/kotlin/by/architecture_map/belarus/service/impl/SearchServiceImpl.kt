@@ -43,6 +43,7 @@ class SearchServiceImpl(
         if (!buildingCenturyTo.isNullOrEmpty()) {
             criteria = criteria.and("buildingCentury")
                 .lessThanEqual(buildingCenturyTo)
+        }
 
         val query = CriteriaQuery(criteria)
 
@@ -69,4 +70,5 @@ class SearchServiceImpl(
 
         return searchHits.map { it.content }.toList()
     }
+
 }
