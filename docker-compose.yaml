@@ -90,3 +90,4 @@ services:
         condition: service_healthy
     command: logstash -f /usr/share/logstash/pipeline/logstash-construction.conf && 
              logstash -f /usr/share/logstash/pipeline/logstash-article.conf
+

@@ -9,8 +9,8 @@ interface SearchService {
         architecturalStyleId: String?,
         region: String?,
         district: String?,
-        buildingTimeFrom: String?,
-        buildingTimeTo: String?
+        buildingCenturyFrom: String?,
+        buildingCenturyTo: String?
     ): List<Construction>
 
     fun searchArticle(request: String): List<Article>
