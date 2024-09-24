@@ -1,5 +1,7 @@
 package by.architecture_map.belarus.service.impl
 
+import by.architecture_map.belarus.entity.Address
+import by.architecture_map.belarus.entity.ArchitecturalStyle
 import by.architecture_map.belarus.entity.Construction
 import by.architecture_map.belarus.exception.NotFoundException
 import by.architecture_map.belarus.repository.jpa.ConstructionRepository
@@ -23,7 +25,11 @@ class ConstructionServiceImplTest {
     @Test
     fun whenCreateConstruction_thenSaveConstruction() {
         //given
-        val construction = Construction(description = "Really beautiful")
+        val construction = Construction(
+            name = "Name2",
+            address = Address(region = "Test"),
+            architecturalStyle = ArchitecturalStyle(name = "Style")
+        )
             .apply { id = 1 }
 
         every { constructionRepository.save(construction) } returns construction
@@ -40,9 +46,17 @@ class ConstructionServiceImplTest {
     fun whenFindAllConstruction_thenReturnListOfConstruction() {
         //given
         val constructions = mutableListOf(
-            Construction(description = "Really beautiful")
+            Construction(
+                name = "Name1",
+                address = Address(region = "Test"),
+                architecturalStyle = ArchitecturalStyle(name = "Style")
+            )
                 .apply { id = 1 },
-            Construction(description = "Beautiful")
+            Construction(
+                name = "Name2",
+                address = Address(region = "Test"),
+                architecturalStyle = ArchitecturalStyle(name = "Style")
+            )
                 .apply { id = 2 }
         )
         every { constructionRepository.findAll() } returns constructions
@@ -59,7 +73,11 @@ class ConstructionServiceImplTest {
     fun whenFind_thenReturnConstruction() {
         //given
         var id = 1
-        val construction = Construction(description = "Really beautiful")
+        val construction = Construction(
+            name = "Name1",
+            address = Address(region = "Test"),
+            architecturalStyle = ArchitecturalStyle(name = "Style")
+        )
             .apply { id = id }
         every { constructionRepository.findById(id) } returns Optional.of(construction)
 
@@ -75,9 +93,17 @@ class ConstructionServiceImplTest {
     fun whenUpdate_thenUpdateConstruction() {
         //given
         var id = 1
-        val existingConstruction = Construction()
+        val existingConstruction = Construction(
+            name = "Name1",
+            address = Address(region = "Test"),
+            architecturalStyle = ArchitecturalStyle(name = "Style")
+        )
             .apply { id = id }
-        val updatedConstruction = Construction(name = "Updated Name")
+        val updatedConstruction = Construction(
+            name = "Name2",
+            address = Address(region = "Test2"),
+            architecturalStyle = ArchitecturalStyle(name = "Style2")
+        )
             .apply { id = id }
         every { constructionRepository.findById(id) } returns Optional.of(existingConstruction)
         every { constructionRepository.save(existingConstruction) } returns existingConstruction.apply {
@@ -103,9 +129,17 @@ class ConstructionServiceImplTest {
     fun whenPatch_thenPatcheConstruction() {
         //given
         var id = 1
-        val existingConstruction = Construction()
+        val existingConstruction = Construction(
+            name = "Name",
+            address = Address(region = "Test"),
+            architecturalStyle = ArchitecturalStyle(name = "Style")
+        )
             .apply { id = id }
-        val updatedConstruction = Construction(name = "Updated Name")
+        val updatedConstruction = Construction(
+            name = "Name 2",
+            address = Address(region = "Test 2"),
+            architecturalStyle = ArchitecturalStyle(name = "Another style")
+        )
             .apply { id = id }
         every { constructionRepository.findById(id) } returns Optional.of(existingConstruction)
         every { constructionRepository.save(existingConstruction) } returns existingConstruction.apply {

@@ -85,7 +85,7 @@ class SourceServiceImplTest {
         val existingSource =
             Source(name = "Old Name", url = "http://example.com", description = "Old Description")
                 .apply { id = id }
-        val updatedSource = Source(name = "Updated Name", url = null, description = "Updated Description")
+        val updatedSource = Source(name = "Updated Name", url = "http://example2.com", description = "Updated Description")
             .apply { id = id }
         every { sourceRepository.findById(id) } returns Optional.of(existingSource)
         every { sourceRepository.save(existingSource) } returns existingSource.apply {

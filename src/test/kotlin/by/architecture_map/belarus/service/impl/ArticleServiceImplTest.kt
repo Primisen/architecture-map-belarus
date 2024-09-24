@@ -1,6 +1,7 @@
 package by.architecture_map.belarus.service.impl
 
 import by.architecture_map.belarus.entity.Article
+import by.architecture_map.belarus.entity.Image
 import by.architecture_map.belarus.exception.NotFoundException
 import by.architecture_map.belarus.repository.jpa.ArticleRepository
 import io.mockk.Runs
@@ -22,7 +23,12 @@ class ArticleServiceImplTest {
     @Test
     fun whenCreateArticle_thenSaveArticle() {
         //given
-        val article = Article(content = "Really beautiful")
+        val article = Article(
+            title = "Title",
+            content = "Really beautiful",
+            shortDescription = "Short description",
+            demonstrativeImage = Image("http://..")
+        )
             .apply { id = 1 }
 
         every { articleRepository.save(article) } returns article
@@ -39,9 +45,19 @@ class ArticleServiceImplTest {
     fun whenFindAllArticles_thenReturnListOfArticles() {
         //given
         val articles = listOf(
-            Article(content = "Really beautiful")
+            Article(
+                title = "Title",
+                content = "Really beautiful",
+                shortDescription = "Short description",
+                demonstrativeImage = Image("http://..")
+            )
                 .apply { id = 1 },
-            Article(content = "Beautiful")
+            Article(
+                title = "Title",
+                content = "Beautiful",
+                shortDescription = "Short description",
+                demonstrativeImage = Image("http://..")
+            )
                 .apply { id = 2 }
         )
         every { articleRepository.findAll() } returns articles
@@ -58,7 +74,12 @@ class ArticleServiceImplTest {
     fun whenFind_thenReturnArticle() {
         //given
         var id = 1
-        val article = Article(content = "Really beautiful")
+        val article = Article(
+            title = "Title",
+            content = "Really beautiful",
+            shortDescription = "Short description",
+            demonstrativeImage = Image("http://..")
+        )
             .apply { id = id }
         every { articleRepository.findById(id) } returns Optional.of(article)
 
@@ -74,9 +95,19 @@ class ArticleServiceImplTest {
     fun whenUpdate_thenUpdateArticle() {
         //given
         var id = 1
-        val existingArticle = Article()
+        val existingArticle = Article(
+            title = "Title",
+            content = "Really beautiful",
+            shortDescription = "Short description",
+            demonstrativeImage = Image("http://..")
+        )
             .apply { id = id }
-        val updatedArticle = Article(title = "Updated title")
+        val updatedArticle = Article(
+            title = "Title",
+            content = "Beautiful",
+            shortDescription = "Short description",
+            demonstrativeImage = Image("http://..")
+        )
             .apply { id = id }
         every { articleRepository.findById(id) } returns Optional.of(existingArticle)
         every { articleRepository.save(existingArticle) } returns existingArticle.apply {
