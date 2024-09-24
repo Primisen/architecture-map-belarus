@@ -2,6 +2,7 @@ package by.architecture_map.belarus.controller
 
 import by.architecture_map.belarus.entity.Article
 import by.architecture_map.belarus.service.ArticleService
+import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.CrossOrigin
@@ -31,6 +32,10 @@ class ArticleController(
 
     @GetMapping("/{id}")
     fun find(@PathVariable id: Int): Article = articleService.find(id)
+
+    @Operation(summary = "Finding articles in Elasticsearch")
+    @GetMapping
+    fun articleSearch(request: String): List<Article> = articleService.find(request)
 
     @PutMapping("/{id}")
     fun update(@PathVariable id: Int, @RequestBody updatedArticle: Article): ResponseEntity<Article> =

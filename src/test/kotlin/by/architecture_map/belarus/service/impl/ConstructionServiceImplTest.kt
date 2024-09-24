@@ -11,12 +11,14 @@ import io.mockk.verify
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations
 import java.util.*
 
 class ConstructionServiceImplTest {
 
     private val constructionRepository: ConstructionRepository = mockk()
-    private val constructionService = ConstructionServiceImpl(constructionRepository)
+    private val elasticsearchOperations: ElasticsearchOperations = mockk()
+    private val constructionService = ConstructionServiceImpl(constructionRepository, elasticsearchOperations)
 
     @Test
     fun whenCreateConstruction_thenSaveConstruction() {

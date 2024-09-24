@@ -10,12 +10,14 @@ import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations
 import java.util.*
 
 class ArticleServiceImplTest {
 
     private val articleRepository: ArticleRepository = mockk()
-    private val articleService = ArticleServiceImpl(articleRepository)
+    private val elasticsearchOperations: ElasticsearchOperations = mockk()
+    private val articleService = ArticleServiceImpl(articleRepository, elasticsearchOperations)
 
     @Test
     fun whenCreateArticle_thenSaveArticle() {
