@@ -12,13 +12,13 @@ import org.springframework.data.elasticsearch.annotations.Document
 @Document(indexName = "article")
 data class Article(
 
-    var title: String? = null,
-    var content: String? = null,
-    var shortDescription: String? = null,
+    var title: String,
+    var content: String,
+    var shortDescription: String,
 
     @OneToOne
     @JoinColumn(name = "demonstrative_image_id", referencedColumnName = "id")
-    var demonstrativeImage: Image? = null,
+    var demonstrativeImage: Image,
 
     @ManyToMany(cascade = [CascadeType.ALL])
     @JoinTable(
@@ -26,6 +26,6 @@ data class Article(
         joinColumns = [JoinColumn(name = "article_id")],
         inverseJoinColumns = [JoinColumn(name = "tag_id")]
     )
-    var tag: List<Tag>? = listOf()
+    var tag: List<Tag> = listOf()
 
 ) : BaseEntity()

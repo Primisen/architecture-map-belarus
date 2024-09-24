@@ -12,7 +12,7 @@ import jakarta.persistence.OneToOne
 @Entity
 data class ArchitecturalAttribute(
 
-    var name: String? = null,
+    var name: String,
     var description: String? = null,
     @OneToOne
     @JoinColumn(name = "demonstrative_image_id", referencedColumnName = "id")

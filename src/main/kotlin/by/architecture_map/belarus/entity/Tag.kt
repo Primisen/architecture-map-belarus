@@ -5,6 +5,6 @@ import jakarta.persistence.Entity
 @Entity
 class Tag(
 
-    var name: String? = null
+    var name: String
 
 ) : BaseEntity()
