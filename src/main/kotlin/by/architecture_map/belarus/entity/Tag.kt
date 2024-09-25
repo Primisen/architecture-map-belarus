@@ -3,10 +3,8 @@ package by.architecture_map.belarus.entity
 import jakarta.persistence.Entity
 
 @Entity
-data class Source(
+class Tag(
 
-    var name: String,
-    var url: String,
-    var description: String? = null
+    var name: String
 
 ) : BaseEntity()

@@ -11,7 +11,7 @@ import jakarta.persistence.OneToOne
 @Entity
 data class Architect(
 
-    var name: String? = null,
+    var name: String,
     var middleName: String? = null,
     var surname: String? = null,
 

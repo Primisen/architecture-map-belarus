@@ -31,6 +31,7 @@ class ArchitecturalStyleServiceImpl(
         }
 
     override fun patchUpdate(id: Int, updatedArchitecturalStyle: ArchitecturalStyle): ArchitecturalStyle =
+
         applyUpdates(id) {
             if (!updatedArchitecturalStyle.name.isNullOrEmpty())
                 name = updatedArchitecturalStyle.name

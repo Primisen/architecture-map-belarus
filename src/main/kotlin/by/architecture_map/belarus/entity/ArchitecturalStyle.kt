@@ -10,7 +10,7 @@ import jakarta.persistence.OneToOne
 @Entity
 data class ArchitecturalStyle(
 
-    var name: String? = null,
+    var name: String,
     var description: String? = null,
 
     @ManyToMany

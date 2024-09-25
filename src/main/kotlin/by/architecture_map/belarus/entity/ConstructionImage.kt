@@ -13,7 +13,7 @@ data class ConstructionImage(
     @JsonIgnoreProperties("images")
     @ManyToOne
     @JoinColumn(name = "construction_id")
-    var construction: Construction? = null,
+    var construction: Construction,
     var takenTime: String? = null
 
 ) : Image()

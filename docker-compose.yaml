@@ -80,11 +80,14 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     volumes:
-      - ./logstash/postgres_to_elasticsearch.conf:/usr/share/logstash/pipeline/logstash.conf
+      - ./logstash/construction.conf:/usr/share/logstash/pipeline/logstash-construction.conf
+      - ./logstash/article.conf:/usr/share/logstash/pipeline/logstash-article.conf
       - ./logstash/postgresql-42.7.3.jar:/usr/share/logstash/postgresql-42.7.3.jar
     depends_on:
       es01:
         condition: service_healthy
       db:
         condition: service_healthy
-    command: logstash -f /usr/share/logstash/pipeline/logstash.conf
+    command: logstash -f /usr/share/logstash/pipeline/logstash-construction.conf && 
+             logstash -f /usr/share/logstash/pipeline/logstash-article.conf
+

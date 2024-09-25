@@ -1,5 +1,8 @@
 package by.architecture_map.belarus.service.impl
 
+import by.architecture_map.belarus.entity.Address
+import by.architecture_map.belarus.entity.ArchitecturalStyle
+import by.architecture_map.belarus.entity.Construction
 import by.architecture_map.belarus.entity.ConstructionImage
 import by.architecture_map.belarus.service.ConstructionService
 import by.architecture_map.belarus.repository.jpa.ConstructionImageRepository
@@ -14,12 +17,20 @@ class ConstructionImageServiceImplTest {
 
     private val constructionImageRepository: ConstructionImageRepository = mockk()
     private val constructionService: ConstructionService = mockk()
-    private val constructionImageService = ConstructionImageServiceImpl(constructionImageRepository, constructionService)
+    private val constructionImageService =
+        ConstructionImageServiceImpl(constructionImageRepository, constructionService)
 
     @Test
     fun whenCreateConstructionImage_thenSaveImage() {
         //given
-        val image = ConstructionImage(takenTime = "пач. XX ст")
+        val image = ConstructionImage(
+            construction = Construction(
+                name = "Name",
+                address = Address(region = "Test"),
+                architecturalStyle = ArchitecturalStyle(name = "Style")
+            ),
+            takenTime = "пач. XX ст"
+        )
         every { constructionImageRepository.save(image) } returns image
 
         //when
@@ -35,8 +46,22 @@ class ConstructionImageServiceImplTest {
         //given
         val imageIds = "1,2,3"
         val images = mutableListOf(
-                ConstructionImage(takenTime = "пач. XX ст"),
-                ConstructionImage(takenTime = "cяр. XX ст")
+            ConstructionImage(
+                construction = Construction(
+                    name = "Name1",
+                    address = Address(region = "Test"),
+                    architecturalStyle = ArchitecturalStyle(name = "Style")
+                ),
+                takenTime = "пач. XX ст"
+            ),
+            ConstructionImage(
+                construction = Construction(
+                    name = "Name2",
+                    address = Address(region = "Test"),
+                    architecturalStyle = ArchitecturalStyle(name = "Style")
+                ),
+                takenTime = "пач. XX ст"
+            )
         )
         every { constructionImageRepository.getRandomAndUniqueImages(intArrayOf(1, 2, 3)) } returns images
 
@@ -53,8 +78,22 @@ class ConstructionImageServiceImplTest {
         //given
         val styleId = 1
         val images = mutableListOf(
-                ConstructionImage(takenTime = "пач. XX ст"),
-                ConstructionImage(takenTime = "cяр. XX ст")
+            ConstructionImage(
+                construction = Construction(
+                    name = "Name1",
+                    address = Address(region = "Test"),
+                    architecturalStyle = ArchitecturalStyle(name = "Style")
+                ),
+                takenTime = "пач. XX ст"
+            ),
+            ConstructionImage(
+                construction = Construction(
+                    name = "Name2",
+                    address = Address(region = "Test"),
+                    architecturalStyle = ArchitecturalStyle(name = "Style")
+                ),
+                takenTime = "пач. XX ст"
+            )
         )
         every { constructionImageRepository.findByConstructionArchitecturalStyleId(styleId) } returns images
 

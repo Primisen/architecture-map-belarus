@@ -132,7 +132,7 @@ class ArchitecturalStyleServiceImplTest {
         var id = 1
         val existingStyle = ArchitecturalStyle(name = "Gothic", description = "Old Description")
             .apply { id = id }
-        val patchStyle = ArchitecturalStyle(description = "New Description")
+        val patchStyle = ArchitecturalStyle(name = "Gothic", description = "New Description")
             .apply { id = id }
 
         every { architecturalStyleRepository.findById(id) } returns Optional.of(existingStyle)

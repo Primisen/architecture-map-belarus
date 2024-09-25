@@ -19,7 +19,7 @@ import org.springframework.data.elasticsearch.annotations.Document
 @Document(indexName = "construction")
 data class Construction(
 
-    var name: String? = null,
+    var name: String,
 
     /**
      * There are cases when there is no the exact date the construction was built,
@@ -35,12 +35,12 @@ data class Construction(
     var buildingCentury: Short? = null,
 
     @OneToOne(cascade = [CascadeType.PERSIST])
-    @JoinColumn(name = "address_id", nullable = false)
-    var address: Address? = null,
+    @JoinColumn(name = "address_id")
+    var address: Address,
 
     @ManyToOne(cascade = [CascadeType.MERGE])
     @JoinColumn(name = "architectural_style_id")
-    var architecturalStyle: ArchitecturalStyle? = null,
+    var architecturalStyle: ArchitecturalStyle,
 
     @JsonIgnoreProperties("constructions")
     @ManyToMany(cascade = [CascadeType.ALL])
