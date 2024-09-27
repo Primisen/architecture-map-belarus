@@ -2,18 +2,41 @@ package by.architecture_map.belarus.entity
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import jakarta.persistence.Entity
+import jakarta.persistence.Inheritance
+import jakarta.persistence.InheritanceType
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
-import jakarta.persistence.PrimaryKeyJoinColumn
 
 @Entity
-@PrimaryKeyJoinColumn(name = "image_id")
-data class ConstructionImage(
+@Inheritance(strategy = InheritanceType.JOINED)
+open class ConstructionImage(
 
     @JsonIgnoreProperties("images")
     @ManyToOne
     @JoinColumn(name = "construction_id")
-    var construction: Construction,
+    var construction: Construction? = null,
     var takenTime: String? = null
 
-) : Image()
+) : Image(
+
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        if (!super.equals(other)) return false
+
+        other as ConstructionImage
+
+        if (construction != other.construction) return false
+        if (takenTime != other.takenTime) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = super.hashCode()
+        result = 31 * result + (construction?.hashCode() ?: 0)
+        result = 31 * result + (takenTime?.hashCode() ?: 0)
+        return result
+    }
+}

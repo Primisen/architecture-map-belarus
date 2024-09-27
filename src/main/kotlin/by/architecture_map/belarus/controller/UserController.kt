@@ -1,5 +1,6 @@
 package by.architecture_map.belarus.controller
 
+import by.architecture_map.belarus.dto.UpdatePasswordDTO
 import by.architecture_map.belarus.dto.UserDTO
 import by.architecture_map.belarus.entity.User
 import by.architecture_map.belarus.service.UserService
@@ -10,7 +11,6 @@ import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -22,34 +22,28 @@ import org.springframework.web.bind.annotation.RestController
 class UserController(
     private val userService: UserService
 ) {
-
-    @PostMapping
-    fun create(@RequestBody userDto: UserDTO): ResponseEntity<User> =
-        ResponseEntity(userService.create(userDto), HttpStatus.CREATED)
-
-    @GetMapping
-    fun findAll(): List<User> = userService.findAll()
+    @GetMapping()
+    fun findAll(): List<UserDTO> = userService.findAll()
 
     @GetMapping("/{id}")
-//    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     fun find(@PathVariable id: Int): User = userService.find(id)
 
     @GetMapping("/{username}")
-//    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     fun find(@PathVariable username: String): User? = userService.find(username)
 
     @PutMapping("/{id}")
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    fun update(@PathVariable id: Int, @RequestBody updatedUser: User): ResponseEntity<User> =
+    fun update(@PathVariable id: Int, @RequestBody updatedUser: UserDTO): ResponseEntity<UserDTO> =
         ResponseEntity(userService.update(id, updatedUser), HttpStatus.NO_CONTENT)
 
+    @PutMapping("/update-password")
+    fun updatePassword(@RequestBody updatePasswordDTO: UpdatePasswordDTO): ResponseEntity<String> =
+        userService.updatePassword(updatePasswordDTO).let { ResponseEntity(HttpStatus.NO_CONTENT) }
+
     @PatchMapping("/{id}")
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    fun patchUpdate(@PathVariable id: Int, @RequestBody user: User): ResponseEntity<User> =
+    fun patchUpdate(@PathVariable id: Int, @RequestBody user: UserDTO): ResponseEntity<UserDTO> =
         ResponseEntity(userService.patchUpdate(id, user), HttpStatus.NO_CONTENT)
 
     @DeleteMapping("/{id}")
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     fun delete(@PathVariable id: Int): ResponseEntity<String> =
         userService.delete(id).let { ResponseEntity(HttpStatus.NO_CONTENT) }
 }

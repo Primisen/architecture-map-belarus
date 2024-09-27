@@ -6,7 +6,6 @@ import by.architecture_map.belarus.service.RoleService
 import org.springframework.stereotype.Service
 
 @Service
-class RoleService(private val roleRepository: RoleRepository) : RoleService {
-
+class RoleServiceImpl(private val roleRepository: RoleRepository) : RoleService {
     override fun find(name: String): Role = roleRepository.findRoleByName(name)
 }

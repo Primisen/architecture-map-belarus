@@ -1,67 +1,74 @@
 package by.architecture_map.belarus.configuration
 
-import by.architecture_map.belarus.service.impl.CustomDetailsService
+import by.architecture_map.belarus.properties.JwtProperties
+import by.architecture_map.belarus.repository.jpa.UserRepository
+import by.architecture_map.belarus.service.impl.CustomUserDetailsService
+import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpMethod
 import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.authentication.AuthenticationProvider
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer
+import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 
 @Configuration
 @EnableWebSecurity
-//open class WebSecurityConfig() {
-open class WebSecurityConfig(private val customUserDetailsService: CustomDetailsService) {
+@EnableConfigurationProperties(JwtProperties::class)
+open class WebSecurityConfig(
+    private val userRepository: UserRepository
+) {
 
     @Bean
-    open fun securityFilterChain(http: HttpSecurity): SecurityFilterChain =
+    open fun securityFilterChain(
+        http: HttpSecurity,
+        jwtAuthenticationFilter: JwtAuthenticationFilter
+    ): SecurityFilterChain =
         http
             .csrf { it.disable() }
-            .authorizeHttpRequests { requests ->
-                requests
-                    .requestMatchers(
-                        "/users/**"
-                    ).authenticated()
+            .authorizeHttpRequests {
+                it
+                    .requestMatchers("/users/**")
+                    .authenticated()
+                    .requestMatchers(HttpMethod.POST, "/user-images/**")
+                    .authenticated()
+                    .requestMatchers(HttpMethod.GET, "/users/**")
+                    .hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.PUT, "/user-images/**")
+                    .hasRole("ADMIN")
                     .anyRequest().permitAll()
-
             }
-            .formLogin { form ->
-                form
-//                    .loginPage("/login")
-                    .permitAll()
+            .sessionManagement {
+                it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             }
-            .logout { logout -> logout.permitAll() }
+            .authenticationProvider(authenticationProvider(userRepository))
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
             .build()
-
-//    @Bean
-//    open fun authenticationManager(configuration: AuthenticationConfiguration): AuthenticationManager =
-//        configuration.authenticationManager
-
-//    @Bean
-//    open fun authenticationManager(auth: AuthenticationManagerBuilder): AuthenticationManager {
-//        auth.authenticationProvider(daoAuthenticationProvider())
-//        return auth.build()
-//    }
-
-    @Bean
-    open fun daoAuthenticationProvider(): DaoAuthenticationProvider {
-        val provider = DaoAuthenticationProvider()
-        provider.setUserDetailsService(customUserDetailsService)  // Your UserDetailsService implementation
-        provider.setPasswordEncoder(passwordEncoder())  // Your password encoder
-        return provider
-    }
 
     @Bean
     open fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder();
 
     @Bean
-    open fun userDetailsService(): UserDetailsService = customUserDetailsService
+    open fun userDetailsService(userRepository: UserRepository): UserDetailsService =
+        CustomUserDetailsService(userRepository)
 
+    @Bean
+    open fun authenticationProvider(userRepository: UserRepository): AuthenticationProvider =
+        DaoAuthenticationProvider()
+            .also {
+                it.setUserDetailsService(userDetailsService(userRepository))
+                it.setPasswordEncoder(passwordEncoder())
+            }
+
+    @Bean
+    open fun authenticationManager(config: AuthenticationConfiguration): AuthenticationManager =
+        config.authenticationManager
 }

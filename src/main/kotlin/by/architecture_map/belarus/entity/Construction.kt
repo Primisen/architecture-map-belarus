@@ -54,7 +54,7 @@ data class Construction(
     var description: String? = null,
 
     @JsonIgnoreProperties("construction")
-    @OneToMany(mappedBy = "construction")
-    var images: List<ConstructionImage>? = listOf()
+    @OneToMany(mappedBy = "construction", cascade = [CascadeType.ALL], targetEntity = ConstructionImage::class)
+    var images: List<ConstructionImage> = listOf()
 
 ) : BaseEntity()
