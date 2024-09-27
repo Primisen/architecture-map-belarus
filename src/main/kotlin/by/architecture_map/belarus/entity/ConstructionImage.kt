@@ -14,8 +14,8 @@ open class ConstructionImage(
     @JsonIgnoreProperties("images")
     @ManyToOne
     @JoinColumn(name = "construction_id")
-    var construction: Construction? = null,
-    var takenTime: String? = null
+    open var construction: Construction? = null,
+    open var takenTime: String? = null
 
 ) : Image(
 
