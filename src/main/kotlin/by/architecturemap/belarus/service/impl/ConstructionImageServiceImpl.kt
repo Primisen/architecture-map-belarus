@@ -23,7 +23,7 @@ class ConstructionImageServiceImpl(
     override fun getImagesOfConstructionsWithSameArchitecturalStyle(constructionId: Int): List<ConstructionImage> =
         constructionImageRepository.getImagesOfConstructionsWithSameArchitecturalStyleByConstructionId(
             constructionId,
-            constructionService.find(constructionId).architecturalStyle?.id
+            constructionService.find(constructionId).architecturalStyle.id
         )
 
     override fun delete(id: Int) {

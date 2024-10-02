@@ -16,7 +16,7 @@ class ArchitectServiceImplTest {
     @Test
     fun whenSaveArchitect_thenSaveArchitect() {
         //given
-        val architect = Architect(name = "John Doe")
+        val architect = Architect(name = "John Doe", surname = "Haiduk", yearsOfLife = "XVI ст")
         every { architectRepository.save(architect) } returns architect
 
         //when
@@ -31,8 +31,8 @@ class ArchitectServiceImplTest {
     fun whenFindAll_thenReturnListOfArchitects() {
         //given
         val architects = mutableListOf(
-            Architect(name = "John Doe"),
-            Architect(name = "Jane Doe")
+            Architect(name = "John Doe", surname = "Haiduk", yearsOfLife = "XVI ст"),
+            Architect(name = "Jane Doe2", surname = "Shokel", yearsOfLife = "XVI ст")
         )
         every { architectRepository.findAll() } returns architects
 

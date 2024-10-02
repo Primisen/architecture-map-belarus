@@ -1,5 +1,6 @@
 package by.architecturemap.belarus.controller
 
+import by.architecturemap.belarus.dto.ArticleDTO
 import by.architecturemap.belarus.entity.Article
 import by.architecturemap.belarus.service.ArticleService
 import io.swagger.v3.oas.annotations.Operation
@@ -39,11 +40,11 @@ class ArticleController(
     fun articleSearch(request: String): List<Article> = articleService.find(request)
 
     @PutMapping("/{id}")
-    fun update(@PathVariable id: Int, @RequestBody updatedArticle: Article): ResponseEntity<Article> =
+    fun update(@PathVariable id: Int, @Valid @RequestBody updatedArticle: Article): ResponseEntity<Article> =
         ResponseEntity(articleService.update(id, updatedArticle), HttpStatus.NO_CONTENT)
 
     @PatchMapping("/{id}")
-    fun patchUpdate(@PathVariable id: Int, @RequestBody article: Article): ResponseEntity<Article> =
+    fun patchUpdate(@PathVariable id: Int, @RequestBody article: ArticleDTO): ResponseEntity<Article> =
         ResponseEntity(articleService.patchUpdate(id, article), HttpStatus.NO_CONTENT)
 
     @DeleteMapping("/{id}")

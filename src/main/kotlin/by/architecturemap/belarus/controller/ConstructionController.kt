@@ -1,6 +1,7 @@
 package by.architecturemap.belarus.controller
 
 import by.architecturemap.belarus.dto.ConstructionDTO
+import by.architecturemap.belarus.dto.ConstructionSearchingDTO
 import by.architecturemap.belarus.entity.Construction
 import by.architecturemap.belarus.service.ConstructionService
 import io.swagger.v3.oas.annotations.Operation
@@ -46,7 +47,7 @@ class ConstructionController(
         @RequestParam(required = false) buildingCenturyTo: String?
     ): List<Construction> =
         constructionService.find(
-            ConstructionDTO(
+            ConstructionSearchingDTO(
                 architecturalStyleId,
                 region,
                 district,
@@ -56,11 +57,14 @@ class ConstructionController(
         )
 
     @PutMapping("/{id}")
-    fun update(@PathVariable id: Int, @RequestBody constructionUpdates: Construction): ResponseEntity<Construction> =
+    fun update(
+        @PathVariable id: Int,
+        @Valid @RequestBody constructionUpdates: Construction
+    ): ResponseEntity<Construction> =
         ResponseEntity(constructionService.update(id, constructionUpdates), HttpStatus.NO_CONTENT)
 
     @PatchMapping("/{id}")
-    fun patchUpdate(@PathVariable id: Int, @RequestBody construction: Construction): ResponseEntity<Construction> =
+    fun patchUpdate(@PathVariable id: Int, @RequestBody construction: ConstructionDTO): ResponseEntity<Construction> =
         ResponseEntity(constructionService.patchUpdate(id, construction), HttpStatus.NO_CONTENT)
 
     @DeleteMapping("/{id}")

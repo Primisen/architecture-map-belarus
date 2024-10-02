@@ -1,5 +1,6 @@
 package by.architecturemap.belarus.service.impl
 
+import by.architecturemap.belarus.dto.SourceDTO
 import by.architecturemap.belarus.entity.Source
 import by.architecturemap.belarus.exception.NotFoundException
 import by.architecturemap.belarus.repository.jpa.SourceRepository
@@ -85,7 +86,7 @@ class SourceServiceImplTest {
         val existingSource =
             Source(name = "Old Name", url = "http://example.com", description = "Old Description")
                 .apply { id = id }
-        val updatedSource = Source(
+        val updatedSource = SourceDTO(
             name = "Updated Name",
             url = "http://example2.com",
             description = "Updated Description"
@@ -93,7 +94,7 @@ class SourceServiceImplTest {
             .apply { id = id }
         every { sourceRepository.findById(id) } returns Optional.of(existingSource)
         every { sourceRepository.save(existingSource) } returns existingSource.apply {
-            name = updatedSource.name
+            name = updatedSource.name!!
             url = existingSource.url
             description = updatedSource.description
         }

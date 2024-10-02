@@ -1,5 +1,6 @@
 package by.architecturemap.belarus.service.impl
 
+import by.architecturemap.belarus.dto.ArchitecturalStyleDTO
 import by.architecturemap.belarus.entity.ArchitecturalStyle
 import by.architecturemap.belarus.exception.NotFoundException
 import by.architecturemap.belarus.service.ImageService
@@ -105,7 +106,7 @@ class ArchitecturalStyleServiceImplTest {
         //then
         verify(exactly = 1) { architecturalStyleRepository.findById(id) }
         verify(exactly = 1) { architecturalStyleRepository.save(existingStyle) }
-        assertEquals(updatedStyle.name, result?.name)
+        assertEquals(updatedStyle.name, result.name)
     }
 
     @Test
@@ -132,12 +133,12 @@ class ArchitecturalStyleServiceImplTest {
         var id = 1
         val existingStyle = ArchitecturalStyle(name = "Gothic", description = "Old Description")
             .apply { id = id }
-        val patchStyle = ArchitecturalStyle(name = "Gothic", description = "New Description")
+        val patchStyle = ArchitecturalStyleDTO(name = "Gothic", description = "New Description")
             .apply { id = id }
 
         every { architecturalStyleRepository.findById(id) } returns Optional.of(existingStyle)
         every { architecturalStyleRepository.save(existingStyle) } returns existingStyle.apply {
-            name = patchStyle.name
+            name = patchStyle.name!!
         }
 
         //when
@@ -146,7 +147,7 @@ class ArchitecturalStyleServiceImplTest {
         //then
         verify(exactly = 1) { architecturalStyleRepository.findById(id) }
         verify(exactly = 1) { architecturalStyleRepository.save(existingStyle) }
-        assertEquals(patchStyle.name, result?.name)
+        assertEquals(patchStyle.name, result.name)
     }
 
     @Test

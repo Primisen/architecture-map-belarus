@@ -1,5 +1,6 @@
 package by.architecturemap.belarus.service.impl
 
+import by.architecturemap.belarus.dto.ArticleDTO
 import by.architecturemap.belarus.entity.Article
 import by.architecturemap.belarus.exception.NotFoundException
 import by.architecturemap.belarus.repository.jpa.ArticleRepository
@@ -48,17 +49,17 @@ class ArticleServiceImpl(
             tag = updatedArticle.tag
         }
 
-    override fun patchUpdate(id: Int, updatedArticle: Article): Article =
+    override fun patchUpdate(id: Int, updatedArticle: ArticleDTO): Article =
         applyUpdate(id) {
-            if (!updatedArticle.title.isNullOrEmpty())
-                title = updatedArticle.title
-            if (!updatedArticle.content.isNullOrEmpty())
-                content = updatedArticle.content
-            if (!updatedArticle.shortDescription.isNullOrEmpty())
-                shortDescription = updatedArticle.shortDescription
+            if (!updatedArticle.title.isNullOrBlank())
+                title = updatedArticle.title!!
+            if (!updatedArticle.content.isNullOrBlank())
+                content = updatedArticle.content!!
+            if (!updatedArticle.shortDescription.isNullOrBlank())
+                shortDescription = updatedArticle.shortDescription!!
             if (updatedArticle.demonstrativeImage != null)
-                demonstrativeImage = updatedArticle.demonstrativeImage
-            if (!updatedArticle.tag.isNullOrEmpty())
+                demonstrativeImage = updatedArticle.demonstrativeImage!!
+            if (updatedArticle.tag.isNotEmpty())
                 tag = updatedArticle.tag
         }
 

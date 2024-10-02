@@ -1,6 +1,7 @@
 package by.architecturemap.belarus.service.impl
 
 import by.architecturemap.belarus.dto.ConstructionDTO
+import by.architecturemap.belarus.dto.ConstructionSearchingDTO
 import by.architecturemap.belarus.entity.Construction
 import by.architecturemap.belarus.exception.NotFoundException
 import by.architecturemap.belarus.service.ConstructionService
@@ -23,8 +24,8 @@ class ConstructionServiceImpl(
     override fun find(id: Int): Construction = constructionRepository.findById(id)
         .orElseThrow { throw NotFoundException("Construction not found with id: $id") }
 
-    override fun find(constructionDTO: ConstructionDTO): List<Construction> =
-        constructionDTO
+    override fun find(constructionSearchingDTO: ConstructionSearchingDTO): List<Construction> =
+        constructionSearchingDTO
             .run {
                 var criteria = Criteria()
 
@@ -59,24 +60,25 @@ class ConstructionServiceImpl(
             address = updatedConstruction.address
             architects = updatedConstruction.architects
             buildingDate = updatedConstruction.buildingDate
+            buildingCentury = updatedConstruction.buildingCentury
             images = updatedConstruction.images
         }
 
-    override fun patchUpdate(id: Int, updatedConstruction: Construction): Construction =
+    override fun patchUpdate(id: Int, updatedConstruction: ConstructionDTO): Construction =
         applyUpdates(id) {
-            if (!updatedConstruction.name.isNullOrEmpty())
-                name = updatedConstruction.name
+            if (!updatedConstruction.name.isNullOrBlank())
+                name = updatedConstruction.name!!
             if (updatedConstruction.address != null)
-                address = updatedConstruction.address
-            if (!updatedConstruction.architects.isNullOrEmpty())
+                address = updatedConstruction.address!!
+            if (updatedConstruction.architects.isNotEmpty())
                 architects = updatedConstruction.architects
             if (updatedConstruction.architecturalStyle != null)
-                architecturalStyle = updatedConstruction.architecturalStyle
-            if (!updatedConstruction.images.isNullOrEmpty())
+                architecturalStyle = updatedConstruction.architecturalStyle!!
+            if (updatedConstruction.images.isNotEmpty())
                 images = updatedConstruction.images
-            if (!updatedConstruction.description.isNullOrEmpty())
+            if (!updatedConstruction.description.isNullOrBlank())
                 description = updatedConstruction.description
-            if (!updatedConstruction.buildingDate.isNullOrEmpty())
+            if (!updatedConstruction.buildingDate.isNullOrBlank())
                 buildingDate = updatedConstruction.buildingDate
         }
 

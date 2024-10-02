@@ -137,7 +137,7 @@ class ArticleServiceImplTest {
         every { articleRepository.deleteById(id) } just Runs
 
         //when
-        val result = articleService.delete(id)
+        articleService.delete(id)
 
         //then
         verify(exactly = 1) { articleRepository.findById(id) }

@@ -1,5 +1,6 @@
 package by.architecturemap.belarus.service.impl
 
+import by.architecturemap.belarus.dto.ConstructionDTO
 import by.architecturemap.belarus.entity.Address
 import by.architecturemap.belarus.entity.ArchitecturalStyle
 import by.architecturemap.belarus.entity.Construction
@@ -126,7 +127,7 @@ class ConstructionServiceImplTest {
     }
 
     @Test
-    fun whenPatch_thenPatcheConstruction() {
+    fun whenPatch_thenPatchConstruction() {
         //given
         var id = 1
         val existingConstruction = Construction(
@@ -135,7 +136,7 @@ class ConstructionServiceImplTest {
             architecturalStyle = ArchitecturalStyle(name = "Style")
         )
             .apply { id = id }
-        val updatedConstruction = Construction(
+        val updatedConstruction = ConstructionDTO(
             name = "Name 2",
             address = Address(region = "Test 2"),
             architecturalStyle = ArchitecturalStyle(name = "Another style")
@@ -143,10 +144,10 @@ class ConstructionServiceImplTest {
             .apply { id = id }
         every { constructionRepository.findById(id) } returns Optional.of(existingConstruction)
         every { constructionRepository.save(existingConstruction) } returns existingConstruction.apply {
-            name = updatedConstruction.name
-            address = updatedConstruction.address
+            name = updatedConstruction.name!!
+            address = updatedConstruction.address!!
             architects = updatedConstruction.architects
-            architecturalStyle = updatedConstruction.architecturalStyle
+            architecturalStyle = updatedConstruction.architecturalStyle!!
             images = updatedConstruction.images
             description = updatedConstruction.description
             buildingDate = updatedConstruction.buildingDate
@@ -170,7 +171,7 @@ class ConstructionServiceImplTest {
         every { constructionRepository.deleteById(id) } just Runs
 
         //when
-        val result = constructionService.delete(id)
+        constructionService.delete(id)
 
         //then
         verify(exactly = 1) { constructionRepository.findById(id) }

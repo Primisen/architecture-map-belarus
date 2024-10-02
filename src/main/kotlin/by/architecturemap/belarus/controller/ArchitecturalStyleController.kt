@@ -1,5 +1,6 @@
 package by.architecturemap.belarus.controller
 
+import by.architecturemap.belarus.dto.ArchitecturalStyleDTO
 import by.architecturemap.belarus.entity.ArchitecturalStyle
 import by.architecturemap.belarus.service.ArchitecturalStyleService
 import jakarta.validation.Valid
@@ -36,14 +37,14 @@ class ArchitecturalStyleController(
     @PutMapping("/{id}")
     fun update(
         @PathVariable id: Int,
-        @RequestBody styleUpdates: ArchitecturalStyle
+        @Valid @RequestBody styleUpdates: ArchitecturalStyle
     ): ResponseEntity<ArchitecturalStyle> =
         ResponseEntity(architecturalStyleService.update(id, styleUpdates), HttpStatus.NO_CONTENT)
 
     @PatchMapping("/{id}")
     fun patchUpdate(
         @PathVariable id: Int,
-        @RequestBody architecturalStyle: ArchitecturalStyle
+        @RequestBody architecturalStyle: ArchitecturalStyleDTO
     ): ResponseEntity<ArchitecturalStyle> =
         ResponseEntity(architecturalStyleService.patchUpdate(id, architecturalStyle), HttpStatus.NO_CONTENT)
 

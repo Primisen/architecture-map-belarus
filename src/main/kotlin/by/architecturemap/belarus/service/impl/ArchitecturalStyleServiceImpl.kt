@@ -1,5 +1,6 @@
 package by.architecturemap.belarus.service.impl
 
+import by.architecturemap.belarus.dto.ArchitecturalStyleDTO
 import by.architecturemap.belarus.entity.ArchitecturalStyle
 import by.architecturemap.belarus.exception.NotFoundException
 import by.architecturemap.belarus.service.ArchitecturalStyleService
@@ -30,20 +31,20 @@ class ArchitecturalStyleServiceImpl(
             yearsActive = updatedArchitecturalStyle.yearsActive
         }
 
-    override fun patchUpdate(id: Int, updatedArchitecturalStyle: ArchitecturalStyle): ArchitecturalStyle =
+    override fun patchUpdate(id: Int, updatedArchitecturalStyle: ArchitecturalStyleDTO): ArchitecturalStyle =
 
         applyUpdates(id) {
-            if (!updatedArchitecturalStyle.name.isNullOrEmpty())
-                name = updatedArchitecturalStyle.name
-            if (!updatedArchitecturalStyle.attributes.isNullOrEmpty())
+            if (!updatedArchitecturalStyle.name.isNullOrBlank())
+                name = updatedArchitecturalStyle.name!!
+            if (updatedArchitecturalStyle.attributes.isNotEmpty())
                 attributes = updatedArchitecturalStyle.attributes
-            if (!updatedArchitecturalStyle.description.isNullOrEmpty())
+            if (!updatedArchitecturalStyle.description.isNullOrBlank())
                 description = updatedArchitecturalStyle.description
-            if (!updatedArchitecturalStyle.shortDescription.isNullOrEmpty())
+            if (!updatedArchitecturalStyle.shortDescription.isNullOrBlank())
                 shortDescription = updatedArchitecturalStyle.shortDescription
             if (updatedArchitecturalStyle.demonstrativeImage != null)
                 demonstrativeImage = updatedArchitecturalStyle.demonstrativeImage?.id?.let { imageService.find(it) }
-            if (!updatedArchitecturalStyle.yearsActive.isNullOrEmpty())
+            if (!updatedArchitecturalStyle.yearsActive.isNullOrBlank())
                 yearsActive = updatedArchitecturalStyle.yearsActive
         }
 

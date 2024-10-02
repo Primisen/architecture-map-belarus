@@ -1,5 +1,6 @@
 package by.architecturemap.belarus.controller
 
+import by.architecturemap.belarus.dto.SourceDTO
 import by.architecturemap.belarus.entity.Source
 import by.architecturemap.belarus.service.SourceService
 import jakarta.validation.Valid
@@ -31,11 +32,11 @@ class SourceController(
     fun findAll(): List<Source> = sourceService.findAll()
 
     @PutMapping("/{id}")
-    fun update(@PathVariable id: Int, @RequestBody source: Source): ResponseEntity<Source> =
+    fun update(@PathVariable id: Int, @Valid @RequestBody source: Source): ResponseEntity<Source> =
         ResponseEntity(sourceService.update(id, source), HttpStatus.NO_CONTENT)
 
     @PatchMapping("/{id}")
-    fun patch(@PathVariable id: Int, @RequestBody source: Source): ResponseEntity<Source> =
+    fun patch(@PathVariable id: Int, @RequestBody source: SourceDTO): ResponseEntity<Source> =
         ResponseEntity(sourceService.patchUpdate(id, source), HttpStatus.NO_CONTENT)
 
     @DeleteMapping("/{id}")
