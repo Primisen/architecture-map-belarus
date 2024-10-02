@@ -3,6 +3,7 @@ package by.architecturemap.belarus.controller
 import by.architecturemap.belarus.entity.Article
 import by.architecturemap.belarus.service.ArticleService
 import io.swagger.v3.oas.annotations.Operation
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.CrossOrigin
@@ -24,7 +25,7 @@ class ArticleController(
 ) {
 
     @PostMapping("/")
-    fun create(@RequestBody article: Article): ResponseEntity<Article> =
+    fun create(@Valid @RequestBody article: Article): ResponseEntity<Article> =
         ResponseEntity(articleService.create(article), HttpStatus.CREATED)
 
     @GetMapping("/")

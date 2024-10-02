@@ -8,6 +8,10 @@ import jakarta.persistence.JoinTable
 import jakarta.persistence.ManyToMany
 import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
+import jakarta.validation.constraints.Email
+import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.NotEmpty
+import jakarta.validation.constraints.NotNull
 
 @Entity
 /**
@@ -17,19 +21,24 @@ import jakarta.persistence.Table
 @Table(name = "usr")
 data class User(
 
+    @Email
     var username: String,
 
     /**
      * When the User is registered, this enabled field will be set to false.
      * During the account verification process – if successful – it will become true
      */
+    @NotNull(message = "Enable field may not be null")
     var enable: Boolean = false,
 
+    @NotBlank(message = "Name may not be blank")
     var password: CharArray,
+
     var name: String? = null,
     var surname: String? = null,
     var aboutThemself: String? = null,
 
+    @NotEmpty(message = "Name may not be empty")
     @ManyToMany(fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
     @JoinTable(
         name = "role_user",

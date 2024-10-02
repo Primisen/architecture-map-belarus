@@ -6,11 +6,14 @@ import jakarta.persistence.JoinColumn
 import jakarta.persistence.JoinTable
 import jakarta.persistence.ManyToMany
 import jakarta.persistence.OneToOne
+import jakarta.validation.constraints.NotBlank
 
 @Entity
 data class ArchitecturalStyle(
 
+    @NotBlank(message = "Name may not be blank")
     var name: String,
+
     var description: String? = null,
 
     @ManyToMany

@@ -2,6 +2,7 @@ package by.architecturemap.belarus.controller
 
 import by.architecturemap.belarus.entity.Source
 import by.architecturemap.belarus.service.SourceService
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.CrossOrigin
@@ -23,7 +24,7 @@ class SourceController(
 ) {
 
     @PostMapping("/")
-    fun create(@RequestBody source: Source): ResponseEntity<Source> =
+    fun create(@Valid @RequestBody source: Source): ResponseEntity<Source> =
         ResponseEntity(sourceService.create(source), HttpStatus.CREATED)
 
     @GetMapping("/")

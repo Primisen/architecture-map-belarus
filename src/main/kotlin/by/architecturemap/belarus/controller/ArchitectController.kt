@@ -2,6 +2,7 @@ package by.architecturemap.belarus.controller
 
 import by.architecturemap.belarus.entity.Architect
 import by.architecturemap.belarus.service.ArchitectService
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.CrossOrigin
@@ -20,7 +21,7 @@ class ArchitectController(
 ) {
 
     @PostMapping
-    fun create(@RequestBody architect: Architect): ResponseEntity<Architect> =
+    fun create(@Valid @RequestBody architect: Architect): ResponseEntity<Architect> =
         ResponseEntity(architectService.create(architect), HttpStatus.CREATED)
 
     @GetMapping("/{id}")

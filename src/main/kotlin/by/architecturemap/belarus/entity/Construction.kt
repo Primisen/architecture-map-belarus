@@ -9,6 +9,9 @@ import jakarta.persistence.ManyToMany
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToMany
 import jakarta.persistence.OneToOne
+import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.NotEmpty
+import jakarta.validation.constraints.NotNull
 import org.springframework.data.elasticsearch.annotations.Document
 
 /**
@@ -19,6 +22,7 @@ import org.springframework.data.elasticsearch.annotations.Document
 @Document(indexName = "construction")
 data class Construction(
 
+    @NotBlank(message = "Name may not be blank")
     var name: String,
 
     /**
@@ -34,10 +38,12 @@ data class Construction(
      */
     var buildingCentury: Short? = null,
 
+    @NotNull(message = "Address may not be null")
     @OneToOne(cascade = [CascadeType.PERSIST])
     @JoinColumn(name = "address_id")
     var address: Address,
 
+    @NotNull(message = "Architectural style may not be null")
     @ManyToOne(cascade = [CascadeType.MERGE])
     @JoinColumn(name = "architectural_style_id")
     var architecturalStyle: ArchitecturalStyle,
@@ -53,6 +59,7 @@ data class Construction(
 
     var description: String? = null,
 
+    @NotEmpty(message = "Construction image may not be empty")
     @JsonIgnoreProperties("construction")
     @OneToMany(mappedBy = "construction", cascade = [CascadeType.ALL], targetEntity = ConstructionImage::class)
     var images: List<ConstructionImage> = listOf()

@@ -4,6 +4,7 @@ import by.architecturemap.belarus.entity.ConstructionImage
 import by.architecturemap.belarus.service.ConstructionImageService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.CrossOrigin
@@ -25,7 +26,7 @@ class ConstructionImageController(
 
     @Operation(summary = "Save image of construction")
     @PostMapping("/")
-    fun create(@RequestBody constructionImage: ConstructionImage): ResponseEntity<ConstructionImage> =
+    fun create(@Valid @RequestBody constructionImage: ConstructionImage): ResponseEntity<ConstructionImage> =
         ResponseEntity(constructionImageService.create(constructionImage), HttpStatus.CREATED)
 
     @Operation(summary = "Getting list of random images of construction for home page")

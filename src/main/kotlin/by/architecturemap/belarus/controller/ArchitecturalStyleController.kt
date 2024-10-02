@@ -2,6 +2,7 @@ package by.architecturemap.belarus.controller
 
 import by.architecturemap.belarus.entity.ArchitecturalStyle
 import by.architecturemap.belarus.service.ArchitecturalStyleService
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.CrossOrigin
@@ -23,7 +24,7 @@ class ArchitecturalStyleController(
 ) {
 
     @PostMapping("/")
-    fun create(@RequestBody architecturalStyle: ArchitecturalStyle): ResponseEntity<ArchitecturalStyle> =
+    fun create(@Valid @RequestBody architecturalStyle: ArchitecturalStyle): ResponseEntity<ArchitecturalStyle> =
         ResponseEntity(architecturalStyleService.create(architecturalStyle), HttpStatus.CREATED)
 
     @GetMapping("/")

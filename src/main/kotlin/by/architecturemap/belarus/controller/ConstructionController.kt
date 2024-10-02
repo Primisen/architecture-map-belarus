@@ -4,6 +4,7 @@ import by.architecturemap.belarus.dto.ConstructionDTO
 import by.architecturemap.belarus.entity.Construction
 import by.architecturemap.belarus.service.ConstructionService
 import io.swagger.v3.oas.annotations.Operation
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.CrossOrigin
@@ -26,7 +27,7 @@ class ConstructionController(
 ) {
 
     @PostMapping("/")
-    fun create(@RequestBody construction: Construction): ResponseEntity<Construction> =
+    fun create(@Valid @RequestBody construction: Construction): ResponseEntity<Construction> =
         ResponseEntity(constructionService.create(construction), HttpStatus.CREATED)
 
     @GetMapping("/")
