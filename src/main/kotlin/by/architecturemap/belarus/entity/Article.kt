@@ -25,7 +25,7 @@ data class Article(
     var shortDescription: String,
 
     @NotNull(message = "Demonstrative image may not be null")
-    @OneToOne
+    @OneToOne(cascade = [CascadeType.PERSIST, CascadeType.REMOVE])
     @JoinColumn(name = "demonstrative_image_id", referencedColumnName = "id")
     var demonstrativeImage: Image,
 

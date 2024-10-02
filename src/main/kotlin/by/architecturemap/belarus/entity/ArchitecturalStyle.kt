@@ -1,6 +1,7 @@
 package by.architecturemap.belarus.entity
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import jakarta.persistence.CascadeType
 import jakarta.persistence.Entity
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.JoinTable
@@ -16,7 +17,7 @@ data class ArchitecturalStyle(
 
     var description: String? = null,
 
-    @ManyToMany
+    @ManyToMany(cascade = [CascadeType.PERSIST, CascadeType.REMOVE])
     @JoinTable(
         name = "architectural_style_architectural_attribute",
         joinColumns = [JoinColumn(name = "architectural_style_id")],
@@ -25,7 +26,7 @@ data class ArchitecturalStyle(
     var attributes: List<ArchitecturalAttribute>? = listOf(),
 
     @JsonIgnoreProperties("construction")
-    @OneToOne
+    @OneToOne(cascade = [CascadeType.PERSIST, CascadeType.REMOVE])
     @JoinColumn(name = "demonstrative_image_id", referencedColumnName = "id")
     var demonstrativeImage: Image? = null,
 

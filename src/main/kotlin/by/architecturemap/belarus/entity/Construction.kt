@@ -39,7 +39,7 @@ data class Construction(
     var buildingCentury: Short? = null,
 
     @NotNull(message = "Address may not be null")
-    @OneToOne(cascade = [CascadeType.PERSIST])
+    @OneToOne(cascade = [CascadeType.PERSIST, CascadeType.REMOVE])
     @JoinColumn(name = "address_id")
     var address: Address,
 

@@ -1,5 +1,6 @@
 package by.architecturemap.belarus.entity
 
+import jakarta.persistence.CascadeType
 import jakarta.persistence.Entity
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.OneToOne
@@ -18,7 +19,7 @@ data class ArchitecturalAttribute(
 
     var description: String? = null,
 
-    @OneToOne
+    @OneToOne(cascade = [CascadeType.PERSIST, CascadeType.REMOVE])
     @JoinColumn(name = "demonstrative_image_id", referencedColumnName = "id")
     var demonstrativeImage: Image? = null
 

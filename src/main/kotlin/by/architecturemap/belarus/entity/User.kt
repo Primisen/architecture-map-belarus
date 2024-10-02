@@ -47,7 +47,7 @@ data class User(
     )
     var roles: Set<Role> = setOf(),
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = [CascadeType.REMOVE])
     var images: List<UserImage> = listOf()
 
 ) : BaseEntity() {
