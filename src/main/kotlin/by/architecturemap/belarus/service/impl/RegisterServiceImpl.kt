@@ -13,7 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
-const val PASSWORD_MIN_LENGTH:Int = 8
+const val PASSWORD_MIN_LENGTH: Int = 8
 
 @Service
 open class RegisterServiceImpl(
@@ -22,7 +22,7 @@ open class RegisterServiceImpl(
     private val roleService: RoleService,
     private val emailService: EmailService,
     private val verificationTokenService: VerificationTokenService
-) : RegisterService{
+) : RegisterService {
 
     @Transactional(rollbackFor = [Exception::class])
     override fun register(registrationUserDTO: RegistrationUserDTO): UserDTO =
@@ -47,7 +47,7 @@ open class RegisterServiceImpl(
                 EmailVerificationToken(user = savedUser)
                     .also {
                         verificationTokenService.save(it)
-                        emailService.sendVerificationEmail(savedUser, it.token)
+                        emailService.sendVerificationTokenToEmail(savedUser, it.token)
                     }
 
                 savedUser.toDTO()
@@ -56,7 +56,7 @@ open class RegisterServiceImpl(
     override fun confirmEmail(token: String) {
         token
             .let {
-                verificationTokenService.checkThatTokenExistsAndNotExpired(token)
+                verificationTokenService.getToken(token)
             }
             .run {
                 val user = this.user

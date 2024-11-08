@@ -24,12 +24,13 @@ class SourceController(
     private val sourceService: SourceService
 ) {
 
-    @PostMapping("/")
+    @PostMapping
     fun create(@Valid @RequestBody source: Source): ResponseEntity<Source> =
         ResponseEntity(sourceService.create(source), HttpStatus.CREATED)
 
-    @GetMapping("/")
-    fun findAll(): List<Source> = sourceService.findAll()
+    @GetMapping
+    fun findAll(): ResponseEntity<List<Source>> =
+        ResponseEntity(sourceService.findAll(), HttpStatus.OK)
 
     @PutMapping("/{id}")
     fun update(@PathVariable id: Int, @Valid @RequestBody source: Source): ResponseEntity<Source> =

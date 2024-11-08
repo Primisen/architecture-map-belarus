@@ -44,7 +44,7 @@ open class UserServiceImpl(
     }
 
     override fun delete(id: Int) {
-        find(id).also { userRepository.deleteById(id) }
+        userRepository.deleteById(id)
     }
 
     private fun checkThatPasswordHasCorrectLength(password: String) {
@@ -54,7 +54,7 @@ open class UserServiceImpl(
     }
 
     private fun checkThatPasswordIsCorrect(user: User, password: String) {
-        check(user.password.toString() == passwordEncoder.encode(password)) { "Password is incorrect!" }
+        require(user.password.joinToString("") == passwordEncoder.encode(password)) { "Password is incorrect!" }
     }
 
     private fun applyUpdates(id: Int, update: User.() -> Unit): User =

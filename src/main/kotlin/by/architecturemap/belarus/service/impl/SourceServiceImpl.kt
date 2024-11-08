@@ -30,7 +30,7 @@ class SourceServiceImpl(
         applyUpdates(id) {
             if (!updatedSource.name.isNullOrBlank())
                 name = updatedSource.name!!
-            if (updatedSource.url.isNullOrBlank())
+            if (!updatedSource.url.isNullOrBlank())
                 url = updatedSource.url!!
             if (!updatedSource.description.isNullOrBlank())
                 description = updatedSource.description

@@ -11,7 +11,8 @@ import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertThrows
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.assertThrows
 import java.util.Optional
 
 class SourceServiceImplTest {
@@ -19,123 +20,153 @@ class SourceServiceImplTest {
     private val sourceRepository: SourceRepository = mockk()
     private val sourceService = SourceServiceImpl(sourceRepository)
 
+    private val id = 1
+    private lateinit var source: Source
+    private lateinit var updatedSource: Source
+
+    @BeforeEach
+    fun setUp() {
+        source = Source(name = "Source Name", url = "http://example.com", description = "Source Description")
+        updatedSource = Source(name = "Updated Name", url = "http://new-url.com", description = "Updated Description")
+    }
+
     @Test
-    fun whenCreateSource_thenSaveSource() {
-        //given
-        val source = Source(name = "Source Name", url = "http://example.com", description = "Source Description")
-            .apply { id = 1 }
+    fun givenSource_whenCreate_thenReturnSavedSource() {
+        // arrange
+        val expected = source
         every { sourceRepository.save(source) } returns source
 
-        //when
-        val result = sourceService.create(source)
+        // act
+        val actual = sourceService.create(source)
 
-        //then
+        // assert
         verify(exactly = 1) { sourceRepository.save(source) }
-        assertEquals(source, result)
+        assertEquals(expected, actual)
     }
 
     @Test
-    fun whenFindAllSources_thenReturnListOfSources() {
-        //given
-        val sources = mutableListOf(
-            Source(name = "Source 1", url = "http://example.com/1", description = "Description 1")
-                .apply { id = 1 },
-            Source(name = "Source 2", url = "http://example.com/2", description = "Description 2")
-                .apply { id = 2 }
-        )
+    fun whenFindAll_thenReturnListOfSources() {
+        // arrange
+        val sources = listOf(source, updatedSource)
         every { sourceRepository.findAll() } returns sources
 
-        //when
-        val result = sourceService.findAll()
+        // act
+        val actual = sourceService.findAll()
 
-        //then
+        // assert
         verify(exactly = 1) { sourceRepository.findAll() }
-        assertEquals(sources, result)
+        assertEquals(sources, actual)
     }
 
     @Test
-    fun whenUpdate_thenUpdateSource() {
-        //given
-        var id = 1
-        val existingSource =
-            Source(name = "Old Name", url = "http://example.com", description = "Old Description")
-                .apply { id = id }
-        val updatedSource =
-            Source(name = "Updated Name", url = "http://new-url.com", description = "Updated Description")
-                .apply { id = id }
-        every { sourceRepository.findById(id) } returns Optional.of(existingSource)
-        every { sourceRepository.save(existingSource) } returns existingSource.apply {
-            name = updatedSource.name
-            url = updatedSource.url
-            description = updatedSource.description
-        }
+    fun givenSourceId_whenUpdate_thenReturnUpdatedSource() {
+        // arrange
+        val expected = updatedSource
+        every { sourceRepository.findById(id) } returns Optional.of(source)
+        every { sourceRepository.save(source) } returns source
 
-        //when
-        val result = sourceService.update(id, updatedSource)
+        // act
+        val actual = sourceService.update(id, updatedSource)
 
-        //then
+        // assert
         verify(exactly = 1) { sourceRepository.findById(id) }
-        verify(exactly = 1) { sourceRepository.save(existingSource) }
-        assertEquals(existingSource, result)
+        verify(exactly = 1) { sourceRepository.save(source) }
+        assertEquals(expected, actual)
     }
 
     @Test
-    fun whenPatch_thenPatchSource() {
-        //given
-        var id = 1
-        val existingSource =
-            Source(name = "Old Name", url = "http://example.com", description = "Old Description")
-                .apply { id = id }
-        val updatedSource = SourceDTO(
+    fun givenSourceDTO_whenPatchUpdate_thenReturnPatchedSource() {
+        // arrange
+        val sourceDTO = SourceDTO(
             name = "Updated Name",
             url = "http://example2.com",
             description = "Updated Description"
         )
-            .apply { id = id }
-        every { sourceRepository.findById(id) } returns Optional.of(existingSource)
-        every { sourceRepository.save(existingSource) } returns existingSource.apply {
-            name = updatedSource.name!!
-            url = existingSource.url
-            description = updatedSource.description
-        }
 
-        //when
-        val result = sourceService.patchUpdate(id, updatedSource)
+        every { sourceRepository.findById(id) } returns Optional.of(source)
+        every { sourceRepository.save(source) } returns source
 
-        //then
+        // act
+        val actual = sourceService.patchUpdate(id, sourceDTO)
+
+        // assert
+        val expected = Source(
+            name = "Updated Name",
+            url = "http://example2.com",
+            description = "Updated Description"
+        )
         verify(exactly = 1) { sourceRepository.findById(id) }
-        verify(exactly = 1) { sourceRepository.save(existingSource) }
-        assertEquals(existingSource, result)
+        verify(exactly = 1) { sourceRepository.save(source) }
+        assertEquals(expected, actual)
     }
 
     @Test
-    fun whenDelete_thenDeleteSource() {
-        //given
-        val id = 1
-        val source = mockk<Source>()
+    fun givenBlankSourceDTO_whenPatchUpdate_thenReturnOriginalSource() {
+        // arrange
+        val sourceDTO = SourceDTO(
+            name = "",
+            url = "",
+            description = ""
+        )
+
+        every { sourceRepository.findById(id) } returns Optional.of(source)
+        every { sourceRepository.save(source) } returns source
+
+        // act
+        val actual = sourceService.patchUpdate(id, sourceDTO)
+
+        // assert
+        val expected = source
+        verify(exactly = 1) { sourceRepository.findById(id) }
+        verify(exactly = 1) { sourceRepository.save(source) }
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun givenSourceDTOWithNullFields_whenPatchUpdate_thenReturnOriginalSource() {
+        // arrange
+        val sourceDTO = SourceDTO(
+            name = null,
+            url = null,
+            description = null
+        )
+
+        every { sourceRepository.findById(id) } returns Optional.of(source)
+        every { sourceRepository.save(source) } returns source
+
+        // act
+        val actual = sourceService.patchUpdate(id, sourceDTO)
+
+        // assert
+        val expected = source
+        verify(exactly = 1) { sourceRepository.findById(id) }
+        verify(exactly = 1) { sourceRepository.save(source) }
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun givenSourceId_whenDelete_thenVerifyDeletion() {
+        // arrange
         every { sourceRepository.findById(id) } returns Optional.of(source)
         every { sourceRepository.deleteById(id) } just Runs
 
-        //when
+        // act
         sourceService.delete(id)
 
-        //then
+        // assert
         verify(exactly = 1) { sourceRepository.findById(id) }
         verify(exactly = 1) { sourceRepository.deleteById(id) }
     }
 
     @Test
-    fun whenDeleteSourceAndSourceDoesNotExists_thenThrowNotFoundException() {
-        //given
-        val id = 1
+    fun givenInvalidSourceId_whenDelete_thenThrowNotFoundException() {
+        // arrange
         every { sourceRepository.findById(id) } returns Optional.empty()
 
-        //when & then
-        assertThrows(NotFoundException::class.java) {
-            sourceService.delete(id)
-        }
+        // act & assert
+        assertThrows<NotFoundException> { sourceService.delete(id) }
 
-        //verify
+        // verify
         verify(exactly = 1) { sourceRepository.findById(id) }
         verify(exactly = 0) { sourceRepository.deleteById(id) }
     }

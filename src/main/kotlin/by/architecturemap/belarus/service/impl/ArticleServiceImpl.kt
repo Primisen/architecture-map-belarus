@@ -35,7 +35,7 @@ class ArticleServiceImpl(
                 val query = CriteriaQuery(criteria)
 
                 val searchHits: SearchHits<Article> = elasticsearchOperations.search(query, Article::class.java)
-                searchHits.map { it.content }.toList()
+                searchHits.searchHits.map { it.content }.toList()
             }
 
     override fun findAll(): List<Article> = articleRepository.findAll()

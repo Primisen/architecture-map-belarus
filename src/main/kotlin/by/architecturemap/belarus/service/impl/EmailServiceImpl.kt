@@ -24,7 +24,7 @@ class EmailServiceImpl(
         private const val BASE_URL = "https://architecture-map.by"
     }
 
-    override fun sendVerificationEmail(user: User, token: String) {
+    override fun sendVerificationTokenToEmail(user: User, token: String) {
         val mail = buildEmail(user.username, token)
         sendEmail(mail)
     }

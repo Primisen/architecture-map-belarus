@@ -24,15 +24,17 @@ class ArchitecturalStyleController(
     private val architecturalStyleService: ArchitecturalStyleService
 ) {
 
-    @PostMapping("/")
+    @PostMapping
     fun create(@Valid @RequestBody architecturalStyle: ArchitecturalStyle): ResponseEntity<ArchitecturalStyle> =
         ResponseEntity(architecturalStyleService.create(architecturalStyle), HttpStatus.CREATED)
 
-    @GetMapping("/")
-    fun findAll(): List<ArchitecturalStyle> = architecturalStyleService.findAll()
+    @GetMapping
+    fun findAll(): ResponseEntity<List<ArchitecturalStyle>> =
+        ResponseEntity(architecturalStyleService.findAll(), HttpStatus.OK)
 
     @GetMapping("/{id}")
-    fun find(@PathVariable id: Int): ArchitecturalStyle = architecturalStyleService.find(id)
+    fun find(@PathVariable id: Int): ResponseEntity<ArchitecturalStyle> =
+        ResponseEntity(architecturalStyleService.find(id), HttpStatus.OK)
 
     @PutMapping("/{id}")
     fun update(

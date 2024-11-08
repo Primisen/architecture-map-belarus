@@ -25,8 +25,10 @@ class ArchitectController(
         ResponseEntity(architectService.create(architect), HttpStatus.CREATED)
 
     @GetMapping("/{id}")
-    fun find(@PathVariable id: Int): Architect = architectService.find(id)
+    fun find(@PathVariable id: Int): ResponseEntity<Architect> =
+        ResponseEntity(architectService.find(id), HttpStatus.OK)
 
-    @GetMapping("/")
-    fun findAll(): List<Architect> = architectService.findAll()
+    @GetMapping
+    fun findAll(): ResponseEntity<List<Architect>> =
+        ResponseEntity(architectService.findAll(), HttpStatus.OK)
 }

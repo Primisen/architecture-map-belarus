@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
@@ -25,19 +26,22 @@ class ArticleController(
     private val articleService: ArticleService
 ) {
 
-    @PostMapping("/")
+    @PostMapping
     fun create(@Valid @RequestBody article: Article): ResponseEntity<Article> =
         ResponseEntity(articleService.create(article), HttpStatus.CREATED)
 
-    @GetMapping("/")
-    fun findAll(): List<Article> = articleService.findAll()
+    @GetMapping
+    fun findAll(): ResponseEntity<List<Article>> =
+        ResponseEntity(articleService.findAll(), HttpStatus.OK)
 
     @GetMapping("/{id}")
-    fun find(@PathVariable id: Int): Article = articleService.find(id)
+    fun find(@PathVariable id: Int): ResponseEntity<Article> =
+        ResponseEntity(articleService.find(id), HttpStatus.OK)
 
     @Operation(summary = "Finding articles in Elasticsearch")
-    @GetMapping
-    fun articleSearch(request: String): List<Article> = articleService.find(request)
+    @GetMapping("/search")
+    fun searchArticle(@RequestParam(required = false) searchRequest: String): ResponseEntity<List<Article>> =
+        ResponseEntity(articleService.find(searchRequest), HttpStatus.OK)
 
     @PutMapping("/{id}")
     fun update(@PathVariable id: Int, @Valid @RequestBody updatedArticle: Article): ResponseEntity<Article> =

@@ -1,7 +1,9 @@
 package by.architecturemap.belarus.service.impl
 
+import by.architecturemap.belarus.dto.ArticleDTO
 import by.architecturemap.belarus.entity.Article
 import by.architecturemap.belarus.entity.Image
+import by.architecturemap.belarus.entity.Tag
 import by.architecturemap.belarus.exception.NotFoundException
 import by.architecturemap.belarus.repository.jpa.ArticleRepository
 import io.mockk.Runs
@@ -10,9 +12,14 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertThrows
+import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations
+import org.springframework.data.elasticsearch.core.SearchHit
+import org.springframework.data.elasticsearch.core.SearchHits
+import org.springframework.data.elasticsearch.core.query.CriteriaQuery
 import java.util.Optional
 
 class ArticleServiceImplTest {
@@ -21,142 +28,246 @@ class ArticleServiceImplTest {
     private val elasticsearchOperations: ElasticsearchOperations = mockk()
     private val articleService = ArticleServiceImpl(articleRepository, elasticsearchOperations)
 
-    @Test
-    fun whenCreateArticle_thenSaveArticle() {
-        //given
-        val article = Article(
+    private val id = 1
+    private lateinit var article: Article
+    private lateinit var updatedArticle: Article
+
+    @BeforeEach
+    fun setUp() {
+        article = Article(
             title = "Title",
             content = "Really beautiful",
             shortDescription = "Short description",
             demonstrativeImage = Image("http://..")
         )
-            .apply { id = 1 }
+        updatedArticle = Article(
+            title = "Updated Title",
+            content = "Updated content",
+            shortDescription = "Updated short description",
+            demonstrativeImage = Image("http://updated..")
+        )
+    }
 
+    @Test
+    fun givenArticle_whenCreateArticle_thenReturnSavedArticle() {
+        // arrange
+        val expected = Article(
+            title = article.title,
+            content = article.content,
+            shortDescription = article.shortDescription,
+            demonstrativeImage = article.demonstrativeImage
+        )
         every { articleRepository.save(article) } returns article
 
-        //when
-        val result = articleService.create(article)
+        // act
+        val actual = articleService.create(article)
 
-        //then
-        verify(exactly = 1) { articleRepository.save(article) }
-        assertEquals(article, result)
+        // assert
+        assertEquals(expected, actual)
     }
 
     @Test
     fun whenFindAllArticles_thenReturnListOfArticles() {
-        //given
-        val articles = listOf(
-            Article(
-                title = "Title",
-                content = "Really beautiful",
-                shortDescription = "Short description",
-                demonstrativeImage = Image("http://..")
-            )
-                .apply { id = 1 },
-            Article(
-                title = "Title",
-                content = "Beautiful",
-                shortDescription = "Short description",
-                demonstrativeImage = Image("http://..")
-            )
-                .apply { id = 2 }
-        )
-        every { articleRepository.findAll() } returns articles
+        // arrange
+        val expected = listOf(article, article)
+        every { articleRepository.findAll() } returns expected
 
-        //when
-        val result = articleService.findAll()
+        // act
+        val actual = articleService.findAll()
 
-        //then
-        verify(exactly = 1) { articleRepository.findAll() }
-        assertEquals(articles, result)
+        // assert
+        assertEquals(expected, actual)
     }
 
     @Test
-    fun whenFind_thenReturnArticle() {
-        //given
-        var id = 1
-        val article = Article(
-            title = "Title",
-            content = "Really beautiful",
-            shortDescription = "Short description",
-            demonstrativeImage = Image("http://..")
+    fun givenArticleId_whenFindArticle_thenReturnFoundArticle() {
+        // arrange
+        val expected = Article(
+            title = article.title,
+            content = article.content,
+            shortDescription = article.shortDescription,
+            demonstrativeImage = article.demonstrativeImage
         )
-            .apply { id = id }
         every { articleRepository.findById(id) } returns Optional.of(article)
 
-        //when
-        val result = articleService.find(id)
+        // act
+        val actual = articleService.find(id)
 
-        //then
-        verify(exactly = 1) { articleRepository.findById(id) }
-        assertEquals(article, result)
+        // assert
+        assertEquals(expected, actual)
     }
 
     @Test
-    fun whenUpdate_thenUpdateArticle() {
-        //given
-        var id = 1
-        val existingArticle = Article(
-            title = "Title",
-            content = "Really beautiful",
-            shortDescription = "Short description",
-            demonstrativeImage = Image("http://..")
-        )
-            .apply { id = id }
-        val updatedArticle = Article(
-            title = "Title",
-            content = "Beautiful",
-            shortDescription = "Short description",
-            demonstrativeImage = Image("http://..")
-        )
-            .apply { id = id }
-        every { articleRepository.findById(id) } returns Optional.of(existingArticle)
-        every { articleRepository.save(existingArticle) } returns existingArticle.apply {
-            title = updatedArticle.title
-            content = updatedArticle.content
-            shortDescription = updatedArticle.shortDescription
-            demonstrativeImage = updatedArticle.demonstrativeImage
-            tag = updatedArticle.tag
-        }
-
-        //when
-        val result = articleService.update(id, updatedArticle)
-
-        //then
-        verify(exactly = 1) { articleRepository.findById(id) }
-        verify(exactly = 1) { articleRepository.save(existingArticle) }
-        assertEquals(existingArticle, result)
-    }
-
-    @Test
-    fun whenDelete_thenDeleteArticle() {
-        //given
-        val id = 1
-        val article = mockk<Article>()
+    fun givenArticleId_whenDeleteArticle_thenCheckThatDeleteFunctionWasCall() {
+        // arrange
         every { articleRepository.findById(id) } returns Optional.of(article)
         every { articleRepository.deleteById(id) } just Runs
 
-        //when
+        // act
         articleService.delete(id)
 
-        //then
+        // assert
         verify(exactly = 1) { articleRepository.findById(id) }
         verify(exactly = 1) { articleRepository.deleteById(id) }
     }
 
     @Test
-    fun whenDeleteArticleAndArticleDoesNotExists_thenThrowNotFoundException() {
-        //given
-        val id = 1
+    fun givenIdOfNotExistedArticle_whenDeleteArticle_thenThrowNotFoundException() {
+        // arrange
         every { articleRepository.findById(id) } returns Optional.empty()
 
-        //when & then
-        assertThrows(NotFoundException::class.java) {
-            articleService.delete(id)
-        }
-
-        //verify
+        // act & assert
+        assertThrows<NotFoundException> { articleService.delete(id) }
         verify(exactly = 1) { articleRepository.findById(id) }
         verify(exactly = 0) { articleRepository.deleteById(id) }
+    }
+
+    @Test
+    fun givenUpdatedArticle_whenUpdate_thenReturnUpdatedAndSavedArticle() {
+        // arrange
+        val expected = Article(
+            title = updatedArticle.title,
+            content = updatedArticle.content,
+            shortDescription = updatedArticle.shortDescription,
+            demonstrativeImage = updatedArticle.demonstrativeImage
+        )
+        every { articleRepository.findById(id) } returns Optional.of(article)
+        every { articleRepository.save(article) } returns article
+
+        // act
+        val actual = articleService.update(id, updatedArticle)
+
+        // assert
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun givenValidArticleDTO_whenPatchUpdate_thenUpdateArticle() {
+        // arrange
+        val exists = article
+        val patchArticle = ArticleDTO(
+            title = "New title",
+            content = "Beautiful",
+            shortDescription = "New short description",
+            demonstrativeImage = Image("https://.."),
+            tag = listOf(Tag(name = "Сядзібы"))
+        )
+        val expected = Article(
+            title = patchArticle.title!!,
+            content = patchArticle.content!!,
+            shortDescription = patchArticle.shortDescription!!,
+            demonstrativeImage = patchArticle.demonstrativeImage!!,
+            tag = patchArticle.tag!!
+        )
+
+        every { articleRepository.findById(id) } returns Optional.of(exists)
+        every { articleRepository.save(exists) } returns exists
+
+        // act
+        val actual = articleService.patchUpdate(id, patchArticle)
+
+        // assert
+        verify(exactly = 1) { articleRepository.findById(id) }
+        verify(exactly = 1) { articleRepository.save(exists) }
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun givenArticleDTOWithBlankFields_whenPatchUpdate_thenUpdateArticle() {
+        // arrange
+        val exists = article
+        val patchArticle = ArticleDTO(
+            title = "",
+            content = "",
+            shortDescription = "",
+            tag = emptyList()
+        )
+        val expected = Article(
+            title = exists.title,
+            content = exists.content,
+            shortDescription = exists.shortDescription,
+            demonstrativeImage = exists.demonstrativeImage,
+            tag = exists.tag
+        )
+
+        every { articleRepository.findById(id) } returns Optional.of(exists)
+        every { articleRepository.save(exists) } returns exists
+
+        // act
+        val actual = articleService.patchUpdate(id, patchArticle)
+
+        // assert
+        verify(exactly = 1) { articleRepository.findById(id) }
+        verify(exactly = 1) { articleRepository.save(exists) }
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun givenArticleDTOWithNullFields_whenPatchUpdate_thenUpdateArticle() {
+        // arrange
+        val exists = article
+        val patchArticle = ArticleDTO(
+            title = null,
+            content = null,
+            shortDescription = null,
+            demonstrativeImage = null,
+        )
+        val expected = Article(
+            title = exists.title,
+            content = exists.content,
+            shortDescription = exists.shortDescription,
+            demonstrativeImage = exists.demonstrativeImage,
+            tag = exists.tag
+        )
+
+        every { articleRepository.findById(id) } returns Optional.of(exists)
+        every { articleRepository.save(exists) } returns exists
+
+        // act
+        val actual = articleService.patchUpdate(id, patchArticle)
+
+        // assert
+        verify(exactly = 1) { articleRepository.findById(id) }
+        verify(exactly = 1) { articleRepository.save(exists) }
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun whenFind_thenReturnMatchingArticles() {
+        // arrange
+        val searchRequest = "Title"
+        val mockArticle = article
+        val mockSearchHits: SearchHits<Article> = mockk()
+        val mockSearchHit: SearchHit<Article> = mockk()
+        val expected = listOf(mockArticle)
+
+        every { mockSearchHit.content } returns mockArticle
+        every { mockSearchHits.searchHits } returns listOf(mockSearchHit)
+        every { elasticsearchOperations.search(any<CriteriaQuery>(), Article::class.java) } returns mockSearchHits
+
+        // act
+        val actual = articleService.find(searchRequest)
+
+        // assert
+        assertNotNull(actual)
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun whenFindWithEmptyRequest_thenReturnEmptyList() {
+        // arrange
+        val searchRequest = ""
+        val mockSearchHits: SearchHits<Article> = mockk()
+        val expected = emptyList<Article>()
+
+        every { mockSearchHits.searchHits } returns emptyList()
+        every { elasticsearchOperations.search(any<CriteriaQuery>(), Article::class.java) } returns mockSearchHits
+
+        // act
+        val actual = articleService.find(searchRequest)
+
+        // assert
+        assertNotNull(actual)
+        assertEquals(expected, actual)
     }
 }

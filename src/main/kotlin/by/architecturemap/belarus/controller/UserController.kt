@@ -22,13 +22,16 @@ class UserController(
     private val userService: UserService
 ) {
     @GetMapping()
-    fun findAll(): List<UserDTO> = userService.findAll()
+    fun findAll(): ResponseEntity<List<UserDTO>> =
+        ResponseEntity(userService.findAll(), HttpStatus.OK)
 
     @GetMapping("/{id}")
-    fun find(@PathVariable id: Int): User = userService.find(id)
+    fun find(@PathVariable id: Int): ResponseEntity<User> =
+        ResponseEntity(userService.find(id), HttpStatus.OK)
 
-    @GetMapping("/{username}")
-    fun find(@PathVariable username: String): User? = userService.find(username)
+    @GetMapping("/username/{username}")
+    fun find(@PathVariable username: String): ResponseEntity<User> =
+        ResponseEntity(userService.find(username), HttpStatus.OK)
 
     @PutMapping("/{id}")
     fun update(@PathVariable id: Int, @RequestBody updatedUser: UserDTO): ResponseEntity<UserDTO> =

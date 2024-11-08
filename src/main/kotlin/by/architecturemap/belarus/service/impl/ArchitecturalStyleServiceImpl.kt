@@ -4,14 +4,12 @@ import by.architecturemap.belarus.dto.ArchitecturalStyleDTO
 import by.architecturemap.belarus.entity.ArchitecturalStyle
 import by.architecturemap.belarus.exception.NotFoundException
 import by.architecturemap.belarus.service.ArchitecturalStyleService
-import by.architecturemap.belarus.service.ImageService
 import by.architecturemap.belarus.repository.jpa.ArchitecturalStyleRepository
 import org.springframework.stereotype.Service
 
 @Service
 class ArchitecturalStyleServiceImpl(
     private val architecturalStyleRepository: ArchitecturalStyleRepository,
-    private val imageService: ImageService
 ) : ArchitecturalStyleService {
 
     override fun create(architecturalStyle: ArchitecturalStyle) = architecturalStyleRepository.save(architecturalStyle)
@@ -43,7 +41,7 @@ class ArchitecturalStyleServiceImpl(
             if (!updatedArchitecturalStyle.shortDescription.isNullOrBlank())
                 shortDescription = updatedArchitecturalStyle.shortDescription
             if (updatedArchitecturalStyle.demonstrativeImage != null)
-                demonstrativeImage = updatedArchitecturalStyle.demonstrativeImage?.id?.let { imageService.find(it) }
+                demonstrativeImage = updatedArchitecturalStyle.demonstrativeImage
             if (!updatedArchitecturalStyle.yearsActive.isNullOrBlank())
                 yearsActive = updatedArchitecturalStyle.yearsActive
         }

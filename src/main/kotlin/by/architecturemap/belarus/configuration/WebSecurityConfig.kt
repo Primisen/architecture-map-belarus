@@ -1,9 +1,7 @@
 package by.architecturemap.belarus.configuration
 
-import by.architecturemap.belarus.properties.JwtProperties
 import by.architecturemap.belarus.repository.jpa.UserRepository
 import by.architecturemap.belarus.service.impl.CustomUserDetailsService
-import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
@@ -22,7 +20,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-@EnableConfigurationProperties(JwtProperties::class)
 open class WebSecurityConfig(
     private val userRepository: UserRepository
 ) {
@@ -42,7 +39,46 @@ open class WebSecurityConfig(
                     .authenticated()
                     .requestMatchers(HttpMethod.GET, "/users/**")
                     .hasRole("ADMIN")
-                    .requestMatchers(HttpMethod.PUT, "/user-images/**")
+
+                    .requestMatchers(
+                        HttpMethod.POST,
+                        "/architects",
+                        "/architectural-styles",
+                        "/articles",
+                        "/constructions",
+                        "/construction-images",
+                        "/sources"
+                    )
+                    .hasRole("ADMIN")
+
+                    .requestMatchers(
+                        HttpMethod.PUT,
+                        "/architectural-styles",
+                        "/articles",
+                        "/constructions",
+                        "/sources",
+                        "/user-images/**"
+                    )
+                    .hasRole("ADMIN")
+
+                    .requestMatchers(
+                        HttpMethod.PATCH,
+                        "/architectural-styles",
+                        "/articles",
+                        "/constructions",
+                        "/sources"
+                    )
+                    .hasRole("ADMIN")
+
+                    .requestMatchers(
+                        HttpMethod.DELETE,
+                        "/architectural-styles",
+                        "/articles",
+                        "/constructions",
+                        "/construction-images",
+                        "/sources/**",
+                        "/users"
+                    )
                     .hasRole("ADMIN")
                     .anyRequest().permitAll()
             }

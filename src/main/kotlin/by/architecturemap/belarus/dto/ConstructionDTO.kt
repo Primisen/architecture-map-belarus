@@ -12,6 +12,6 @@ data class ConstructionDTO(
     var address: Address? = null,
     var architects: List<Architect> = listOf(),
     var buildingDate: String? = null,
-    var buildingCentury: String? = null,
+    var buildingCentury: Short? = null,
     var images: List<ConstructionImage> = listOf()
 )

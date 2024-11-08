@@ -27,7 +27,6 @@ data class Architect(
     @NotBlank(message = "Years of life may not be blank")
     var yearsOfLife: String,
 
-    @NotBlank(message = "Short work description may not be blank")
     var shortWorkDescription: String? = null,
 
     var biographicalArticle: String? = null,

@@ -6,10 +6,10 @@ import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Service
-import java.util.*
+import java.util.Date
 
 @Service
-class JwtServiceImpl(jwtProperties: JwtProperties)  {
+class JwtServiceImpl(jwtProperties: JwtProperties) {
 
     private val secretKey = Keys.hmacShaKeyFor(
         jwtProperties.key.toByteArray()
@@ -31,13 +31,15 @@ class JwtServiceImpl(jwtProperties: JwtProperties)  {
             .compact()
 
     fun isValid(token: String, userDetails: UserDetails): Boolean =
-        userDetails.username == extractEmail(token) && !isExpired(token)
+        run {
+            return userDetails.username == extractEmail(token) && !isExpired(token)
+        }
 
     fun extractEmail(token: String): String? =
         getAllClaims(token)
             .subject
 
-    fun isExpired(token: String): Boolean =
+    private fun isExpired(token: String): Boolean =
         getAllClaims(token)
             .expiration
             .before(Date(System.currentTimeMillis()))

@@ -12,6 +12,8 @@ import org.springframework.data.elasticsearch.core.query.Criteria
 import org.springframework.data.elasticsearch.core.query.CriteriaQuery
 import org.springframework.stereotype.Service
 
+private const val CURRENT_CENTURY = 21
+
 @Service
 class ConstructionServiceImpl(
     private val constructionRepository: ConstructionRepository,
@@ -29,17 +31,17 @@ class ConstructionServiceImpl(
             .run {
                 var criteria = Criteria()
 
-                if (!architecturalStyleId.isNullOrEmpty())
+                if (!architecturalStyleId.isNullOrBlank())
                     criteria = criteria.and("architecturalStyle.id").`is`(architecturalStyleId)
-                if (!region.isNullOrEmpty())
+                if (!region.isNullOrBlank())
                     criteria = criteria.and("address.region").`is`(region)
-                if (!district.isNullOrEmpty())
+                if (!district.isNullOrBlank())
                     criteria = criteria.and("address.district").`is`(district)
-                if (!buildingCenturyFrom.isNullOrEmpty()) {
+                if (!buildingCenturyFrom.isNullOrBlank()) {
                     criteria = criteria.and("buildingCentury")
                         .greaterThanEqual(buildingCenturyFrom)
                 }
-                if (!buildingCenturyTo.isNullOrEmpty()) {
+                if (!buildingCenturyTo.isNullOrBlank()) {
                     criteria = criteria.and("buildingCentury")
                         .lessThanEqual(buildingCenturyTo)
                 }
@@ -49,7 +51,7 @@ class ConstructionServiceImpl(
                 val searchHits: SearchHits<Construction> =
                     elasticsearchOperations.search(query, Construction::class.java)
 
-                searchHits.map { it.content }.toList()
+                searchHits.searchHits.map { it.content }.toList()
             }
 
     override fun update(id: Int, updatedConstruction: Construction): Construction =
@@ -80,6 +82,9 @@ class ConstructionServiceImpl(
                 description = updatedConstruction.description
             if (!updatedConstruction.buildingDate.isNullOrBlank())
                 buildingDate = updatedConstruction.buildingDate
+            if (updatedConstruction.buildingCentury != null &&
+                updatedConstruction.buildingCentury!! in 1..CURRENT_CENTURY)
+                buildingCentury = updatedConstruction.buildingCentury
         }
 
     override fun delete(id: Int) {

@@ -27,33 +27,37 @@ class ConstructionController(
     private val constructionService: ConstructionService
 ) {
 
-    @PostMapping("/")
+    @PostMapping
     fun create(@Valid @RequestBody construction: Construction): ResponseEntity<Construction> =
         ResponseEntity(constructionService.create(construction), HttpStatus.CREATED)
 
-    @GetMapping("/")
-    fun findAll(): List<Construction> = constructionService.findAll()
+    @GetMapping
+    fun findAll(): ResponseEntity<List<Construction>> =
+        ResponseEntity(constructionService.findAll(), HttpStatus.OK)
 
     @GetMapping("/{id}")
-    fun find(@PathVariable id: Int): Construction = constructionService.find(id)
+    fun find(@PathVariable id: Int): ResponseEntity<Construction> =
+        ResponseEntity(constructionService.find(id), HttpStatus.OK)
 
     @Operation(summary = "Finding constructions in Elasticsearch")
-    @GetMapping
+    @GetMapping("/search")
     fun find(
         @RequestParam(required = false) architecturalStyleId: String?,
         @RequestParam(required = false) region: String?,
         @RequestParam(required = false) district: String?,
         @RequestParam(required = false) buildingCenturyFrom: String?,
         @RequestParam(required = false) buildingCenturyTo: String?
-    ): List<Construction> =
-        constructionService.find(
-            ConstructionSearchingDTO(
-                architecturalStyleId,
-                region,
-                district,
-                buildingCenturyFrom,
-                buildingCenturyTo
-            )
+    ): ResponseEntity<List<Construction>> =
+        ResponseEntity(
+            constructionService.find(
+                ConstructionSearchingDTO(
+                    architecturalStyleId,
+                    region,
+                    district,
+                    buildingCenturyFrom,
+                    buildingCenturyTo
+                )
+            ), HttpStatus.OK
         )
 
     @PutMapping("/{id}")

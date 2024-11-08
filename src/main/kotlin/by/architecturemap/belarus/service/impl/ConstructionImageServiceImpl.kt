@@ -17,7 +17,7 @@ class ConstructionImageServiceImpl(
     override fun getRandomAndUniqueImages(usedImagesId: String?) =
         constructionImageRepository.getRandomAndUniqueImages(parseStringToIntArray(usedImagesId))
 
-    override fun find(architecturalStyleId: Int) =
+    override fun find(architecturalStyleId: Int): List<ConstructionImage> =
         constructionImageRepository.findByConstructionArchitecturalStyleId(architecturalStyleId)
 
     override fun getImagesOfConstructionsWithSameArchitecturalStyle(constructionId: Int): List<ConstructionImage> =
@@ -27,8 +27,9 @@ class ConstructionImageServiceImpl(
         )
 
     override fun delete(id: Int) {
-        find(id).also { constructionImageRepository.deleteById(id) }
+        constructionImageRepository.deleteById(id)
     }
+
     private fun parseStringToIntArray(numbers: String?): IntArray =
         numbers
             ?.split(",")
