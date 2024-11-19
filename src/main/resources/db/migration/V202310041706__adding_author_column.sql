@@ -1,2 +1,0 @@
-ALTER TABLE image
-    ADD COLUMN author VARCHAR(100);

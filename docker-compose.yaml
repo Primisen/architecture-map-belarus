@@ -47,7 +47,7 @@ services:
       - node.name=es01
       - discovery.type=single-node
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
-      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+      - ES_JAVA_OPTS=-Xms128m -Xmx128m
       - xpack.license.self_generated.type=trial
       - xpack.security.enabled=true
       - xpack.security.http.ssl.enabled=true

@@ -1,1 +1,0 @@
-ALTER TABLE architect ADD COLUMN middle_name VARCHAR(50);

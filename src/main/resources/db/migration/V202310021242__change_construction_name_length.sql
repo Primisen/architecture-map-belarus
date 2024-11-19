@@ -1,2 +1,0 @@
-ALTER TABLE construction
-    ALTER COLUMN name SET DATA TYPE VARCHAR(100);
