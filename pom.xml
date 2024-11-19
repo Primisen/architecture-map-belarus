@@ -203,7 +203,7 @@
                 <configuration>
                     <archive>
                         <manifestEntries>
-                            <Main-Class>by.architecture_map.belarus.Application</Main-Class>
+                            <Main-Class>by.architecturemap.belarus.Application</Main-Class>
                         </manifestEntries>
                     </archive>
                 </configuration>
@@ -212,7 +212,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>by.architecture_map.belarus.ApplicationKt</mainClass>
+                    <mainClass>by.architecturemap.belarus.ApplicationKt</mainClass>
                 </configuration>
             </plugin>
             <plugin>
