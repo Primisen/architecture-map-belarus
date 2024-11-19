@@ -6,14 +6,14 @@ import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Service
-import java.nio.charset.StandardCharsets
+import java.security.SecureRandom
 import java.util.Date
 
 @Service
 class JwtServiceImpl(jwtProperties: JwtProperties) {
 
     private val secretKey = Keys.hmacShaKeyFor(
-        jwtProperties.key.toByteArray(StandardCharsets.UTF_8)
+        ByteArray(32).also { SecureRandom().nextBytes(it) }
     )
 
     fun createJwt(
