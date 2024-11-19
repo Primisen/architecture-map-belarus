@@ -1,6 +1,5 @@
 package by.architecturemap.belarus.service.impl
 
-import by.architecturemap.belarus.properties.JwtProperties
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
@@ -9,11 +8,13 @@ import org.springframework.stereotype.Service
 import java.security.SecureRandom
 import java.util.Date
 
+const val BYTE_ARRAY_SIZE: Int = 32
+
 @Service
-class JwtServiceImpl(jwtProperties: JwtProperties) {
+class JwtServiceImpl {
 
     private val secretKey = Keys.hmacShaKeyFor(
-        ByteArray(32).also { SecureRandom().nextBytes(it) }
+        ByteArray(BYTE_ARRAY_SIZE).also { SecureRandom().nextBytes(it) }
     )
 
     fun createJwt(
