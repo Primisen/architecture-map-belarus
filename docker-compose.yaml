@@ -15,8 +15,6 @@ services:
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
     ports:
       - 8080:8080
-    volumes:
-      - ./cacerts:/etc/ssl/certs/java/cacerts:ro
 
   db:
     image: 'postgres:13.1-alpine'
