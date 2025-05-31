@@ -4,11 +4,6 @@ services:
   backend:
     image: 'primisen/belarus-architecture-map:latest'
     container_name: backend
-    depends_on:
-      es01:
-        condition: service_healthy
-      db:
-        condition: service_healthy
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/architecture-map?currentSchema=architecture_map
       - SPRING_ELASTICSEARCH_URIS=https://es01:9200
