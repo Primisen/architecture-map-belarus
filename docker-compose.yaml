@@ -2,7 +2,9 @@ version: '3'
 
 services:
   backend:
-    image: 'primisen/belarus-architecture-map:latest'
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: backend
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/architecture-map?currentSchema=architecture_map
