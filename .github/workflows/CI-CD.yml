@@ -2,7 +2,9 @@ name: Java CI/CD with Maven
 
 on:
   push:
-    branches: [master]
+    branches:
+      - master
+      - feature/update-cicd
   workflow_dispatch:
 
 jobs:
