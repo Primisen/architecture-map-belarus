@@ -32,4 +32,10 @@ interface ConstructionImageRepository : JpaRepository<ConstructionImage, Int> {
         @Param("constructionId") constructionId: Int,
         @Param("architecturalStyleId") architecturalStyleId: Int?
     ): List<ConstructionImage>
+
+    @Query(
+        value = "UPDATE image SET show=:show WHERE id=:id",
+        nativeQuery = true
+    )
+    fun updateShow(id: Int, show: Boolean);
 }

@@ -18,4 +18,6 @@ interface ConstructionImageService {
      */
     fun getImagesOfConstructionsWithSameArchitecturalStyle(constructionId: Int): List<ConstructionImage>
     fun delete(id: Int)
+
+    fun updateVisibility(id: Int, visibility: Boolean)
 }
