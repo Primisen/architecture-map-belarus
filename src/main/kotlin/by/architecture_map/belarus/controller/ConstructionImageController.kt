@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -51,4 +52,13 @@ class ConstructionImageController(
     @DeleteMapping("/{id}")
     fun delete(@PathVariable id: Int): ResponseEntity<String> =
         constructionImageService.delete(id).let { ResponseEntity(HttpStatus.NO_CONTENT) }
+
+    @Operation(summary = "Update image visibility (show value) by image id")
+    @PutMapping("/{id}/visibility")
+    fun updateVisibility(
+        @PathVariable id: Int,
+        @RequestParam visibility: Boolean
+    ): ResponseEntity<String> =
+        constructionImageService.updateVisibility(id, visibility)
+            .let { ResponseEntity(HttpStatus.OK) }
 }

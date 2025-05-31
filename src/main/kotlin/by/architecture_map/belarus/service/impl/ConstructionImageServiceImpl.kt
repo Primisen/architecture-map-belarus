@@ -29,6 +29,11 @@ class ConstructionImageServiceImpl(
     override fun delete(id: Int) {
         find(id).also { constructionImageRepository.deleteById(id) }
     }
+
+    override fun updateVisibility(id: Int, visibility: Boolean) {
+        constructionImageRepository.updateShow(id, visibility)
+    }
+
     private fun parseStringToIntArray(numbers: String?): IntArray =
         numbers
             ?.split(",")
