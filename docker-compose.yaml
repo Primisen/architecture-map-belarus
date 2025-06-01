@@ -1,6 +1,14 @@
 version: '3'
 
 services:
+  frontend:
+    build:
+      context: ../architecture-map-frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - 4200:4200
+
   backend:
     build:
       context: .
