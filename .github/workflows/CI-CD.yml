@@ -55,7 +55,7 @@ jobs:
             #!/bin/bash
             
             set -euo pipefail
-            cd /opt/test
+            cd /opt/architecture-map-belarus/backend/
             
             export container_exec="nerdctl"
             /bin/bash generate_certificate.sh
