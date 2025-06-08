@@ -40,6 +40,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
       - name: Prepare artifacts
         run: |
           mkdir backend
@@ -53,6 +54,18 @@ jobs:
           REMOTE_USER: ${{ vars.REMOTE_USER}}
           SOURCE: "backend/"
           TARGET: "/opt/test/"
+          SCRIPT_AFTER: |
+            pwd
+            touch test
+#      - name: Execute remote SSH commands
+#        uses: appleboy/ssh-action@v1
+#        with:
+#          host: ${{ vars.REMOTE_HOST }}
+#          username: ${{ vars.REMOTE_USER}}
+#          key: ${{ secrets.SSH_PRIVATE_KEY}}
+#          script: |
+#            pwd
+#            touch test
 #      - name: Create env file
 #        run: |
 #          rm .env
