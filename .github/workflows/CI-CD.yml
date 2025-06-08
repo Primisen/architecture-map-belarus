@@ -40,17 +40,19 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - name: Prepare artifacts
+        run: |
+          mkdir backend
+          cp docker-compose.yaml backend/
+          cp env.template backend/
       - name: Deploy to EC2 instance
         uses: easingthemes/ssh-deploy@v5.1.0
         with:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY}}
           REMOTE_HOST: ${{ vars.REMOTE_HOST}}
           REMOTE_USER: ${{ vars.REMOTE_USER}}
-          TARGET: "/opt/test/inner/"
-          SCRIPT_AFTER: |
-            ls -lha
-            pwd
-            touch test
+          SOURCE: "backend/"
+          TARGET: "/opt/test/"
 #      - name: Create env file
 #        run: |
 #          rm .env
