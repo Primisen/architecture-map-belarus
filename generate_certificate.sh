@@ -1,7 +1,12 @@
 #!/bin/bash
 
-# set this to 'docker' or 'nerdctl' depending on your setup
-export container_exec="docker"
+# script required instances.yml file!!!
+
+# run `export container_exec="your_execution_command"` to set exec command, otherwise docker will be used
+if [[ -z $container_exec ]];
+then
+  export container_exec="docker"
+fi
 
 $container_exec run --rm -v $(pwd)/certs:/certs -u root -v .:/usr/share/elasticsearch/config/certificates docker.elastic.co/elasticsearch/elasticsearch:7.17.24  bin/elasticsearch-certutil cert --in config/certificates/instances.yml --pem -out /certs/bundle.zip
 sudo unzip certs/bundle.zip -d certs
