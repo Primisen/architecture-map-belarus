@@ -50,7 +50,7 @@ jobs:
           REMOTE_HOST: ${{ vars.REMOTE_HOST}}
           REMOTE_USER: ${{ vars.REMOTE_USER}}
           SOURCE: "backend/"
-          TARGET: "/opt/test/"
+          TARGET: "/opt/architecture-map-belarus/backend/"
           SCRIPT_AFTER: |
             #!/bin/bash
             
@@ -63,4 +63,5 @@ jobs:
             nerdctl compose pull backend logstash
             nerdctl compose up db es01 -d
             sleep 100 # wait until elasticsearch is available
-            nerdctl compose up backend logstash -d
+            nerdctl compose up backend -d
+#            nerdctl compose up backend logstash -d
