@@ -50,7 +50,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./config/logstash
-          file: ./Dockerfile
+          file: ./config/logstash/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/am-logstash:latest
 
