@@ -55,8 +55,9 @@ jobs:
             
             set -euo pipefail
             cd /opt/test
-
-            container_exec="nerdctl" /bin/bash generate_certificate.sh
+            
+            export container_exec="nerdctl"
+            /bin/bash generate_certificate.sh
 
             nerdctl compose pull backend logstash
             nerdctl compose up db es01 -d
