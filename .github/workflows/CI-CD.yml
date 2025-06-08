@@ -46,7 +46,7 @@ jobs:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY}}
           REMOTE_HOST: ${{ vars.REMOTE_HOST}}
           REMOTE_USER: ${{ vars.REMOTE_USER}}
-          TARGET: "/opt/test/"
+          TARGET: "/opt/test/inner/"
           SCRIPT_AFTER: |
             ls -lha
             pwd
