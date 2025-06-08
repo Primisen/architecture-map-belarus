@@ -24,7 +24,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/am-backend:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/belarus-architecture-map:latest
 #      - name: Build and push logstash
 #        uses: docker/build-push-action@v5
 #        with:
