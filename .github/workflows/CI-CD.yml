@@ -43,7 +43,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: .config/elasticsearch/Dockerfile
+          file: ./config/elasticsearch/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/am-es:latest
       - name: Build and push logstash
