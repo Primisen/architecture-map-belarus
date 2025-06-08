@@ -2,6 +2,12 @@
 
 # script required instances.yml file!!!
 
+if [[ -d certs && -f cacerts ]];
+then
+  echo "Certificates directory ./certs and cacerts file already exist, exiting..."
+  exit 0
+fi
+
 # run `export container_exec="your_execution_command"` to set exec command, otherwise docker will be used
 if [[ -z $container_exec ]];
 then
