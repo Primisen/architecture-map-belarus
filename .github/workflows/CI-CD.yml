@@ -31,7 +31,7 @@ jobs:
 #          context: ./config/logstash
 #          file: ./config/logstash/Dockerfile
 #          push: true
-#          tags: ${{ secrets.DOCKERHUB_USERNAME }}/am-logstash:latest
+#          tags: ${{ secrets.DOCKERHUB_USERNAME }}/belarus-architecture-map-logstash:latest
 
   deploy:
     needs: build
