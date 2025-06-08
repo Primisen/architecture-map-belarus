@@ -8,7 +8,8 @@ FROM  maven:3.8.5-openjdk-17 as builder
 
 WORKDIR /opt/app
 COPY --from=dependencies /root/.m2 /root/.m2
-COPY . .
+COPY --from=dependencies /opt/app/pom.xml .
+COPY src .
 RUN mvn -B -e clean install
 
 FROM openjdk:17-jdk-alpine
