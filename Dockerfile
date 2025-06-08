@@ -16,5 +16,5 @@ FROM openjdk:17-jdk-alpine
 
 WORKDIR  /opt/app
 COPY --from=builder /opt/app/target/architecture-map-0.0.1-SNAPSHOT.jar application.jar
-COPY cacerts /etc/ssl/certs/java/cacerts
+
 ENTRYPOINT ["java", "-jar", "application.jar"]

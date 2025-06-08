@@ -24,6 +24,8 @@ services:
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
     ports:
       - 8080:8080
+    volumes:
+      - ./cacerts:/etc/ssl/certs/java/cacerts:ro
 
   db:
     image: 'postgres:13.1-alpine'
@@ -45,10 +47,7 @@ services:
       - /opt/architecture-map-belarus/pgdata:/var/lib/postgresql/data
 
   es01:
-    image: 'kmpfwgn/am-es:latest'
-    build:
-      context: .
-      dockerfile: config/elasticsearch/Dockerfile
+    image: 'docker.elastic.co/elasticsearch/elasticsearch:8.15.1'
     container_name: es01
     environment:
       - node.name=es01
@@ -68,6 +67,7 @@ services:
       - xpack.security.transport.ssl.key=/usr/share/elasticsearch/config/certificates/es01/es01.key
     volumes:
       - /usr/share/elasticsearch/data
+      - ./certs:/usr/share/elasticsearch/config/certificates
     ports:
       - 9200:9200
     healthcheck:
