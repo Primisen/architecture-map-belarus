@@ -41,7 +41,8 @@ jobs:
       - name: Prepare artifacts
         run: |
           mkdir backend
-          cp docker-compose.yaml .env.template generate_certificate.sh backend/
+          cp docker-compose.yaml .env.template backend/
+          cp generate_certificate.sh instances.yml backend/
       - name: Deploy to EC2 instance
         uses: easingthemes/ssh-deploy@v5.1.0
         with:

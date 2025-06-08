@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# script required instances.yml file!!!
+
 # run `export container_exec="your_execution_command"` to set exec command, otherwise docker will be used
 if [[ -z $container_exec ]];
 then
