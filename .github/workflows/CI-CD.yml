@@ -51,8 +51,14 @@ jobs:
           SOURCE: "backend/"
           TARGET: "/opt/test/"
           SCRIPT_AFTER: |
+            #!/bin/bash
+            
+            set -euo pipefail
             cd /opt/test
+            
+            export container_exec="nerdctl"
             /bin/bash generate_certificate.sh
+
             nerdctl compose pull backend logstash
             nerdctl compose up db es01 -d
             sleep 100 # wait when elasticsearch is available
