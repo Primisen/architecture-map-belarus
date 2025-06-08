@@ -61,8 +61,8 @@ jobs:
             /bin/bash generate_certificate.sh
 
             nerdctl compose pull backend
-#            nerdctl compose pull backend logstash
+            # nerdctl compose pull backend logstash
             nerdctl compose up db es01 -d
             sleep 100 # wait until elasticsearch is available
             nerdctl compose up backend -d
-#            nerdctl compose up backend logstash -d
+            # nerdctl compose up backend logstash -d
