@@ -45,7 +45,7 @@ jobs:
         run: |
           mkdir backend
           cp docker-compose.yaml backend/
-          cp env.template backend/
+          cp .env.template backend/
       - name: Deploy to EC2 instance
         uses: easingthemes/ssh-deploy@v5.1.0
         with:
