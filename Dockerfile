@@ -12,7 +12,7 @@ COPY --from=dependencies /opt/app/ /opt/app
 COPY src src
 RUN mvn -B -e clean install
 
-FROM openjdk:17-jdk-alpine
+FROM openjdk:17-jdk-slim
 
 WORKDIR  /opt/app
 COPY --from=builder /opt/app/target/architecture-map-0.0.1-SNAPSHOT.jar application.jar
