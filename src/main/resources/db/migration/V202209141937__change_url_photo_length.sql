@@ -1,2 +1,0 @@
-ALTER TABLE photo
-ALTER COLUMN url_address_to_photo SET DATA TYPE VARCHAR(1000);
