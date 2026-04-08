@@ -1,4 +1,6 @@
 spring:
+  config:
+    import: optional:file:.env[.properties]
 
   application:
     name: ${APPLICATION_NAME:architecture_map}
@@ -7,21 +9,23 @@ spring:
     url: ${DB_URL:jdbc:postgresql://localhost:5432/architecture_map?currentSchema=${spring.application.name}}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
 
   flyway:
     enabled: false
-
-#  elasticsearch:
-#    uris: https://localhost:9200
-#    username: ${ELASTIC_USERNAME}
-#    password: ${ELASTIC_PASSWORD}
 
   data:
     elasticsearch:
       repositories:
         enabled: false
 
-server:
   servlet:
     encoding:
       charset: UTF-8
