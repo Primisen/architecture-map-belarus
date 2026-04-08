@@ -6,6 +6,7 @@ import by.architecture_map.belarus.exception.NotFoundException;
 import by.architecture_map.belarus.service.ConstructionService;
 import by.architecture_map.belarus.repository.jpa.ConstructionRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.query.Criteria;
@@ -22,7 +23,7 @@ import java.util.stream.Collectors;
 public class ConstructionServiceImpl implements ConstructionService {
 
     private final ConstructionRepository constructionRepository;
-    private final ElasticsearchOperations elasticsearchOperations;
+    private final ObjectProvider<ElasticsearchOperations> elasticsearchOperationsProvider;
 
     @Override
     public Construction create(Construction construction) {
@@ -42,6 +43,14 @@ public class ConstructionServiceImpl implements ConstructionService {
 
     @Override
     public List<Construction> find(ConstructionDTO constructionDTO) {
+        ElasticsearchOperations elasticsearchOperations = elasticsearchOperationsProvider.getIfAvailable();
+
+        if (elasticsearchOperations == null) {
+            return constructionRepository.findAll().stream()
+                    .filter(construction -> constructionDTO == null)
+                    .collect(Collectors.toList());
+        }
+
         Criteria criteria = new Criteria();
 
         if (constructionDTO.getArchitecturalStyleId() != null && !constructionDTO.getArchitecturalStyleId().isEmpty())
