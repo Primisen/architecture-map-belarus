@@ -5,6 +5,7 @@ import by.architecture_map.belarus.exception.NotFoundException;
 import by.architecture_map.belarus.repository.jpa.ArticleRepository;
 import by.architecture_map.belarus.service.ArticleService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.query.Criteria;
@@ -15,12 +16,14 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import static org.apache.commons.lang3.StringUtils.containsIgnoreCase;
+
 @Service
 @RequiredArgsConstructor
 public class ArticleServiceImpl implements ArticleService {
 
     private final ArticleRepository articleRepository;
-    private final ElasticsearchOperations elasticsearchOperations;
+    private final ObjectProvider<ElasticsearchOperations> elasticsearchOperationsProvider;
 
     @Override
     public Article create(Article article) {
@@ -35,6 +38,18 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public List<Article> find(String request) {
+
+        ElasticsearchOperations elasticsearchOperations = elasticsearchOperationsProvider.getIfAvailable();
+
+        if (elasticsearchOperations == null) {
+            return findAll().stream()
+                    .filter(article -> request == null || request.isEmpty()
+                            || containsIgnoreCase(article.getTitle(), request)
+                            || containsIgnoreCase(article.getContent(), request)
+                            || containsIgnoreCase(article.getShortDescription(), request))
+                    .collect(Collectors.toList());
+        }
+
         Criteria criteria = new Criteria();
         if (request != null && !request.isEmpty()) {
             criteria = criteria
