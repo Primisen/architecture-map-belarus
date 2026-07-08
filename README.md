@@ -13,4 +13,4 @@ TODO list:
 10. [ ] Nice to have integration with other Belarusian cultural projects but no specific ideas about it. Thinking about it
 11. [ ] Rename the master branch to the main
 12. [x] Need to inject AI some (any) way into the project [just kidding]
-13. [ ] *Some images are really informative but low-quality or not very appealing. Maybe this is where AI could actually help
+13. [ ] *Some images are really informative but low-quality or not very appealing. Maybe this is where AI could actually help. Maybe it can help create a scheme or something like this based on the source. In other words, get the important information and create another image (or something else, image is expensive) based on the source, with a link to the source.
